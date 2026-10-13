@@ -127,18 +127,20 @@ async function more(side){
  const btn=$(`more-${side}`);btn.disabled=true;const version=routeVersion;
  try{const data=await providers[active].search(state.query,state.next,requests[side]?.signal);if(version!==routeVersion)return;state.cards.push(...data.cards);state.next=data.next;renderBatch(side);}catch(e){if(version===routeVersion)$(`search-status-${side}`).textContent='Não foi possível carregar a próxima página. Tente novamente.';}finally{btn.disabled=false;}
 }
+const importing={left:false,right:false};
 async function useCard(side,card,button){
- value(`input-${side}-digimon`,card.name);value(`input-${side}-detail`,card.detail||card.id);if(colorHex[card.color]&&games[active].colors.some(c=>c[0]===card.color))setColor(side,card.color);
- if(!card.image){$(`search-status-${side}`).textContent='Dados aplicados. Envie a imagem da carta abaixo para completar a capa.';return;}
- button.disabled=true;busy++;
+ if(importing[side])return;
+ const applyDetails=()=>{value(`input-${side}-digimon`,card.name);value(`input-${side}-detail`,card.detail||card.id);if(colorHex[card.color]&&games[active].colors.some(c=>c[0]===card.color))setColor(side,card.color);};
+ if(!card.image){applyDetails();$(`search-status-${side}`).textContent='Imagem não disponível nesta base. Envie a carta pelo campo abaixo.';return;}
+ button.disabled=true;importing[side]=true;busy++;const originalLabel=button.textContent;button.textContent='Carregando…';
+ $(`search-status-${side}`).textContent='Carregando a imagem da carta…';
  try{
-  const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),20000);let response;
-  try{response=await fetch(card.image,{signal:controller.signal});}finally{clearTimeout(timer);}
-  if(!response.ok)throw new Error('Imagem indisponível');const blob=await response.blob();if(!blob.type.startsWith('image/'))throw new Error('Resposta inválida');
-  const ok=await engine.loadFile(side,new File([blob],`${card.id}.jpg`,{type:blob.type}));
+  const blob=await window.ThumbImages.load(card.image);
+  const ok=await engine.loadFile(side,new File([blob],`${card.id}.png`,{type:blob.type}));
+  if(ok)applyDetails();
   $(`search-status-${side}`).textContent=ok?'Carta aplicada. Ajuste o enquadramento como preferir.':'A imagem não pôde ser aberta. Envie-a manualmente.';
- }catch{$(`search-status-${side}`).textContent='A base bloqueou a importação ou não respondeu. Abra a imagem pelo link do resultado, salve e envie pelo campo abaixo. Os dados da carta já foram aplicados.';}
- finally{busy--;button.disabled=false;}
+ }catch(e){$(`search-status-${side}`).textContent=e.code==='SERVICE_REQUIRED'?'A importação desta base ainda precisa ser ativada pelo administrador. Por enquanto, abra a imagem pelo link do resultado e envie pelo campo abaixo.':'Não foi possível importar a imagem. Tente novamente ou envie o arquivo pelo campo abaixo.';}
+ finally{busy--;importing[side]=false;button.disabled=false;button.textContent=originalLabel;}
 }
 // Optional drag mode prevents accidental movement while scrolling on a phone.
 let drag=null;

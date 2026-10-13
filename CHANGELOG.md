@@ -1,3 +1,11 @@
+## 0.3.0 — Imagens das bases
+
+- Importação Yu-Gi-Oh! pelo manifesto YGOResources e ID Konami.
+- Índice Digimon com prévias e artes alternativas.
+- Worker com cache preparado para ativar importação Digimon/One Piece.
+- Cache de imagens, limites de tamanho e preservação da carta anterior em falhas.
+- Testes dos adaptadores, seleção, cliente de imagens e Worker.
+
 # Changelog
 
 ## 0.2.0 — 2026-10-13

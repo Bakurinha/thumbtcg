@@ -20,7 +20,7 @@ Editor de thumbnails dedicado a trading card games, mantido por **Bakura**.
 
 ## Como usar
 
-Abra `index.html` ou acesse o site. Não é necessário instalar dependências para usar o editor.
+Acesse o site (ou sirva a pasta por HTTP para desenvolvimento). Não é necessário instalar dependências para usar o editor.
 
 1. Escolha o cardgame.
 2. Pesquise uma carta ou envie uma imagem em cada lado.
@@ -30,18 +30,36 @@ Abra `index.html` ou acesse o site. Não é necessário instalar dependências p
 
 Os rascunhos em memória duram somente enquanto a página estiver aberta. O arquivo JSON é a forma de guardar a edição, inclusive as imagens, entre sessões.
 
-## Bases externas e limites atuais
+## Bases externas e imagens
 
-| Jogo | Base | Integração atual |
+| Jogo | Fonte | Situação |
 | --- | --- | --- |
-| Digimon | [DigimonCard.io](https://digimoncard.io/api-documentation) | Busca por nome/código e preenchimento dos dados. Imagem por upload. |
-| Yu-Gi-Oh! | [YGOPRODeck](https://ygoprodeck.com/api-guide/) | Busca por nome, artes alternativas e preenchimento dos dados. Imagem por upload. |
-| Magic | [Scryfall](https://scryfall.com/docs/api) | Busca com edições, prévias e importação de imagem; depende da disponibilidade da base. |
-| One Piece | [OPTCG API](https://optcgapi.com/documentation) | Busca em sets, starter decks e promos, com prévias. Importação é tentada; o servidor de imagens não apresentou CORS nos testes, então o upload pode ser necessário. |
+| Digimon | Índice Digimon Card App / imagens TakaOtaku | Prévia e busca por nome/código com artes alternativas. Importação depende de ativar o Worker. |
+| Yu-Gi-Oh! | YGOPRODeck + YGOResources | Importação direta via repositórios de imagens, vinculada pelo ID Konami e arte do manifesto. |
+| Magic | Scryfall | Prévia e importação direta, incluindo edições e faces. |
+| One Piece | OPTCG API | Prévia; importação depende de ativar o Worker. |
 
-DigimonCard.io e YGOPRODeck orientam baixar e hospedar as imagens na infraestrutura da aplicação. Esta versão estática não faz hotlink dessas imagens. Para importar automaticamente nesses jogos, o próximo passo é um serviço próprio com cache de imagens; não se devem inserir chaves privadas no JavaScript nem usar proxies públicos improvisados.
+**Para ativar Digimon e One Piece:** siga [worker/README.md](worker/README.md).
+O serviço está pronto no repositório, mas ainda precisa ser publicado em uma conta
+Cloudflare e ter sua URL preenchida em `config.js`. O upload continua disponível.
 
-Consultas são disparadas pelo botão Buscar, espaçadas e guardadas em cache em memória por uma hora. A base de Digimon retorna no máximo 1.000 resultados por consulta. A disponibilidade e a cobertura das edições dependem dos fornecedores. Pesquisas por nome em inglês costumam ter melhor cobertura.
+As imagens importadas são incorporadas ao projeto para exportação. Uma falha de
+importação mantém a carta anterior e seus dados. Há limite de 8 MB por imagem e
+cache de 24 MB na sessão para evitar downloads repetidos.
+
+Os índices locais incluem 8.810 registros de Digimon e 14.342 IDs de Yu-Gi-Oh! nesta
+versão. Eles não garantem todas as edições futuras. Atualize com
+`python scripts/update-image-indexes.py` e publique os arquivos `data/`.
+
+Fontes dos índices:
+- https://github.com/TakaOtaku/Digimon-Card-App
+- https://github.com/yugioh-artworks/artworks-index
+- https://ygoprodeck.com/api-guide/
+- https://scryfall.com/docs/api
+- https://optcgapi.com/documentation
+
+Não fazemos hotlink das imagens do YGOPRODeck ou DigimonCard.io. A cobertura e a
+disponibilidade dependem das fontes; buscas em inglês têm melhor cobertura.
 
 ## Desenvolvimento
 

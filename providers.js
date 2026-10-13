@@ -19,14 +19,24 @@ async function json(url,signal){
 }
 const safeURL=value=>{try{const u=new URL(value);return u.protocol==='https:'?u.href:'';}catch{return '';}};
 const configs={
- digimon:{label:'DigimonCard.io',link:'https://digimoncard.io/api-documentation',note:'Pesquisa de nomes e códigos. Escolha os dados e envie a imagem da carta pelo campo abaixo.',placeholder:'Ex.: Marsmon ou BT11-017',async search(query,page,signal){
-  const params=new URLSearchParams({[/^(BT|EX|ST|P|LM|RB|AD)\d*-/i.test(query)?'card':'n']:query,series:'Digimon Card Game',limit:'1000'});
-  const data=await json(`https://digimoncard.io/api-public/search?${params}`,signal);
-  return {cards:(Array.isArray(data)?data:data.data||[]).map(c=>({name:c.name,id:c.id,detail:c.id,color:c.color?.toLowerCase(),url:`https://digimoncard.io/card/${encodeURIComponent(c.pretty_url||c.id)}`,image:'',thumb:''})),next:null};
+ digimon:{label:'Digimon Card App',link:'https://github.com/TakaOtaku/Digimon-Card-App',note:'Busque por nome ou código para ver as cartas e artes alternativas.',placeholder:'Ex.: Marsmon ou BT11-017',async search(query,page,signal){
+  const data=await json('data/digimon-images.json',signal),term=query.trim().toLowerCase();
+  return {cards:data.filter(c=>`${c.name} ${c.number} ${c.id}`.toLowerCase().includes(term)).map(c=>{
+   const image=`https://web-garage.takaotaku.de/${encodeURIComponent(c.file)}`;
+   return {name:c.name,id:c.id,detail:c.id,color:String(Array.isArray(c.color)?c.color[0]:c.color).toLowerCase(),image,thumb:image,url:image};
+  }),next:null};
  }},
- yugioh:{label:'YGOPRODeck',link:'https://ygoprodeck.com/api-guide/',note:'Pesquisa de cartas e artes alternativas. Use os dados e envie sua imagem para editar.',placeholder:'Ex.: Dark Magician ou Blue-Eyes',async search(query,page=0,signal){
-  const params=new URLSearchParams({fname:query,num:'100',offset:String(page||0)}),data=await json(`https://db.ygoprodeck.com/api/v7/cardinfo.php?${params}`,signal);
-  const cards=(data.data||[]).flatMap(c=>(c.card_images?.length?c.card_images:[{}]).map((im,i)=>({name:c.name,id:String(im.id||c.id),detail:`${c.type}${i?` • Arte ${i+1}`:''}`,color:c.frameType?.includes('pendulum')?'pendulum':(['normal','effect','fusion','synchro','xyz','link','ritual','spell','trap'].includes(c.frameType)?c.frameType:'normal'),url:safeURL(c.ygoprodeck_url),image:'',thumb:''})));
+ yugioh:{label:'YGOPRODeck + YGOResources',link:'https://github.com/yugioh-artworks/artworks-index',note:'Imagens e artes alternativas do YGOResources. Busque pelo nome em inglês.',placeholder:'Ex.: Dark Magician ou Blue-Eyes',async search(query,page=0,signal){
+  const params=new URLSearchParams({fname:query,num:'100',offset:String(page||0),misc:'yes'}),data=await json(`https://db.ygoprodeck.com/api/v7/cardinfo.php?${params}`,signal);
+  const index=await json('data/yugioh-images.json',signal);
+  const cards=(data.data||[]).flatMap(c=>{
+   const konami=c.misc_info?.find(m=>m.konami_id)?.konami_id;
+   const variants=index[String(konami)]||[['', '', '']];
+   return variants.map(([art,path,lang])=>{
+    const image=path?`https://raw.githubusercontent.com/yugioh-artworks/${path}`:'';
+    return {name:c.name,id:`${c.id}-${art}`,detail:`${c.type}${art?` • Arte ${art} · ${lang}`:''}`,color:c.frameType?.includes('pendulum')?'pendulum':(['normal','effect','fusion','synchro','xyz','link','ritual','spell','trap'].includes(c.frameType)?c.frameType:'normal'),url:safeURL(c.ygoprodeck_url),image,thumb:image};
+   });
+  });
   return {cards,next:data.meta?.pages_remaining>0?Number(page||0)+100:null};
  }},
  magic:{label:'Scryfall',link:'https://scryfall.com/docs/api',note:'Imagens e edições via Scryfall. A ilustração é destacada por padrão. Busque pelo nome em inglês.',placeholder:'Ex.: Lightning Bolt ou Atraxa',async search(query,page=1,signal){
