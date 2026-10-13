@@ -1,3 +1,8 @@
+## 0.3.1 — Imagens na home
+
+- Substitui as letras decorativas pelos quatro arquivos enviados por Bakura, nos respectivos cardgames.
+- Imagens locais, proporção uniforme, enquadramento responsivo e textos alternativos.
+
 ## 0.3.0 — Imagens das bases
 
 - Importação Yu-Gi-Oh! pelo manifesto YGOResources e ID Konami.
