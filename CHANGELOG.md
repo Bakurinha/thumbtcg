@@ -1,3 +1,8 @@
+## 0.3.2 — Cartas no destaque
+
+- MedievalGallantmon e Ash Blossom substituem os pôsteres decorativos da home.
+- Imagem do setor Yu-Gi-Oh! atualizada para Beyond the Brave.
+
 ## 0.3.1 — Imagens na home
 
 - Substitui as letras decorativas pelos quatro arquivos enviados por Bakura, nos respectivos cardgames.

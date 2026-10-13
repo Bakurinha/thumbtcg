@@ -7,5 +7,13 @@
 .game-card .game-art{height:auto;aspect-ratio:4/3;background:#fff;display:block}
 .game-card .game-art::before,.game-card .game-art::after{content:none}
 .game-cover{display:block;width:100%;height:100%;object-fit:contain;object-position:center}
-.game-card.yugioh .game-cover{object-fit:cover}
+.game-card.yugioh .game-cover{object-fit:contain}
 .game-card:focus-visible{outline-offset:5px}
+
+/* Hero cards preserve the complete uploaded artwork and their original ratio. */
+.hero-art .poster{width:42%;max-width:195px;height:auto;padding:0;display:block;background:#101813;border-radius:10px}
+.hero-art .poster::after{content:none}
+.hero-art .poster img{display:block;width:100%;height:auto}
+.hero-art .poster-a{top:8px}
+.hero-art .poster-b{top:30px}
+@media(max-width:760px){.hero-art .poster{width:39%;max-width:140px}.hero-art .poster-a{top:0}.hero-art .poster-b{top:14px}}
