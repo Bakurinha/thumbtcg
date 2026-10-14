@@ -1,3 +1,15 @@
+## 0.5.0 — Camadas, fundos e composições avançadas
+
+- “Edição avançada” e controles de “Edição na prévia” recolhidos até ativação.
+- Ordem independente das camadas, incluindo imagens, textos, faixas e decoração; restaurar ordem original.
+- 12 layouts adicionais inspirados em referências de thumbs TCG, totalizando 22 nos quatro jogos.
+- Upload de papel de parede e imagem adicional (retrato/logo); PNG transparente preservado, sem remoção automática de fundo.
+- Ampliação de uma ou das duas cartas no fundo; zoom, posição, gamma, brilho, contraste, saturação, desfoque, opacidade e escurecimento separados da arte frontal.
+- Efeitos cinema, suave, monocromático, intenso e brilho neon frontal.
+- Estado avançado persistido no JSON e no histórico; projetos v2 antigos recebem os padrões neutros.
+- Validação em Chromium desktop e móvel emulado: uploads, camadas/desfazer, 12 layouts, salvar/reabrir, isolamento dos rascunhos, compatibilidade e pixels do PNG após ajuste de brilho. Celular físico pendente.
+- Prioridades ADV-01 a ADV-05 registradas acima de TCG-03 a TCG-05; expansão de jogos/bases permanece pendente.
+
 ## 0.4.0 — Qualidade de exportação e edição direta
 
 - Exportação PNG em 720p, 1080p e 1440p; avisos quando a carta original limita a nitidez.

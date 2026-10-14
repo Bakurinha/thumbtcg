@@ -20,6 +20,12 @@ panel.innerHTML=`<div class="direct-heading"><strong>Edição na prévia</strong
 <div class="alignment-actions"><button type="button" class="studio-btn" data-align="left">Esquerda</button><button type="button" class="studio-btn" data-align="center">Centro horizontal</button><button type="button" class="studio-btn" data-align="right">Direita</button><button type="button" class="studio-btn" data-align="top">Topo</button><button type="button" class="studio-btn" data-align="middle">Centro vertical</button><button type="button" class="studio-btn" data-align="bottom">Base</button><button type="button" class="studio-btn" id="reset-element">Restaurar posição e tamanho</button></div>`;
 document.querySelector('.project-actions').after(panel);
 const quality=document.createElement('p');quality.id='quality-status';quality.className='quality-status';quality.setAttribute('role','status');panel.before(quality);
+const directOptions=document.createElement('div');directOptions.id='direct-options';directOptions.hidden=true;
+while(panel.querySelector('.direct-switch').nextSibling)directOptions.append(panel.querySelector('.direct-switch').nextSibling);
+panel.append(directOptions);
+// Unified selection replaces the duplicate card-only movement buttons.
+for(const id of ['move-art','move-side']){const el=$(id);if(el){el.hidden=true;directOptions.append(el);}}
+
 for(const id of Object.keys(names)){
  const el=$(id),group=document.createElementNS(ns,'g');group.dataset.editElement=id;
  el.before(group);group.append(el);wrappers.set(id,group);
@@ -55,7 +61,8 @@ function historyButtons(){const locked=restoring||loading>0||studio.isBusy();$('
 function snapshot(){return studio.snapshot();}
 function equal(a,b){
  if(['left','right'].some(side=>a.art[side].original!==b.art[side].original))return false;
- const small=data=>({...data,art:Object.fromEntries(['left','right'].map(side=>[side,{...data.art[side],original:undefined}]))});
+ if(['wallpaper','extra'].some(key=>a.advanced?.[key]!==b.advanced?.[key]))return false;
+ const small=data=>({...data,advanced:data.advanced?{...data.advanced,wallpaper:undefined,extra:undefined}:null,art:Object.fromEntries(['left','right'].map(side=>[side,{...data.art[side],original:undefined}]))});
  return JSON.stringify(small(a))===JSON.stringify(small(b));
 }
 function commit(){
@@ -74,7 +81,7 @@ async function travel(redo){
 }
 $('undo-edit').addEventListener('click',()=>travel(false));$('redo-edit').addEventListener('click',()=>travel(true));
 $('direct-mode').addEventListener('change',()=>{
- const enabled=$('direct-mode').checked;svg.classList.toggle('direct-editing',enabled);
+ const enabled=$('direct-mode').checked;directOptions.hidden=!enabled;svg.classList.toggle('direct-editing',enabled);
  if(enabled){document.querySelector('.preview').classList.remove('move-mode');$('move-art').setAttribute('aria-pressed','false');}
  refresh();
 });
@@ -140,7 +147,7 @@ async function qualityWarnings(width){
  return warnings;
 }
 function scheduleQuality(){clearTimeout(qualityTimer);qualityTimer=setTimeout(async()=>{const version=++qualityVersion;if($('editor').hidden)return;try{const warnings=await qualityWarnings(Number($('export-size').value));if(version===qualityVersion)quality.textContent=warnings.join(' ');}catch{if(version===qualityVersion)quality.textContent='Não foi possível avaliar a nitidez das imagens.';}},300);}
-window.ThumbInteractions={getState:()=>structuredClone(state),setState,validateState,commit,undo:()=>travel(false),redo:()=>travel(true)};
+window.ThumbInteractions={register(id,label){names[id]=label;const el=$(id),group=document.createElementNS(ns,'g');group.dataset.editElement=id;el.before(group);group.append(el);wrappers.set(id,group);$('selected-element').add(new Option(label,id));return group;},select,getState:()=>structuredClone(state),setState,validateState,commit,undo:()=>travel(false),redo:()=>travel(true)};
 studio.qualityWarnings=qualityWarnings;
 resetHistory();
 })();

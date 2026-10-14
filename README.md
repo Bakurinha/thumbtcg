@@ -8,7 +8,7 @@ Editor de thumbnails dedicado a trading card games, mantido por **Bakura**.
 
 - Boas-vindas com seleção de Digimon TCG, Yu-Gi-Oh!, Magic: The Gathering e One Piece.
 - Rotas compartilháveis: `#digimon`, `#yugioh`, `#magic` e `#onepiece`.
-- Dez layouts, paletas de cada TCG, padrões visuais próprios e cores livres por lado.
+- 22 layouts, paletas de cada TCG, padrões visuais próprios e cores livres por lado.
 - Pesquisa nas bases correspondentes ao cardgame escolhido, com resultados e paginação.
 - Upload de imagens em todos os jogos; recorte inicial da ilustração em Yu-Gi-Oh!, Magic e One Piece.
 - Posição horizontal/vertical, zoom e edição direta na prévia, inclusive por toque.
@@ -19,6 +19,14 @@ Editor de thumbnails dedicado a trading card games, mantido por **Bakura**.
 - Salvar/abrir projeto JSON com as imagens. Rascunhos separados por jogo durante a sessão.
 - Interface responsiva: prévia ao lado das ferramentas no desktop e fluxo vertical no celular.
 - Contato e chave PIX com botão de copiar.
+
+## Edição avançada
+
+Marque **Edição avançada** para ordenar camadas, enviar um wallpaper ou uma imagem adicional e controlar o fundo ampliado. A lista mostra primeiro o que está na frente. Os botões movem a camada selecionada; **Restaurar ordem** recupera a composição original.
+
+O fundo pode usar a carta esquerda, a direita, ambas ou um arquivo próprio. Seus ajustes de gamma, brilho, contraste, saturação, desfoque, zoom e posição são independentes das cartas frontais. Os presets são pontos de partida ajustáveis. Um wallpaper enviado é preservado ao escolher outro layout.
+
+Marque **Editar elementos na prévia** para revelar as ferramentas de posicionamento e tamanho, inclusive da imagem adicional. Para retratos recortados, envie PNG com transparência; o editor não remove o fundo automaticamente. Projetos JSON guardam os dois uploads, as configurações e a ordem das camadas.
 
 ## Como usar
 
@@ -93,3 +101,5 @@ Ative **Editar elementos na prévia** para arrastar e usar o ponto no canto. Tam
 - **PIX:** suportebakura@gmail.com (doação voluntária)
 
 Projeto independente de fãs. Marcas, cartas e ilustrações pertencem aos respectivos titulares. Os estilos são interpretações visuais do projeto, não um ranking estatístico de thumbnails mais populares.
+
+Validação do editor avançado: `npm run test:advanced` com servidor HTTP local (mesmas variáveis `BASE_URL` e `CHROMIUM_PATH` do teste de navegador). Verifica 12 novos layouts, opções recolhidas, camadas e histórico, upload/roundtrip, rascunhos por jogo e pixels reais do PNG com filtros.

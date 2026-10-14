@@ -15,7 +15,7 @@ async function route(game){w.location.hash=game;await tick();}
  assert.equal($('welcome').hidden,false);assert.equal($('editor').hidden,true);
  for(const game of ['digimon','yugioh','magic','onepiece']){
   await route(game);assert.equal($('welcome').hidden,true);assert.equal(w.document.body.dataset.game,game);
-  assert.equal(w.document.querySelectorAll('.layout-card').length,10);
+  assert.equal(w.document.querySelectorAll('.layout-card').length,22);
   assert.equal($('theme-left').options.length,game==='digimon'?8:game==='yugioh'?11:7);
   assert.ok($('top-ribbon-input').value.toLowerCase().includes(game==='onepiece'?'one piece':game==='yugioh'?'yu-gi-oh':game));
   $('input-left-deck').value=game+' saved';$('input-left-deck').dispatchEvent(new w.Event('input'));
@@ -44,6 +44,6 @@ async function route(game){w.location.hash=game;await tick();}
  w.ThumbImages.load=async()=>new w.Blob(['test'],{type:'image/png'});w.ThumbEngine.loadFile=async()=>true;
  $('results-left').querySelector('button').click();await tick();assert.equal($('input-left-digimon').value,'Replacement');
  await route('');assert.equal($('welcome').hidden,false);
- console.log('PASS: 4 games, 10 layouts, game drafts, positioning, controls, safe search results, metadata selection and adapter pagination.');
+ console.log('PASS: 4 games, 22 layouts, game drafts, positioning, controls, safe search results, metadata selection and adapter pagination.');
  w.close();
 })().catch(e=>{console.error(e);w.close();process.exitCode=1;});

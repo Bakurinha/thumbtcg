@@ -1,6 +1,20 @@
 # Backlog — Thumb TCG
 
-TCG-01 e TCG-02 implementados na versão 0.4.0 e validados em Chromium desktop e móvel com toque emulado. Próxima prioridade: TCG-03. Sem datas prometidas.
+TCG-01 e TCG-02 implementados na versão 0.4.0 e validados em Chromium desktop e móvel com toque emulado. A expansão TCG-03 a TCG-05 foi pausada para priorizar o editor avançado solicitado. Sem datas prometidas.
+
+## Prioridade acima do backlog anterior — Editor avançado (0.5.0)
+
+Implementado e verificado em Chromium desktop e móvel com toque emulado. Conferência em aparelho físico continua pendente.
+
+| ID | Funcionalidade prioritária | Entrega |
+| --- | --- | --- |
+| ADV-01 · Implementado | Edição por camadas | “Edição avançada” recolhida por padrão; trazer à frente, enviar ao fundo, subir/descer uma camada e restaurar ordem. |
+| ADV-02 · Implementado | Edição na prévia opcional | Controles de seleção, posição, tamanho e alinhamento aparecem somente ao ativar a caixa de edição. |
+| ADV-03 · Implementado | Layouts e imagens de fundo | 12 novas composições (22 no total), círculos, duelos panorâmicos, cartões completos, destaque assimétrico, cinema e criador; upload de wallpaper e imagem adicional/retrato. |
+| ADV-04 · Implementado | Fundo ampliado e efeitos | Uma ou duas cartas ampliadas atrás da arte; zoom, posição, gamma, brilho, contraste, saturação, desfoque, opacidade e escurecimento independentes; presets cinema, suave, monocromático, intenso e brilho neon. |
+| ADV-05 · Implementado | Persistência e exportação | Camadas e imagens adicionais salvas no projeto, desfazer/refazer, isolamento por TCG, abertura de projetos antigos e filtros preservados no PNG. |
+
+## Backlog anterior — retomada após o editor avançado
 
 | ID | Prioridade | Adição | Entrega proposta | Critério de conclusão |
 | --- | --- | --- | --- | --- |

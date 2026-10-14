@@ -9,7 +9,7 @@ const fs=require('node:fs/promises');
  const context=await browser.newContext({viewport:mobile?{width:390,height:844}:{width:1440,height:1100},hasTouch:mobile,isMobile:mobile,acceptDownloads:true});
  const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
  await page.goto((process.env.BASE_URL||'http://localhost:8765')+'/#digimon');
- await page.waitForSelector('#selected-element');
+ await page.waitForSelector('#selected-element',{state:'attached'});
  // Import real encoded raster images through the actual normalizer and upload path.
  await page.evaluate(async()=>{
   const canvas=document.createElement('canvas');canvas.width=400;canvas.height=550;const ctx=canvas.getContext('2d');ctx.fillStyle='#26ae78';ctx.fillRect(0,0,800,1100);ctx.fillStyle='#fff';ctx.font='bold 50px sans-serif';ctx.fillText('TCG TEST',35,250);
@@ -17,6 +17,9 @@ const fs=require('node:fs/promises');
  });
  await page.evaluate(()=>ThumbInteractions.undo());assert.equal(await page.evaluate(()=>ThumbEngine.uploaded.left),false);
  await page.evaluate(()=>ThumbInteractions.redo());assert.equal(await page.evaluate(()=>ThumbEngine.uploaded.left),true);
+ assert.equal(await page.locator('#direct-options').isVisible(),false);
+ assert.equal(await page.locator('#advanced-options').isVisible(),false);
+ await page.check('#direct-mode');
  await page.selectOption('#selected-element','text-left-deck');
  await page.fill('#element-x','80');await page.dispatchEvent('#element-x','input');
  await page.evaluate(()=>ThumbInteractions.commit());

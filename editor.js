@@ -63,6 +63,33 @@ const layoutPresets={
   layout9:{name:'Minimal Neon', note:'Centro limpo com marcador simples', vs:{label:'X',x:640,y:370,size:132,rotate:0,font:'neon',style:'normal',stroke:13,letter:0,anchor:'middle'}, showPlate:false, artL:{x:96,y:146,w:442,h:560},artR:{x:742,y:146,w:442,h:560}, deckL:{x:64,y:654,size:50,anchor:'start',font:'arena'}, deckR:{x:1216,y:654,size:50,anchor:'end',font:'arena'}, digiL:{x:68,y:85,size:42,font:'arena',display:false},detailL:{x:68,y:682,size:17,font:'stream',display:false}, digiR:{x:1212,y:85,size:42,font:'arena',display:false},detailR:{x:1212,y:682,size:17,font:'stream',display:false}, nameplates:false, topRibbon:false, ribbonText:''},
   layout10:{name:'Extreme Faceoff', note:'Destaque máximo sem círculo central', vs:{label:'X',x:640,y:352,size:204,rotate:10,font:'impact',style:'italic',stroke:24,letter:0,anchor:'middle'}, showPlate:false, artL:{x:40,y:95,w:508,h:640},artR:{x:734,y:95,w:508,h:640}, deckL:{x:78,y:629,size:68,anchor:'start',font:'impact'}, deckR:{x:1206,y:629,size:68,anchor:'end',font:'impact'}, digiL:{x:80,y:677,size:23,font:'arena',display:true},detailL:{x:80,y:699,size:14,font:'stream',display:false}, digiR:{x:1206,y:677,size:23,font:'arena',display:true},detailR:{x:1206,y:699,size:14,font:'stream',display:false}, nameplates:false, topRibbon:false, ribbonText:''}
 };
+// New compositions share the same editable text/image model as the classic layouts.
+const compositions=[
+ ['Duelo panorâmico','Artes preenchidas e faixa inferior',[0,0,640,720],[640,0,640,720],'split','both'],
+ ['Duelo com faixa central','Duas artes e nomes no centro',[0,0,640,720],[640,0,640,720],'band','both'],
+ ['Círculos em duelo','Duas ilustrações circulares',[55,105,520,520],[705,105,520,520],'circles','both'],
+ ['Destaque à direita','Título à esquerda e círculo grande',[790,100,420,420],[965,440,230,230],'circleRight','left'],
+ ['Destaque à esquerda','Círculo grande e título à direita',[70,100,420,420],[100,440,230,230],'circleLeft','right'],
+ ['Cartas completas','Duas cartas sem recortar a borda',[110,30,450,630],[720,30,450,630],'cards','both'],
+ ['Galeria assimétrica','Uma carta grande e outra de apoio',[80,85,520,560],[835,240,340,400],'gallery','left'],
+ ['Criador + cartas','Envie um retrato PNG e combine as cartas',[715,60,470,470],[925,435,245,245],'creator','right'],
+ ['Cinema TCG','Arte panorâmica e títulos na base',[0,0,850,600],[930,110,290,405],'cinema','left'],
+ ['Confronto diagonal','Dois painéis diagonais sem raios',[0,0,800,720],[540,0,740,720],'diagonal','both'],
+ ['Wallpaper + cartas','Envie seu papel de parede',[85,200,350,450],[845,200,350,450],'wallpaper','none'],
+ ['Foco + miniatura','Carta em destaque sobre sua própria arte',[755,45,455,630],[65,440,210,210],'focus','right']
+];
+compositions.forEach(([name,note,l,r,kind,source],i)=>{
+ const c=structuredClone(layoutPresets.layout9);c.name=name;c.note=note;
+ c.artL={x:l[0],y:l[1],w:l[2],h:l[3]};c.artR={x:r[0],y:r[1],w:r[2],h:r[3]};
+ c.vs={...c.vs,label:'VS',x:640,y:385,size:120};c.extra={kind,source};
+ c.deckL={x:55,y:660,size:60,anchor:'start',font:'impact'};c.deckR={x:1225,y:660,size:60,anchor:'end',font:'impact'};
+ if(kind==='band'){c.deckL.y=c.deckR.y=410;c.vs.y=420;}
+ if(['circleRight','focus'].includes(kind)){c.deckL={x:55,y:230,size:74,anchor:'start',font:'impact'};c.deckR={x:55,y:330,size:54,anchor:'start',font:'impact'};c.vs.label='';}
+ if(kind==='circleLeft'){c.deckL={x:1220,y:230,size:74,anchor:'end',font:'impact'};c.deckR={x:1220,y:330,size:54,anchor:'end',font:'impact'};c.vs.label='';}
+ if(kind==='creator'){c.deckL={x:50,y:100,size:70,anchor:'start',font:'impact'};c.deckR={x:50,y:180,size:55,anchor:'start',font:'impact'};c.vs.label='';}
+ if(['cinema','wallpaper'].includes(kind))c.vs.label='';
+ layoutPresets['layout'+(i+11)]=c;
+});
 const layoutOrder=Object.keys(layoutPresets);
 const currentLayout={value:'layout1'};
 function fontCss(key){return (FONTS[key]||FONTS.impact).css;}
@@ -199,6 +226,8 @@ function buildLayoutUI(){
   });
 }
 function buildThumbSvg(cfg){
+ if(cfg.extra){const circle=['circles','circleRight','circleLeft','creator'].includes(cfg.extra.kind);const art=(r,color)=>circle?`<ellipse cx="${(r.x+r.w/2)/8}" cy="${(r.y+r.h/2)/8}" rx="${r.w/16}" ry="${r.h/16}" fill="${color}" stroke="#e5f9bb"/>`:`<rect x="${r.x/8}" y="${r.y/8}" width="${r.w/8}" height="${r.h/8}" rx="2" fill="${color}"/>`;return `<svg viewBox="0 0 160 90"><rect width="160" height="90" fill="#182b34"/>${art(cfg.artL,'#49785a')}${art(cfg.artR,'#487b94')}<text x="${cfg.deckL.x/8}" y="${cfg.deckL.y/8}" text-anchor="${cfg.deckL.anchor}" fill="white" font-size="7">DECK 01</text><text x="${cfg.deckR.x/8}" y="${cfg.deckR.y/8}" text-anchor="${cfg.deckR.anchor}" fill="white" font-size="7">DECK 02</text><text x="80" y="48" text-anchor="middle" fill="#fff" font-size="12">${cfg.vs.label}</text></svg>`;}
+
   const cx=cfg.vs.x/1280*160, cy=cfg.vs.y/720*90;
   const leftX=cfg.artL.x/1280*160, leftY=cfg.artL.y/720*90, leftW=cfg.artL.w/1280*160, leftH=cfg.artL.h/720*90;
   const rightX=cfg.artR.x/1280*160, rightY=cfg.artR.y/720*90, rightW=cfg.artR.w/1280*160, rightH=cfg.artR.h/720*90;
@@ -268,7 +297,7 @@ function applyLayout(name, announce=false){
   toggleEls.deckNames.checked=true;
   toggleEls.cardNames.checked=(cfg.digiL.display!==false || cfg.digiR.display!==false);
   toggleEls.cardDetails.checked=(cfg.detailL.display!==false || cfg.detailR.display!==false);
-  toggleEls.vs.checked=true;
+  toggleEls.vs.checked=cfg.vs.label!=='';
   ribbonInput.value=cfg.ribbonText || 'DIGIMON CARD GAME  •  DECK BATTLE';
   deckFontInput.value=cfg.deckL.font || 'impact';
   cardFontInput.value=cfg.digiL.font || 'impact';
@@ -280,7 +309,7 @@ function applyLayout(name, announce=false){
   document.getElementById('vs-plate-ring').style.display=cfg.showPlate===false?'none':'';
   applyCustomControls();
   syncLayoutCardSelection();
-  window.dispatchEvent(new Event('thumb:layout'));
+  window.dispatchEvent(new CustomEvent('thumb:layout',{detail:cfg.extra||null}));
   if(announce) status.textContent=`Layout aplicado: ${cfg.name}. Agora você pode editar VS/X/VERSUS, fontes e mostrar/ocultar elementos como quiser.`;
 }
 async function normalizeImage(file){
@@ -385,7 +414,7 @@ buildLayoutUI();
 wireTheme('left');
 wireTheme('right');
 applyLayout('layout1', false);
-window.ThumbEngine={loadFile,applyLayout,applyCustomControls,applyTheme,paletteFromAccent,uploaded,normalizeImage,
+window.ThumbEngine={layoutExtra:()=>layoutPresets[currentLayout.value]?.extra||null,loadFile,applyLayout,applyCustomControls,applyTheme,paletteFromAccent,uploaded,normalizeImage,
  resetImages(){for(const side of ['left','right']){imageSequence[side]++;uploaded[side]=false;document.getElementById(`art-${side}`).removeAttribute('href');document.getElementById(`art-${side}`).removeAttribute('transform');document.getElementById(`placeholder-${side}`).style.display='';document.getElementById(`file-name-${side}`).textContent='PNG, JPG ou WebP • clique ou arraste aqui';}applyToggles();},
  setImage(side,data){document.getElementById(`art-${side}`).setAttribute('href',data);uploaded[side]=true;document.getElementById(`placeholder-${side}`).style.display='none';applyToggles();}
 };

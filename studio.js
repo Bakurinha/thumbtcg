@@ -54,7 +54,7 @@ window.addEventListener('thumb:layout',()=>{
  if(!active)return;value('top-ribbon-input',games[active].ribbon);value('deck-font',games[active].font);value('card-font',games[active].font);for(const side of ['left','right'])transform(side);
 });
 function snapshot(){
- return {format:'thumbtcg',version:2,game:active,fields:Object.fromEntries(baseFields.map(el=>[el.id,el.type==='checkbox'?el.checked:el.value])),art:{left:{...art.left},right:{...art.right}},elements:window.ThumbInteractions?.getState()||{}};
+ return {format:'thumbtcg',version:2,game:active,fields:Object.fromEntries(baseFields.map(el=>[el.id,el.type==='checkbox'?el.checked:el.value])),art:{left:{...art.left},right:{...art.right}},elements:window.ThumbInteractions?.getState()||{},advanced:window.ThumbAdvanced?.getState()||null};
 }
 async function restore(data){
  busy++;try{
@@ -68,6 +68,7 @@ async function restore(data){
  }
  engine.applyCustomControls();
  window.ThumbInteractions?.setState(data.elements||{});
+ window.ThumbAdvanced?.setState(data.advanced);
  }finally{busy--;}
 }
 async function route(){
@@ -77,7 +78,7 @@ async function route(){
  active=valid;editor.hidden=!active;$('welcome').hidden=!!active;$('change-game').hidden=!active;document.querySelector('.nav-label').hidden=!!active;
  if(!active){document.title='ThumbTCG — seu deck em destaque';document.body.removeAttribute('data-game');document.documentElement.style.setProperty('--accent','#c6f36b');return;}
  const game=games[active];document.body.dataset.game=active;document.title=`${game.name} · ThumbTCG`;$('editor-title').textContent=game.name;themeNote.textContent=game.note;
- document.documentElement.style.setProperty('--accent',game.accent);engine.resetImages();window.ThumbInteractions?.setState({});
+ document.documentElement.style.setProperty('--accent',game.accent);engine.resetImages();window.ThumbInteractions?.setState({});window.ThumbAdvanced?.reset();
  const mesh=$('mesh');mesh.setAttribute('width','80');mesh.setAttribute('height','80');mesh.innerHTML=patterns[active];
  for(const side of ['left','right']){
   defaults(side);const select=$(`theme-${side}`);select.replaceChildren(...game.colors.map(([key,name])=>new Option(name,key)),new Option('Personalizada','custom'));
@@ -164,8 +165,9 @@ $('open-project').addEventListener('change',async e=>{
   if(data.format!=='thumbtcg'||data.version!==2||!Object.hasOwn(games,data.game)||!data.fields||!data.art)throw new Error('Arquivo de projeto inválido.');
   for(const side of ['left','right']){const a=data.art[side];if(!a||typeof a.original!=='string'||(a.original&&!/^data:image\/png;base64,[A-Za-z0-9+/=]+$/.test(a.original))||!['full','art'].includes(a.mode)||!Number.isFinite(a.x)||Math.abs(a.x)>640||!Number.isFinite(a.y)||Math.abs(a.y)>720||!Number.isFinite(a.zoom)||a.zoom<.5||a.zoom>3)throw new Error('Dados de imagem inválidos.');}
   window.ThumbInteractions?.validateState(data.elements||{});
+  window.ThumbAdvanced?.validateState(data.advanced);
   if(data.fields['export-size']&&!['1280','1920','2560'].includes(String(data.fields['export-size'])))throw new Error('Resolução inválida.');
-  for(const side of ['left','right'])if(data.art[side].original){const img=new Image();img.src=data.art[side].original;await img.decode();if(img.naturalWidth>4096||img.naturalHeight>4096)throw new Error('Imagem do projeto excede o tamanho permitido.');}
+  for(const source of [data.art.left.original,data.art.right.original,data.advanced?.wallpaper,data.advanced?.extra].filter(Boolean)){const img=new Image();img.src=source;await img.decode();if(img.naturalWidth>4096||img.naturalHeight>4096)throw new Error('Imagem do projeto excede o tamanho permitido.');}
   for(const side of ['left','right'])if(!/^#[0-9a-f]{6}$/i.test(data.fields[`accent-${side}`]))throw new Error('Cor inválida.');
   if(busy)throw new Error('Aguarde a imagem terminar de carregar.');
   if(active)drafts.set(active,snapshot());drafts.set(data.game,data);active=null;history.replaceState(null,'',`#${data.game}`);await route();$('status').textContent='Projeto restaurado. Continue sua edição.';
