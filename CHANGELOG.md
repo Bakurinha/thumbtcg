@@ -1,3 +1,10 @@
+## 0.3.3 — Identidade visual e backlog
+
+- Logo THUMB TCG Studio com transparência substitui o nome textual no cabeçalho.
+- Remove os rótulos numerados dos cardgames e o título Construído com a comunidade.
+- Harmoniza a tipografia do título principal com o restante da interface.
+- Cria BACKLOG.md com as cinco frentes solicitadas e critérios de conclusão.
+
 ## 0.3.2 — Cartas no destaque
 
 - MedievalGallantmon e Ash Blossom substituem os pôsteres decorativos da home.
