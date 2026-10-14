@@ -10,7 +10,7 @@ export function allowedImage(value){
 }
 export default {async fetch(request,env,ctx){
  const origin=env.ALLOWED_ORIGIN||'https://bakurinha.github.io';
- const headers={'Access-Control-Allow-Origin':origin,'Access-Control-Allow-Methods':'GET, OPTIONS','X-ThumbTCG-Version':'2026-10-14.1','Vary':'Origin','X-Content-Type-Options':'nosniff'};
+ const headers={'Access-Control-Allow-Origin':origin,'Access-Control-Allow-Methods':'GET, OPTIONS','X-ThumbTCG-Version':'2026-10-14.2','Vary':'Origin','X-Content-Type-Options':'nosniff'};
  const error=(message,status)=>new Response(message,{status,headers});
  if(request.headers.get('Origin')&&request.headers.get('Origin')!==origin)return error('Origin not allowed',403);
  if(request.method==='OPTIONS')return new Response(null,{status:204,headers});
@@ -23,7 +23,7 @@ export default {async fetch(request,env,ctx){
  const cached=await caches.default.match(cacheKey);if(cached)return cached;
  const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),15000);
  try{
-  const upstream=await fetch(source,{redirect:'error',signal:controller.signal,headers:{Accept:'image/webp,image/png,image/jpeg'}});
+  const upstream=await fetch(source,{redirect:'manual',signal:controller.signal,headers:{Accept:'image/webp,image/png,image/jpeg'}});
   if(!upstream.ok)return error(`Image source returned HTTP ${upstream.status}`,502);
   const type=(upstream.headers.get('content-type')||'').split(';')[0];
   if(!/^image\/(png|jpeg|webp)$/i.test(type))return error('Invalid image',502);
