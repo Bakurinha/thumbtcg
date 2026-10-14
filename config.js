@@ -1,2 +1,2 @@
-// URL pública do Worker; nunca coloque senhas ou tokens neste arquivo.
-window.ThumbConfig = { imageService: '' };
+// URL pública do serviço de imagens; não contém credenciais.
+window.ThumbConfig = { imageService: 'https://thumbtcg-images.suportebakura.workers.dev' };

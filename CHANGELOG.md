@@ -1,3 +1,9 @@
+## 0.3.4 — Conexão com o serviço de imagens
+
+- Configura o Worker informado pelo usuário para importação Digimon/One Piece.
+- Atualiza a versão do carregamento de config.js para evitar configuração antiga em cache.
+- Validação HTTP recebeu bloqueio Cloudflare 403/1010; teste no navegador pendente.
+
 ## 0.3.3 — Identidade visual e backlog
 
 - Logo THUMB TCG Studio com transparência substitui o nome textual no cabeçalho.

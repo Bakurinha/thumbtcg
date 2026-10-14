@@ -4,10 +4,16 @@ O GitHub Pages serve arquivos estáticos. Os servidores dessas duas bases não
 autorizam a leitura da imagem pelo navegador para exportar o canvas. Este Worker
 busca a imagem e mantém cache por sete dias. Não precisa de chave de API das bases.
 
-## O que falta
+## Serviço configurado
 
-Uma conta Cloudflare e publicar este Worker nessa conta. Ele **não foi publicado**
-automaticamente. Consulte os limites/preços da sua conta antes de ativar.
+URL: https://thumbtcg-images.suportebakura.workers.dev
+
+A URL foi integrada ao frontend. A validação em navegador ainda está pendente;
+o ambiente de teste recebeu bloqueio Cloudflare 403/1010.
+
+## Como publicar novamente em outra conta
+
+É necessário ter uma conta Cloudflare. Consulte os limites/preços da sua conta antes de ativar.
 
 Com Node e o repositório no computador, execute na raiz do projeto:
 

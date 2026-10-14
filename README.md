@@ -34,14 +34,16 @@ Os rascunhos em memória duram somente enquanto a página estiver aberta. O arqu
 
 | Jogo | Fonte | Situação |
 | --- | --- | --- |
-| Digimon | Índice Digimon Card App / imagens TakaOtaku | Prévia e busca por nome/código com artes alternativas. Importação depende de ativar o Worker. |
+| Digimon | Índice Digimon Card App / imagens TakaOtaku | Prévia e busca por nome/código com artes alternativas. Worker conectado; validação em navegador pendente. |
 | Yu-Gi-Oh! | YGOPRODeck + YGOResources | Importação direta via repositórios de imagens, vinculada pelo ID Konami e arte do manifesto. |
 | Magic | Scryfall | Prévia e importação direta, incluindo edições e faces. |
-| One Piece | OPTCG API | Prévia; importação depende de ativar o Worker. |
+| One Piece | OPTCG API | Prévia; Worker conectado; validação em navegador pendente. |
 
-**Para ativar Digimon e One Piece:** siga [worker/README.md](worker/README.md).
-O serviço está pronto no repositório, mas ainda precisa ser publicado em uma conta
-Cloudflare e ter sua URL preenchida em `config.js`. O upload continua disponível.
+**Serviço de Digimon e One Piece configurado:**
+`https://thumbtcg-images.suportebakura.workers.dev`.
+A URL já está em `config.js`. A validação HTTP deste ambiente recebeu bloqueio
+Cloudflare 403/1010; falta confirmar a importação no navegador do usuário.
+O upload manual continua disponível. Para manutenção, veja [worker/README.md](worker/README.md).
 
 As imagens importadas são incorporadas ao projeto para exportação. Uma falha de
 importação mantém a carta anterior e seus dados. Há limite de 8 MB por imagem e

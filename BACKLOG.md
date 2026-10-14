@@ -12,8 +12,9 @@ Ideias aprovadas para planejamento, ainda não implementadas. A ordem abaixo é 
 
 ## Pendência da integração atual
 
-- [ ] Receber a URL pública do Worker implantado na Cloudflare.
-- [ ] Configurar `imageService` em `config.js` e testar importação de Digimon e One Piece.
+- [x] Receber a URL pública do Worker implantado na Cloudflare.
+- [x] Configurar `imageService` em `config.js`.
+- [ ] Validar importação de Digimon e One Piece no navegador. Teste HTTP neste ambiente recebeu bloqueio Cloudflare 403/1010.
 - [ ] Validar exportação PNG real em navegador, inclusive no celular.
 
 ## Regra de evolução
