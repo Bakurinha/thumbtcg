@@ -4,7 +4,7 @@
 const cache=new Map();let nextRequest=0;
 const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 async function json(url,signal){
- const hit=cache.get(url);if(hit&&Date.now()-hit.at<3600000)return hit.data;
+ const hit=cache.get(url);if(hit&&Date.now()-hit.at<86400000)return hit.data;
  const slot=Math.max(Date.now(),nextRequest);nextRequest=slot+850;await sleep(slot-Date.now());
  if(signal?.aborted)throw new DOMException('Cancelado','AbortError');
  const timeout=new AbortController(),id=setTimeout(()=>timeout.abort(),20000);
@@ -56,5 +56,23 @@ const configs={
   const seen=new Set();return {cards:cards.filter(c=>{const id=c.card_image||c.card_image_id;if(seen.has(id))return false;seen.add(id);return true;}).map(c=>({name:c.card_name,id:c.card_image_id||c.card_set_id,detail:c.card_set_id,color:c.card_color?.split(/[ /]/)[0].toLowerCase(),image:safeURL(c.card_image),thumb:safeURL(c.card_image),url:safeURL(c.card_image)})),next:null,warning:failed?'Algumas coleções não responderam. Estes resultados são parciais.':''};
  }}
 };
+const inkColor={Amber:'yellow',Amethyst:'purple',Emerald:'green',Ruby:'red',Sapphire:'blue',Steel:'white'};
+const normalized=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+function pokemonCard(c,language){const image=safeURL(c.image);return {name:c.name,id:c.id,detail:`${c.id} · ${language.toUpperCase()}`,image:image?image+'/high.webp':'',thumb:image?image+'/low.webp':'',url:'https://tcgdex.net',source:`TCGdex ${language.toUpperCase()}`};}
+configs.pokemon={label:'TCGdex',link:'https://tcgdex.dev',note:'Cartas em inglês ou português. A disponibilidade de imagens varia por edição. Use carta inteira para full arts.',placeholder:'Ex.: Pikachu, Charizard ou base1-4',sources:[['auto','Automático · inglês'],['tcgdex-en','TCGdex · inglês'],['tcgdex-pt','TCGdex · português']],async search(query,page=1,signal,source='auto'){
+ const language=source==='tcgdex-pt'?'pt':'en',isId=/^[a-z0-9.]*\d[a-z0-9.]*-[a-z0-9]+$/i.test(query);
+ const params=new URLSearchParams({name:query,'pagination:page':String(page||1),'pagination:itemsPerPage':'100'});
+ const data=await json(`https://api.tcgdex.net/v2/${language}/cards${isId?'/'+encodeURIComponent(query):'?'+params}`,signal);
+ const list=Array.isArray(data)?data:data.id?[data]:[];
+ return {cards:list.map(c=>pokemonCard(c,language)),next:!isId&&list.length===100?Number(page||1)+1:null,source:`TCGdex ${language.toUpperCase()}`};
+}};
+function lorcastCard(c){const images=c.image_uris?.digital||{};return {name:[c.name,c.version].filter(Boolean).join(' — '),id:c.id,detail:`${c.set?.code||''} / ${c.collector_number||''} · ${c.rarity||''}`,color:inkColor[c.ink],image:safeURL(images.full||images.large||images.normal),thumb:safeURL(images.small||images.normal||images.large),url:'https://lorcast.com',layout:c.layout,source:'Lorcast'};}
+async function localLorcana(query,signal){const data=await json('data/lorcana-images.json',signal),term=normalized(query);return {cards:data.cards.filter(c=>normalized(`${c.name} ${c.detail}`).includes(term)).map(c=>({...c,color:inkColor[c.color],url:'https://lorcanajson.org',source:'LorcanaJSON + Lorcast · catálogo local'})),next:null,source:`Catálogo local · ${data.updated}`};}
+configs.lorcana={label:'Lorcast + LorcanaJSON',link:'https://lorcast.com/docs/api',note:'Busca inclui edições e variantes. No automático, uma falha da API usa o catálogo local complementar. Imagens sem correspondência podem ser enviadas manualmente.',placeholder:'Ex.: Elsa, Stitch ou Mickey',sources:[['auto','Automático · com alternativa'],['lorcast','Lorcast · online'],['lorcanajson','LorcanaJSON + Lorcast · catálogo local']],async search(query,page,signal,source='auto'){
+ if(source==='lorcanajson')return localLorcana(query,signal);
+ try{const data=await json(`https://api.lorcast.com/v0/cards/search?${new URLSearchParams({q:query,unique:'prints'})}`,signal);if(!Array.isArray(data.results))throw new Error('Resposta inválida da base Lorcast.');return {cards:data.results.map(lorcastCard),next:null,source:'Lorcast'};}
+ catch(e){if(signal?.aborted||source==='lorcast')throw e;const fallback=await localLorcana(query,signal);return {...fallback,warning:'Lorcast não respondeu. Exibindo o catálogo local complementar; edições recentes podem não estar incluídas.'};}
+}};
+
 window.ThumbProviders=configs;
 })();

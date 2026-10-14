@@ -24,3 +24,8 @@ test('reject invalid content, oversize and failures; failed download can retry',
  await assert.rejects(client(async()=>new Response('html',{headers:{'Content-Type':'text/html'}})).load('https://example.com/test'));
  await assert.rejects(client(async()=>new Response('x',{headers:{'Content-Type':'image/png','Content-Length':9*1024*1024}})).load('https://example.com/test'));
 });
+test('Lorcana AVIF uses the restricted image service',async()=>{
+ const source='https://cards.lorcast.io/card/digital/large/crd_d66016477d454f19abf12684a50221ef.avif?1770260175';let called;
+ const images=client(async u=>{called=new URL(u);return new Response('avif',{headers:{'Content-Type':'image/avif'}});},{imageService:'https://example.workers.dev'});
+ assert.equal((await images.load(source)).type,'image/avif');assert.equal(called.searchParams.get('url'),source);
+});

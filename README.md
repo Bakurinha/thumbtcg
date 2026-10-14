@@ -6,8 +6,9 @@ Editor de thumbnails dedicado a trading card games, mantido por **Bakura**.
 
 ## O que há nesta versão
 
-- Boas-vindas com seleção de Digimon TCG, Yu-Gi-Oh!, Magic: The Gathering e One Piece.
-- Rotas compartilháveis: `#digimon`, `#yugioh`, `#magic` e `#onepiece`.
+- Boas-vindas com seleção de Digimon TCG, Yu-Gi-Oh!, Magic: The Gathering, One Piece, Pokémon TCG e Disney Lorcana.
+- Rotas compartilháveis: `#digimon`, `#yugioh`, `#magic`, `#onepiece`, `#pokemon` e `#lorcana`.
+- 18 temas (três por jogo), molduras e intensidade ajustável; preservam cartas e posições.
 - 22 layouts, paletas de cada TCG, padrões visuais próprios e cores livres por lado.
 - Pesquisa nas bases correspondentes ao cardgame escolhido, com resultados e paginação.
 - Upload de imagens em todos os jogos; recorte inicial da ilustração em Yu-Gi-Oh!, Magic e One Piece.
@@ -19,6 +20,10 @@ Editor de thumbnails dedicado a trading card games, mantido por **Bakura**.
 - Salvar/abrir projeto JSON com as imagens. Rascunhos separados por jogo durante a sessão.
 - Interface responsiva: prévia ao lado das ferramentas no desktop e fluxo vertical no celular.
 - Contato e chave PIX com botão de copiar.
+
+## Temas por cardgame
+
+Em **Temas do cardgame**, escolha um preset e ajuste a intensidade ou a moldura. Os presets atualizam as cores dos dois lados, mantendo textos, imagens, posições e efeitos. **Remover efeitos e moldura** preserva as cores escolhidas. Fundo e moldura aparecem na edição por camadas. Projetos antigos abrem sem tema aplicado.
 
 ## Edição avançada
 
@@ -60,7 +65,12 @@ Os rascunhos em memória duram somente enquanto a página estiver aberta. O arqu
 | Magic | Scryfall | Prévia e importação direta, incluindo edições e faces. |
 | One Piece | OPTCG API | Prévia; Worker conectado; validação em navegador pendente. |
 
-**Serviço de Digimon e One Piece configurado:**
+| Pokémon | TCGdex | Inglês/português, nome/código e importação direta quando a edição oferece imagem. |
+| Lorcana | Lorcast + catálogo local LorcanaJSON/Lorcast | Busca online e alternativa local; imagens via Worker. |
+
+A fonte pode ser escolhida em Pokémon e Lorcana. O modo automático de Lorcana usa o catálogo local quando a busca online falha; o CDN das imagens continua sendo externo. O catálogo não garante lançamentos posteriores à sua atualização. Para reconstruí-lo, execute `python scripts/update-lorcana-index.py`; o script só grava após concluir todas as coleções. Referências: [TCGdex](https://tcgdex.dev), [Lorcast](https://lorcast.com/docs/api), [LorcanaJSON](https://lorcanajson.org).
+
+**Serviço de imagens configurado:**
 `https://thumbtcg-images.suportebakura.workers.dev`.
 A URL já está em `config.js`. Em 14/10/2026, a validação HTTP confirmou imagens
 Digimon (BT11-017, WebP) e One Piece (OP01-024, JPEG) com resposta 200 e CORS

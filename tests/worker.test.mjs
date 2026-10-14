@@ -20,3 +20,8 @@ test('worker imports, caches and rejects bad origin/content/size/redirect failur
   for(const [m,status] of [['html',502],['large',413],['redirect',502],['network',502]]){map.clear();mode=m;assert.equal((await worker.fetch(request(),{},ctx)).status,status);}
  }finally{globalThis.fetch=oldFetch;delete globalThis.caches;}
 });
+test('Lorcana permits only actual CDN image paths and numeric cache stamps',()=>{
+ const url='https://cards.lorcast.io/card/digital/large/crd_d66016477d454f19abf12684a50221ef.avif';
+ assert.ok(allowedImage(url));assert.ok(allowedImage(url+'?1770260175'));
+ for(const bad of [url+'?redirect=https://evil.com',url.replace('/digital/','/private/'),url.replace('cards.lorcast.io','cards.lorcast.io.evil.com')])assert.equal(allowedImage(bad),false);
+});

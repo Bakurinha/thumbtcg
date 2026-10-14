@@ -6,6 +6,8 @@ const games={
  digimon:{name:'Digimon TCG',accent:'#b5ed7a',ribbon:'DIGIMON CARD GAME • DECK BATTLE',layout:'layout1',colors:[['green','Verde'],['blue','Azul'],['red','Vermelho'],['yellow','Amarelo'],['purple','Roxo'],['black','Preto'],['white','Branco']],left:'green',right:'blue',note:'Energia digital, contraste de cores e enquadramento original de Digimon.',crop:[0,0,1,1],font:'hyper'},
  yugioh:{name:'Yu-Gi-Oh!',accent:'#c7a1ff',ribbon:'YU-GI-OH! • DUEL',layout:'layout3',colors:[['normal','Monstro normal'],['effect','Monstro de efeito'],['fusion','Fusão'],['synchro','Sincro'],['xyz','Xyz'],['link','Link'],['ritual','Ritual'],['spell','Magia'],['trap','Armadilha'],['pendulum','Pêndulo']],left:'fusion',right:'link',note:'Geometria de duelo e cores inspiradas nas molduras. O foco inicial recorta a ilustração.',crop:[.12,.18,.76,.48],font:'knockout'},
  magic:{name:'Magic: The Gathering',accent:'#efbb80',ribbon:'MAGIC: THE GATHERING • MATCH',layout:'layout4',colors:[['white','Mana branca'],['blue','Mana azul'],['black','Mana preta'],['red','Mana vermelha'],['green','Mana verde'],['yellow','Multicolorido / Dourado']],left:'red',right:'blue',note:'Atmosfera arcana, cores da mana e ilustração em primeiro plano. Ajuste o recorte para versões especiais.',crop:[.08,.12,.84,.43],font:'duel'},
+ pokemon:{name:'Pokémon TCG',accent:'#ffe274',ribbon:'POKÉMON TCG • DECK BATTLE',layout:'layout4',colors:[['yellow','Elétrico'],['red','Fogo'],['blue','Água'],['green','Planta'],['purple','Psíquico'],['black','Escuridão'],['white','Metal / Incolor']],left:'yellow',right:'blue',note:'Energia, tipos e arte em destaque. Use carta inteira para versões full art.',crop:[.08,.16,.84,.42],font:'arena'},
+ lorcana:{name:'Disney Lorcana',accent:'#c8a6ff',ribbon:'DISNEY LORCANA • DECK BATTLE',layout:'layout7',colors:[['yellow','Âmbar'],['purple','Ametista'],['green','Esmeralda'],['red','Rubi'],['blue','Safira'],['white','Aço']],left:'purple',right:'blue',note:'Tintas, magia e ilustração em foco. Para locais e cartas especiais, use carta inteira.',crop:[.04,.10,.92,.47],font:'duel'},
  onepiece:{name:'One Piece',accent:'#ff9380',ribbon:'ONE PIECE CARD GAME • LEADER BATTLE',layout:'layout2',colors:[['red','Vermelho'],['green','Verde'],['blue','Azul'],['purple','Roxo'],['black','Preto'],['yellow','Amarelo']],left:'red',right:'yellow',note:'Impacto de mangá e cores dos líderes. Recorte amplo para valorizar o personagem.',crop:[.05,.12,.9,.66],font:'arena'}
 };
 const colorHex={normal:'#d0ab60',effect:'#d9864c',fusion:'#b878ff',synchro:'#eef4ff',xyz:'#929aa6',link:'#47bcff',ritual:'#5ca4d8',spell:'#49c69e',trap:'#d866a8',pendulum:'#69cda3',green:'#8cff4b',blue:'#47bcff',red:'#ff6b63',yellow:'#ffd24d',purple:'#b878ff',black:'#9da8b6',white:'#eef4ff'};
@@ -30,6 +32,8 @@ const patterns={
  digimon:'<path d="M0 0H80V80" fill="none" stroke="#b4ffd5" stroke-opacity=".09"/>',
  yugioh:'<path d="M40 5L75 40 40 75 5 40Z" fill="none" stroke="#ffe0a0" stroke-opacity=".13"/>',
  magic:'<circle cx="40" cy="40" r="30" fill="none" stroke="#ffe6b7" stroke-opacity=".1"/><circle cx="40" cy="40" r="23" fill="none" stroke="#ffe6b7" stroke-opacity=".05"/>',
+ pokemon:'<path d="M50 0L25 40H45L20 80" fill="none" stroke="#ffe274" stroke-opacity=".12"/>',
+ lorcana:'<path d="M0 60Q25 5 45 42T80 20" fill="none" stroke="#c8a6ff" stroke-opacity=".12"/>',
  onepiece:'<path d="M0 75L80 5M0 80L80 10" stroke="#fff" stroke-opacity=".1"/><circle cx="20" cy="20" r="2" fill="#fff" fill-opacity=".13"/>'
 };
 function value(id,text){const el=$(id);el.value=text;el.dispatchEvent(new Event('input',{bubbles:true}));}
@@ -54,7 +58,7 @@ window.addEventListener('thumb:layout',()=>{
  if(!active)return;value('top-ribbon-input',games[active].ribbon);value('deck-font',games[active].font);value('card-font',games[active].font);for(const side of ['left','right'])transform(side);
 });
 function snapshot(){
- return {format:'thumbtcg',version:2,game:active,fields:Object.fromEntries(baseFields.map(el=>[el.id,el.type==='checkbox'?el.checked:el.value])),art:{left:{...art.left},right:{...art.right}},elements:window.ThumbInteractions?.getState()||{},advanced:window.ThumbAdvanced?.getState()||null,fx:window.ThumbFX?.getState()||null};
+ return {format:'thumbtcg',version:2,game:active,fields:Object.fromEntries(baseFields.map(el=>[el.id,el.type==='checkbox'?el.checked:el.value])),art:{left:{...art.left},right:{...art.right}},elements:window.ThumbInteractions?.getState()||{},advanced:window.ThumbAdvanced?.getState()||null,fx:window.ThumbFX?.getState()||null,appearance:window.ThumbThemes?.getState()||null};
 }
 async function restore(data){
  busy++;try{
@@ -70,6 +74,7 @@ async function restore(data){
  window.ThumbInteractions?.setState(data.elements||{});
  window.ThumbAdvanced?.setState(data.advanced);
  window.ThumbFX?.setState(data.fx);
+ window.ThumbThemes?.setState(data.appearance);
  }finally{busy--;}
 }
 async function route(){
@@ -79,11 +84,11 @@ async function route(){
  active=valid;editor.hidden=!active;$('welcome').hidden=!!active;$('change-game').hidden=!active;document.querySelector('.nav-label').hidden=!!active;
  if(!active){document.title='ThumbTCG — seu deck em destaque';document.body.removeAttribute('data-game');document.documentElement.style.setProperty('--accent','#c6f36b');return;}
  const game=games[active];document.body.dataset.game=active;document.title=`${game.name} · ThumbTCG`;$('editor-title').textContent=game.name;themeNote.textContent=game.note;
- document.documentElement.style.setProperty('--accent',game.accent);engine.resetImages();window.ThumbInteractions?.setState({});window.ThumbAdvanced?.reset();window.ThumbFX?.reset();
+ document.documentElement.style.setProperty('--accent',game.accent);engine.resetImages();window.ThumbInteractions?.setState({});window.ThumbAdvanced?.reset();window.ThumbFX?.reset();window.ThumbThemes?.reset(active);
  const mesh=$('mesh');mesh.setAttribute('width','80');mesh.setAttribute('height','80');mesh.innerHTML=patterns[active];
  for(const side of ['left','right']){
   defaults(side);const select=$(`theme-${side}`);select.replaceChildren(...game.colors.map(([key,name])=>new Option(name,key)),new Option('Personalizada','custom'));
-  const provider=providers[active];$(`search-${side}`).placeholder=provider.placeholder;$(`search-${side}`).value='';$(`source-${side}`).textContent=provider.label;$(`source-${side}`).href=provider.link;$(`source-note-${side}`).textContent=provider.note;$(`results-${side}`).replaceChildren();$(`search-status-${side}`).textContent='';$(`more-${side}`).hidden=true;$(`search-button-${side}`).disabled=false;searchState[side]={};
+  const provider=providers[active];const sources=provider.sources||[['auto',provider.label]];$(`source-select-${side}`).replaceChildren(...sources.map(([id,name])=>new Option(name,id)));$(`source-choice-${side}`).hidden=sources.length<2;$(`search-${side}`).placeholder=provider.placeholder;$(`search-${side}`).value='';$(`source-${side}`).textContent=provider.label;$(`source-${side}`).href=provider.link;$(`source-note-${side}`).textContent=provider.note;$(`results-${side}`).replaceChildren();$(`search-status-${side}`).textContent='';$(`more-${side}`).hidden=true;$(`search-button-${side}`).disabled=false;searchState[side]={};
   $(`crop-${side}`).querySelector('[value=art]').textContent=active==='digimon'?'Enquadramento Digimon':'Destacar ilustração';
  }
  if(drafts.has(active)){busy++;try{await restore(drafts.get(active));}finally{busy--;}}else{
@@ -94,8 +99,9 @@ async function route(){
  $('editor-title').setAttribute('tabindex','-1');$('editor-title').focus({preventScroll:true});window.scrollTo({top:0});window.dispatchEvent(new Event('thumb:ready'));
 }
 function buildSide(side){
- const panel=$(`panel-${side}`),box=document.createElement('form');box.className='library-box';box.innerHTML=`<label for="search-${side}">BUSCAR CARTA · ${side==='left'?'ESQUERDA':'DIREITA'}</label><div class="search-row"><input id="search-${side}" type="search" maxlength="80" autocomplete="off"/><button type="submit" id="search-button-${side}">Buscar</button></div><p class="source-note">Base: <a id="source-${side}" target="_blank" rel="noopener noreferrer"></a></p><p class="source-note" id="source-note-${side}"></p><p class="search-status" id="search-status-${side}" role="status" aria-live="polite"></p><div class="search-results" id="results-${side}"></div><button type="button" class="studio-btn more-results" id="more-${side}" hidden>Mostrar mais</button>`;
+ const panel=$(`panel-${side}`),box=document.createElement('form');box.className='library-box';box.innerHTML=`<label for="search-${side}">BUSCAR CARTA · ${side==='left'?'ESQUERDA':'DIREITA'}</label><div class="search-row"><input id="search-${side}" type="search" maxlength="80" autocomplete="off"/><button type="submit" id="search-button-${side}">Buscar</button></div><label class="field source-choice" id="source-choice-${side}" hidden><span>Fonte das cartas</span><select id="source-select-${side}"></select></label><p class="source-note">Base: <a id="source-${side}" target="_blank" rel="noopener noreferrer"></a></p><p class="source-note" id="source-note-${side}"></p><p class="search-status" id="search-status-${side}" role="status" aria-live="polite"></p><div class="search-results" id="results-${side}"></div><button type="button" class="studio-btn more-results" id="more-${side}" hidden>Mostrar mais</button>`;
  panel.querySelector('.side-heading').after(box);box.addEventListener('submit',e=>{e.preventDefault();search(side);});$(`more-${side}`).addEventListener('click',()=>more(side));
+ $(`source-select-${side}`).addEventListener('change',()=>{requests[side]?.abort();searchState[side]={};$(`results-${side}`).replaceChildren();$(`more-${side}`).hidden=true;$(`search-status-${side}`).textContent='Fonte alterada. Faça a busca novamente.';});
  const adjust=document.createElement('details');adjust.className='art-tools';adjust.open=true;
  adjust.innerHTML=`<summary>Enquadramento e posição</summary><label class="field"><span>Área da carta</span><select id="crop-${side}"><option value="art">Destacar ilustração</option><option value="full">Carta inteira / arte já recortada</option></select></label>${[['zoom','Zoom',.5,3,.05],['x','Horizontal',-640,640,1],['y','Vertical',-720,720,1]].map(([key,label,min,max,step])=>`<label class="field"><span class="range-line">${label}<output id="${key}-value-${side}"></output></span><input type="range" id="${key}-${side}" aria-label="${label} da carta ${side==='left'?'esquerda':'direita'}" min="${min}" max="${max}" step="${step}"/></label>`).join('')}<button type="button" class="studio-btn reset-art" id="reset-${side}">Centralizar e zerar zoom</button><p class="drag-hint">Ative “Mover arte na prévia” e arraste. Os controles acima também funcionam com teclado e toque.</p>`;
  $(`drop-${side}`).after(adjust);
@@ -111,10 +117,10 @@ for(const side of ['left','right']){buildSide(side);$(`theme-${side}`).addEventL
 async function search(side){
  const query=$(`search-${side}`).value.trim();if(query.length<2){$(`search-status-${side}`).textContent='Digite pelo menos 2 caracteres.';return;}
  requests[side]?.abort();const ctrl=new AbortController();requests[side]=ctrl;const version=routeVersion,game=active;
- searchState[side]={query,cards:[],shown:0,next:null};$(`results-${side}`).replaceChildren();$(`more-${side}`).hidden=true;
+ searchState[side]={query,providerSource:$(`source-select-${side}`).value,cards:[],shown:0,next:null};$(`results-${side}`).replaceChildren();$(`more-${side}`).hidden=true;
  const btn=$(`search-button-${side}`);btn.disabled=true;$(`search-status-${side}`).textContent='Buscando na base de cartas…';
  try{
-  const data=await providers[game].search(query,null,ctrl.signal);if(ctrl.signal.aborted||version!==routeVersion)return;
+  const data=await providers[game].search(query,null,ctrl.signal,searchState[side].providerSource);if(ctrl.signal.aborted||version!==routeVersion)return;
   Object.assign(searchState[side],data);renderBatch(side);
  }catch(e){if(ctrl.signal.aborted||version!==routeVersion)return;$(`search-status-${side}`).textContent=e.name==='AbortError'?'A busca demorou demais. Tente novamente ou envie sua imagem.':`${e.message||'Falha de conexão.'} Use o upload abaixo se necessário.`;}
  finally{if(requests[side]===ctrl)btn.disabled=false;}
@@ -124,16 +130,16 @@ function renderBatch(side){
  for(const card of cards.slice(state.shown||0,end)){
   const row=document.createElement('div');row.className='result-card';
   if(card.thumb){const img=document.createElement('img');img.src=card.thumb;img.alt=card.name;img.loading='lazy';img.onerror=()=>{img.remove();};row.append(img);}else{const ph=document.createElement('div');ph.className='result-placeholder';ph.textContent=active==='digimon'?'D':'Y';row.append(ph);}
-  const title=document.createElement('strong');title.textContent=card.name;const meta=document.createElement('span');meta.textContent=card.detail||card.id;const use=document.createElement('button');use.type='button';use.textContent=card.image?'Usar carta':'Usar dados';use.addEventListener('click',()=>useCard(side,card,use));row.append(title,meta,use);
+  const title=document.createElement('strong');title.textContent=card.name;const meta=document.createElement('span');meta.textContent=[card.detail||card.id,card.source].filter(Boolean).join(' · ');const use=document.createElement('button');use.type='button';use.textContent=card.image?'Usar carta':'Usar dados';use.addEventListener('click',()=>useCard(side,card,use));row.append(title,meta,use);
   if(card.url){const link=document.createElement('a');link.href=card.url;link.target='_blank';link.rel='noopener noreferrer';link.textContent=card.image?'Abrir imagem / fonte ↗':'Ver carta na base ↗';row.append(link);}
   container.append(row);
  }
- state.shown=end;$(`search-status-${side}`).textContent=cards.length?`${end} de ${cards.length}${state.next?' +':''} resultados. ${state.warning||''}`:'Nenhuma carta encontrada. Tente o nome em inglês ou envie a imagem.';$(`more-${side}`).hidden=end>=cards.length&&!state.next;
+ state.shown=end;$(`search-status-${side}`).textContent=cards.length?`${end} de ${cards.length}${state.next?' +':''} resultados. ${state.source?`Fonte: ${state.source}. `:''}${state.warning||''}`:'Nenhuma carta encontrada. Tente o nome em inglês ou envie a imagem.';$(`more-${side}`).hidden=end>=cards.length&&!state.next;
 }
 async function more(side){
  const state=searchState[side];if(state.shown<state.cards.length){renderBatch(side);return;}if(!state.next)return;
  const btn=$(`more-${side}`);btn.disabled=true;const version=routeVersion;
- try{const data=await providers[active].search(state.query,state.next,requests[side]?.signal);if(version!==routeVersion)return;state.cards.push(...data.cards);state.next=data.next;renderBatch(side);}catch(e){if(version===routeVersion)$(`search-status-${side}`).textContent='Não foi possível carregar a próxima página. Tente novamente.';}finally{btn.disabled=false;}
+ try{const data=await providers[active].search(state.query,state.next,requests[side]?.signal,state.providerSource);if(version!==routeVersion||searchState[side]!==state||requests[side]?.signal.aborted)return;state.cards.push(...data.cards);state.next=data.next;renderBatch(side);}catch(e){if(version===routeVersion&&searchState[side]===state&&!requests[side]?.signal.aborted)$(`search-status-${side}`).textContent='Não foi possível carregar a próxima página. Tente novamente.';}finally{btn.disabled=false;}
 }
 const importing={left:false,right:false};
 async function useCard(side,card,button){
@@ -144,8 +150,9 @@ async function useCard(side,card,button){
  $(`search-status-${side}`).textContent='Carregando a imagem da carta…';
  try{
   const blob=await window.ThumbImages.load(card.image);
+  const previousMode=art[side].mode;if(card.layout==='landscape'){art[side].mode='full';syncArt(side);}
   const ok=await engine.loadFile(side,new File([blob],`${card.id}.png`,{type:blob.type}));
-  if(ok)applyDetails();
+  if(ok)applyDetails();else{art[side].mode=previousMode;syncArt(side);}
   $(`search-status-${side}`).textContent=ok?'Carta aplicada. Ajuste o enquadramento como preferir.':'A imagem não pôde ser aberta. Envie-a manualmente.';
  }catch(e){$(`search-status-${side}`).textContent=e.code==='SERVICE_REQUIRED'?'A importação desta base ainda precisa ser ativada pelo administrador. Por enquanto, abra a imagem pelo link do resultado e envie pelo campo abaixo.':'Não foi possível importar a imagem. Tente novamente ou envie o arquivo pelo campo abaixo.';}
  finally{busy--;importing[side]=false;button.disabled=false;button.textContent=originalLabel;}
@@ -168,6 +175,7 @@ $('open-project').addEventListener('change',async e=>{
   window.ThumbInteractions?.validateState(data.elements||{});
   window.ThumbAdvanced?.validateState(data.advanced);
   window.ThumbFX?.validateState(data.fx);
+  if(data.appearance)window.ThumbThemes?.validate(data.appearance,data.game);
   if(data.fields['export-size']&&!['1280','1920','2560'].includes(String(data.fields['export-size'])))throw new Error('Resolução inválida.');
   for(const source of [data.art.left.original,data.art.right.original,data.advanced?.wallpaper,data.advanced?.extra,...(data.fx?.fanImages||[])].filter(Boolean)){const img=new Image();img.src=source;await img.decode();if(img.naturalWidth>4096||img.naturalHeight>4096)throw new Error('Imagem do projeto excede o tamanho permitido.');}
   for(const side of ['left','right'])if(!/^#[0-9a-f]{6}$/i.test(data.fields[`accent-${side}`]))throw new Error('Cor inválida.');

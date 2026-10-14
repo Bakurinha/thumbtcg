@@ -1,5 +1,14 @@
 ## 0.6.0 — Enquadramento e efeitos visuais
 
+## 0.7.0 — 2026-10-14
+
+- Seis cardgames: Pokémon TCG e Disney Lorcana entram na home com paletas, recortes e fontes próprios.
+- 18 temas SVG com intensidade, moldura, histórico, exportação e camadas reordenáveis.
+- Busca Pokémon via TCGdex EN/PT; Lorcast com fallback local complementar e fonte visível.
+- Worker de imagens aceita URLs restritas do CDN Lorcast e AVIF; demais regras de origem e tamanho preservadas.
+- Projetos v2 anteriores recebem camadas temáticas opcionais sem alterar sua aparência.
+
+
 - Painel opcional “Avançada e Prévia”, com abas acessíveis “Enquadramento & Câmera” e “Efeitos & Shaders”; atualização agrupada por frame, sem novos serviços externos.
 - Rotação Z e inclinação 2D independentes por carta; máscaras de círculo, lâmina, garras, estilhaços e explosão; divisão diagonal com extremos ajustáveis.
 - Leque de 2 a 5 imagens: cartas do editor e até três uploads, com abertura, espaçamento, elevação focal, posição e escala. O leque é um conjunto independente dos efeitos das cartas soltas.
