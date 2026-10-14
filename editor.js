@@ -292,7 +292,7 @@ async function normalizeImage(file){
   img.src=url;
   if(img.decode)await img.decode();else await new Promise((ok,fail)=>{img.onload=ok;img.onerror=fail;});
   if(!img.naturalWidth||!img.naturalHeight)throw new Error('Não consegui abrir a imagem.');
-  const limit=1800;
+  const limit=4096;
   const factor=Math.min(1,limit/Math.max(img.naturalWidth,img.naturalHeight));
   const canvas=document.createElement('canvas');
   canvas.width=Math.max(1,Math.round(img.naturalWidth*factor));
@@ -310,6 +310,7 @@ const imageSequence={left:0,right:0};
 async function loadFile(side,file){
  const sequence=++imageSequence[side];
  if(!file)return;
+ window.dispatchEvent(new CustomEvent('thumb:loading',{detail:true}));
  status.textContent=`Carregando carta da ${side==='left'?'esquerda':'direita'}...`;
  try{
    let base64=await normalizeImage(file);
@@ -327,6 +328,7 @@ async function loadFile(side,file){
    status.textContent='Imagem centralizada. Edite os nomes, escolha as cores, o layout e exporte quando quiser.';
    return true;
  }catch(err){status.textContent='Erro: '+(err.message||String(err));return false;}
+ finally{window.dispatchEvent(new CustomEvent('thumb:loading',{detail:false}));}
 }
 for(const side of ['left','right']){
  const input=document.getElementById('file-'+side);
@@ -341,9 +343,14 @@ async function exportPNG(){
  const old=exportBtn.textContent;
  exportBtn.textContent='Preparando PNG…';
  try{
-  status.textContent='Renderizando a capa em 1280 × 720…';
+  const width=Number(document.getElementById('export-size')?.value)||1280;
+  if(![1280,1920,2560].includes(width))throw new Error('Resolução inválida.');
+  const height=width*9/16;
+  const warnings=await window.ThumbStudio?.qualityWarnings?.(width)||[];
+  status.textContent=`Renderizando a capa em ${width} × ${height}…`; 
   const copy=svg.cloneNode(true);
-  copy.setAttribute('width','1280');copy.setAttribute('height','720');
+  copy.setAttribute('width',width);copy.setAttribute('height',height);
+  copy.querySelectorAll('[data-editor-only]').forEach(el=>el.remove());
   copy.removeAttribute('id');
   for(const side of ['left','right']) if(toggleEls[side==='left'?'leftArt':'rightArt'].checked && !uploaded[side]) throw new Error(`Selecione a carta da ${side==='left'?'esquerda':'direita'} antes de exportar.`);
   for(const side of ['left','right']){
@@ -356,16 +363,17 @@ async function exportPNG(){
   try{
    const img=new Image();img.src=blobUrl;
    if(img.decode)await img.decode();else await new Promise((ok,fail)=>{img.onload=ok;img.onerror=fail;});
-   const canvas=document.createElement('canvas');canvas.width=1280;canvas.height=720;
+   const canvas=document.createElement('canvas');canvas.width=width;canvas.height=height;
    const ctx=canvas.getContext('2d',{alpha:false});
-   ctx.drawImage(img,0,0,1280,720);
+   ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';
+   ctx.drawImage(img,0,0,width,height);
    const png=await new Promise((ok,fail)=>canvas.toBlob(blob=>blob?ok(blob):fail(new Error('Falha ao gerar PNG')),'image/png'));
    const link=URL.createObjectURL(png);
-   const a=document.createElement('a');a.href=link;a.download=`ThumbTCG-${document.body.dataset.game||'capa'}-1280x720.png`;
+   const a=document.createElement('a');a.href=link;a.download=`ThumbTCG-${document.body.dataset.game||'capa'}-${width}x${height}.png`;
    document.body.appendChild(a);a.click();a.remove();
    setTimeout(()=>URL.revokeObjectURL(link),2000);
   }finally{URL.revokeObjectURL(blobUrl);}
-  status.textContent='PNG exportado com sucesso (1280 × 720 pixels).';
+  status.textContent=`PNG exportado (${width} × ${height} pixels). ${warnings.join(' ')}`;
  }catch(e){status.textContent='Não foi possível exportar: '+(e.message||String(e));}
  finally{exportBtn.disabled=false;exportBtn.textContent=old;}
 }

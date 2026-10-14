@@ -43,7 +43,7 @@ const configs={
   const params=new URLSearchParams({q:query,unique:'prints',order:'name',page:String(page||1)}),data=await json(`https://api.scryfall.com/cards/search?${params}`,signal);
   return {cards:(data.data||[]).flatMap(c=>{
    const faces=c.image_uris?[{name:c.name,image_uris:c.image_uris}]:c.card_faces||[];
-   return faces.filter(f=>f.image_uris).map((f,i)=>({name:f.name||c.name,id:`${c.id}-${i}`,detail:`${c.set?.toUpperCase()} · ${c.collector_number}`,color:({W:'white',U:'blue',B:'black',R:'red',G:'green'})[(c.color_identity||[])[0]]||'yellow',url:safeURL(c.scryfall_uri),image:safeURL(f.image_uris.large||f.image_uris.normal),art:safeURL(f.image_uris.art_crop),thumb:safeURL(f.image_uris.small)}));
+   return faces.filter(f=>f.image_uris).map((f,i)=>({name:f.name||c.name,id:`${c.id}-${i}`,detail:`${c.set?.toUpperCase()} · ${c.collector_number}`,color:({W:'white',U:'blue',B:'black',R:'red',G:'green'})[(c.color_identity||[])[0]]||'yellow',url:safeURL(c.scryfall_uri),image:safeURL(f.image_uris.png||f.image_uris.large||f.image_uris.normal),art:safeURL(f.image_uris.art_crop),thumb:safeURL(f.image_uris.small)}));
   }),next:data.has_more?Number(page||1)+1:null};
  }},
  onepiece:{label:'OPTCG API',link:'https://optcgapi.com/documentation',note:'Busca em coleções, decks iniciais e promos. Se a imagem não puder ser importada, use o upload.',placeholder:'Ex.: Luffy, Zoro ou Nami',async search(query,page,signal){

@@ -39,7 +39,7 @@ async function route(game){w.location.hash=game;await tick();}
  w.ThumbProviders.digimon.search=async()=>({cards:[{name:'Replacement',id:'X',image:'https://web-garage.takaotaku.de/BT11-017.webp'}],next:null});
  $('search-left').closest('form').dispatchEvent(new w.Event('submit',{cancelable:true}));await tick();
  const prior=$('input-left-digimon').value;$('results-left').querySelector('button').click();await tick();
- assert.equal($('input-left-digimon').value,prior);assert.match($('search-status-left').textContent,/administrador/);
+ assert.equal($('input-left-digimon').value,prior);assert.match($('search-status-left').textContent,/envie o arquivo/);
  // Successful image import applies names only after the engine accepts the image.
  w.ThumbImages.load=async()=>new w.Blob(['test'],{type:'image/png'});w.ThumbEngine.loadFile=async()=>true;
  $('results-left').querySelector('button').click();await tick();assert.equal($('input-left-digimon').value,'Replacement');

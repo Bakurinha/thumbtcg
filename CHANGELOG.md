@@ -1,3 +1,12 @@
+## 0.4.0 — Qualidade de exportação e edição direta
+
+- Exportação PNG em 720p, 1080p e 1440p; avisos quando a carta original limita a nitidez.
+- Upload preserva até 4096 px; Magic prioriza a imagem PNG da base.
+- Seleção, arraste com mouse/toque, redimensionamento proporcional e alinhamento de cartas, textos, bases e faixas na prévia.
+- Desfazer/refazer até 25 alterações; resolução e transformações salvas no JSON, com abertura compatível dos projetos v2 anteriores.
+- Restauração do projeto limpa imagens anteriores e evita interação durante desfazer/refazer assíncrono.
+- Testes reais em Chromium desktop e móvel com toque emulado: importação de imagens locais, redimensionamento, alinhamento, histórico, salvar/reabrir e dimensões dos PNGs exportados. Teste em celular físico pendente.
+
 ## 0.3.5 — Correção do serviço de imagens
 
 - Usa redirecionamento manual compatível com o Worker, rejeitando respostas de redirecionamento.

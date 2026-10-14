@@ -1,8 +1,14 @@
 {
   "name": "thumbtcg",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
   "description": "Editor de thumbnails para trading card games",
-  "scripts": {"test": "node tests/studio.test.cjs && node --test tests/images.test.cjs tests/worker.test.mjs"},
-  "devDependencies": {"jsdom": "30.1.2"}
+  "scripts": {
+    "test": "node tests/studio.test.cjs && node --test tests/images.test.cjs tests/worker.test.mjs",
+    "test:browser": "node tests/browser.cjs"
+  },
+  "devDependencies": {
+    "jsdom": "30.1.2",
+    "playwright": "1.62.1"
+  }
 }

@@ -45,24 +45,30 @@ async function cropImage(source,side){
  const [x,y,w,h]=games[active].crop,canvas=document.createElement('canvas');canvas.width=Math.round(img.naturalWidth*w);canvas.height=Math.round(img.naturalHeight*h);
  canvas.getContext('2d').drawImage(img,img.naturalWidth*x,img.naturalHeight*y,canvas.width,canvas.height,0,0,canvas.width,canvas.height);return canvas.toDataURL('image/png');
 }
-window.ThumbStudio={async prepareImage(source,side){
+window.ThumbStudio={snapshot,restore, isBusy:()=>busy>0, async prepareImage(source,side){
  const game=active;art[side].original=source;art[side].x=0;art[side].y=0;art[side].zoom=1;syncArt(side);const result=await cropImage(source,side);if(active!==game)throw new Error('O cardgame foi alterado. Envie a carta novamente.');return result;
 }};
 window.addEventListener('thumb:image',e=>transform(e.detail.side));
+window.addEventListener('thumb:loading',e=>{busy=Math.max(0,busy+(e.detail?1:-1));});
 window.addEventListener('thumb:layout',()=>{
  if(!active)return;value('top-ribbon-input',games[active].ribbon);value('deck-font',games[active].font);value('card-font',games[active].font);for(const side of ['left','right'])transform(side);
 });
 function snapshot(){
- return {format:'thumbtcg',version:2,game:active,fields:Object.fromEntries(baseFields.map(el=>[el.id,el.type==='checkbox'?el.checked:el.value])),art:structuredClone(art)};
+ return {format:'thumbtcg',version:2,game:active,fields:Object.fromEntries(baseFields.map(el=>[el.id,el.type==='checkbox'?el.checked:el.value])),art:{left:{...art.left},right:{...art.right}},elements:window.ThumbInteractions?.getState()||{}};
 }
 async function restore(data){
+ busy++;try{
+ engine.resetImages();
  engine.applyLayout(data.fields['layout-preset']||games[active].layout);
+ if(!data.fields['export-size'])$('export-size').value='1280';
  for(const el of baseFields){if(!(el.id in data.fields))continue;if(el.type==='checkbox')el.checked=Boolean(data.fields[el.id]);else el.value=String(data.fields[el.id]);}
  for(const side of ['left','right']){
   art[side]={...data.art[side],generation:0};syncArt(side);engine.applyTheme(side,engine.paletteFromAccent($(`accent-${side}`).value));
   if(art[side].original)engine.setImage(side,await cropImage(art[side].original,side));
  }
  engine.applyCustomControls();
+ window.ThumbInteractions?.setState(data.elements||{});
+ }finally{busy--;}
 }
 async function route(){
  const next=location.hash.slice(1),valid=Object.hasOwn(games,next)?next:null;
@@ -71,7 +77,7 @@ async function route(){
  active=valid;editor.hidden=!active;$('welcome').hidden=!!active;$('change-game').hidden=!active;document.querySelector('.nav-label').hidden=!!active;
  if(!active){document.title='ThumbTCG — seu deck em destaque';document.body.removeAttribute('data-game');document.documentElement.style.setProperty('--accent','#c6f36b');return;}
  const game=games[active];document.body.dataset.game=active;document.title=`${game.name} · ThumbTCG`;$('editor-title').textContent=game.name;themeNote.textContent=game.note;
- document.documentElement.style.setProperty('--accent',game.accent);engine.resetImages();
+ document.documentElement.style.setProperty('--accent',game.accent);engine.resetImages();window.ThumbInteractions?.setState({});
  const mesh=$('mesh');mesh.setAttribute('width','80');mesh.setAttribute('height','80');mesh.innerHTML=patterns[active];
  for(const side of ['left','right']){
   defaults(side);const select=$(`theme-${side}`);select.replaceChildren(...game.colors.map(([key,name])=>new Option(name,key)),new Option('Personalizada','custom'));
@@ -83,7 +89,7 @@ async function route(){
   value('top-ribbon-input',game.ribbon);value('deck-font',game.font);value('card-font',game.font);
  }
  $('status').textContent='Busque uma carta ou envie suas imagens para começar.';engine.applyCustomControls();
- $('editor-title').setAttribute('tabindex','-1');$('editor-title').focus({preventScroll:true});window.scrollTo({top:0});
+ $('editor-title').setAttribute('tabindex','-1');$('editor-title').focus({preventScroll:true});window.scrollTo({top:0});window.dispatchEvent(new Event('thumb:ready'));
 }
 function buildSide(side){
  const panel=$(`panel-${side}`),box=document.createElement('form');box.className='library-box';box.innerHTML=`<label for="search-${side}">BUSCAR CARTA · ${side==='left'?'ESQUERDA':'DIREITA'}</label><div class="search-row"><input id="search-${side}" type="search" maxlength="80" autocomplete="off"/><button type="submit" id="search-button-${side}">Buscar</button></div><p class="source-note">Base: <a id="source-${side}" target="_blank" rel="noopener noreferrer"></a></p><p class="source-note" id="source-note-${side}"></p><p class="search-status" id="search-status-${side}" role="status" aria-live="polite"></p><div class="search-results" id="results-${side}"></div><button type="button" class="studio-btn more-results" id="more-${side}" hidden>Mostrar mais</button>`;
@@ -154,11 +160,14 @@ $('save-project').addEventListener('click',()=>{
 $('open-project').addEventListener('change',async e=>{
  const file=e.target.files[0];if(!file)return;
  try{
-  if(file.size>25*1024*1024)throw new Error('O projeto deve ter até 25 MB.');const data=JSON.parse(await file.text());
+  if(file.size>100*1024*1024)throw new Error('O projeto deve ter até 100 MB.');const data=JSON.parse(await file.text());
   if(data.format!=='thumbtcg'||data.version!==2||!Object.hasOwn(games,data.game)||!data.fields||!data.art)throw new Error('Arquivo de projeto inválido.');
   for(const side of ['left','right']){const a=data.art[side];if(!a||typeof a.original!=='string'||(a.original&&!/^data:image\/png;base64,[A-Za-z0-9+/=]+$/.test(a.original))||!['full','art'].includes(a.mode)||!Number.isFinite(a.x)||Math.abs(a.x)>640||!Number.isFinite(a.y)||Math.abs(a.y)>720||!Number.isFinite(a.zoom)||a.zoom<.5||a.zoom>3)throw new Error('Dados de imagem inválidos.');}
-  for(const side of ['left','right'])if(data.art[side].original){const img=new Image();img.src=data.art[side].original;await img.decode();if(img.naturalWidth>1800||img.naturalHeight>1800)throw new Error('Imagem do projeto excede o tamanho permitido.');}
+  window.ThumbInteractions?.validateState(data.elements||{});
+  if(data.fields['export-size']&&!['1280','1920','2560'].includes(String(data.fields['export-size'])))throw new Error('Resolução inválida.');
+  for(const side of ['left','right'])if(data.art[side].original){const img=new Image();img.src=data.art[side].original;await img.decode();if(img.naturalWidth>4096||img.naturalHeight>4096)throw new Error('Imagem do projeto excede o tamanho permitido.');}
   for(const side of ['left','right'])if(!/^#[0-9a-f]{6}$/i.test(data.fields[`accent-${side}`]))throw new Error('Cor inválida.');
+  if(busy)throw new Error('Aguarde a imagem terminar de carregar.');
   if(active)drafts.set(active,snapshot());drafts.set(data.game,data);active=null;history.replaceState(null,'',`#${data.game}`);await route();$('status').textContent='Projeto restaurado. Continue sua edição.';
  }catch(error){$('status').textContent=error.message||'Não foi possível abrir este projeto.';}finally{e.target.value='';}
 });

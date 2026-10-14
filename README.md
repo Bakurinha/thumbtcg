@@ -11,9 +11,11 @@ Editor de thumbnails dedicado a trading card games, mantido por **Bakura**.
 - Dez layouts, paletas de cada TCG, padrões visuais próprios e cores livres por lado.
 - Pesquisa nas bases correspondentes ao cardgame escolhido, com resultados e paginação.
 - Upload de imagens em todos os jogos; recorte inicial da ilustração em Yu-Gi-Oh!, Magic e One Piece.
-- Posição horizontal/vertical, zoom e modo de arraste na prévia, inclusive por toque.
+- Posição horizontal/vertical, zoom e edição direta na prévia, inclusive por toque.
+- Seleção de cartas, textos, bases e faixas; arraste, redimensionamento proporcional e alinhamento ao canvas.
+- Desfazer/refazer até 25 alterações por sessão de edição; projetos antigos continuam compatíveis.
 - Textos, fontes, VS/X personalizado e elementos opcionais.
-- Exportação PNG em 1280 × 720, com as imagens incorporadas à renderização.
+- Exportação PNG em 1280 × 720, 1920 × 1080 e 2560 × 1440, com imagens incorporadas e avisos de nitidez.
 - Salvar/abrir projeto JSON com as imagens. Rascunhos separados por jogo durante a sessão.
 - Interface responsiva: prévia ao lado das ferramentas no desktop e fluxo vertical no celular.
 - Contato e chave PIX com botão de copiar.
@@ -26,7 +28,7 @@ Acesse o site (ou sirva a pasta por HTTP para desenvolvimento). Não é necessá
 2. Pesquise uma carta ou envie uma imagem em cada lado.
 3. Selecione um layout, as cores e os textos.
 4. Ajuste o recorte, a posição e o zoom. Para artes já recortadas, escolha **Carta inteira / arte já recortada**.
-5. Exporte o PNG. Salve o projeto JSON se quiser editar novamente depois.
+5. Escolha a resolução e exporte o PNG. Salve o projeto JSON se quiser editar novamente depois.
 
 Os rascunhos em memória duram somente enquanto a página estiver aberta. O arquivo JSON é a forma de guardar a edição, inclusive as imagens, entre sessões.
 
@@ -79,7 +81,11 @@ npm install
 npm test
 ```
 
-A validação da versão 0.2 incluiu sintaxe JavaScript, fluxos em DOM simulado e consultas HTTP a provedores. **Não houve validação visual em navegador nem teste real de exportação PNG nesta sessão.**
+A versão 0.4 foi validada em Chromium com tela desktop (1440 px) e móvel (390 px, toque emulado): upload, arraste, redimensionamento, alinhamento, histórico, projetos novos/antigos e PNG real nas três resoluções. Isso não substitui um teste em aparelho físico. Os testes de navegador usam imagens de teste locais; as bases externas foram verificadas separadamente por HTTP.
+
+Para repetir: `npx playwright install chromium`, sirva a pasta com `python -m http.server 8765` e rode `npm run test:browser`. `BASE_URL` permite mudar o servidor; `CHROMIUM_PATH` permite usar um Chromium já instalado.
+
+Ative **Editar elementos na prévia** para arrastar e usar o ponto no canto. Também há campos numéricos e alinhamento ao canvas. Use Ctrl/Cmd+Z para desfazer e Ctrl/Cmd+Shift+Z ou Ctrl+Y para refazer (fora dos campos de texto). O histórico reinicia ao trocar de jogo ou abrir um projeto; as posições e a resolução são salvas no JSON. A exportação maior não recria detalhes ausentes nas cartas. Uploads mantêm até 4096 px no maior lado; Magic prioriza PNG quando disponível.
 
 ## Contato e apoio
 

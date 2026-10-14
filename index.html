@@ -6,12 +6,12 @@
 <meta name="color-scheme" content="dark" />
 <title>ThumbTCG — seu deck em destaque</title>
 <meta name="description" content="Crie thumbnails de Digimon, Yu-Gi-Oh!, Magic e One Piece. Escolha seu TCG, personalize a arte e exporte sua capa."/>
-<link rel="stylesheet" href="editor.css?v=2"/><link rel="stylesheet" href="studio.css?v=6"/>
+<link rel="stylesheet" href="editor.css?v=2"/><link rel="stylesheet" href="studio.css?v=8"/>
 </head>
 <body>
 <nav class="site-nav" aria-label="Navegação principal"><a href="#" class="brand" aria-label="Thumb TCG — início"><img class="brand-logo" src="assets/brand/thumb-tcg-logo.png" alt="THUMB TCG Studio" width="2020" height="779" /></a><div><span class="nav-label">FEITO PARA QUEM JOGA.</span><a href="#" id="change-game" hidden>← Trocar TCG</a></div></nav>
 <section id="welcome" class="welcome">
- <div class="hero"><div class="hero-copy"><span class="eyebrow">SEU DECK EM DESTAQUE.</span><h1>Crie thumbnails para seus vídeos de <em>TCG.</em></h1><p>Escolha seu cardgame, adicione as cartas e personalize sua thumb.</p><div class="hero-tags"><span>10 layouts</span><span>PNG em HD</span><span>Sem cadastro</span></div></div><div class="hero-art"><div class="orbit"></div><div class="poster poster-a"><img src="assets/home/hero-digimon.jpg" alt="MedievalGallantmon — Digimon Card Game" width="1099" height="1536" decoding="async" /></div><div class="poster poster-b"><img src="assets/home/hero-yugioh.jpg" alt="Ash Blossom &amp; Joyous Spring — Yu-Gi-Oh!" width="1052" height="1536" decoding="async" /></div><span class="floating-tag">1280 × 720 / CREATOR STUDIO</span></div></div>
+ <div class="hero"><div class="hero-copy"><span class="eyebrow">SEU DECK EM DESTAQUE.</span><h1>Crie thumbnails para seus vídeos de <em>TCG.</em></h1><p>Escolha seu cardgame, adicione as cartas e personalize sua thumb.</p><div class="hero-tags"><span>10 layouts</span><span>PNG até 1440p</span><span>Sem cadastro</span></div></div><div class="hero-art"><div class="orbit"></div><div class="poster poster-a"><img src="assets/home/hero-digimon.jpg" alt="MedievalGallantmon — Digimon Card Game" width="1099" height="1536" decoding="async" /></div><div class="poster poster-b"><img src="assets/home/hero-yugioh.jpg" alt="Ash Blossom &amp; Joyous Spring — Yu-Gi-Oh!" width="1052" height="1536" decoding="async" /></div><span class="floating-tag">1280 × 720 / CREATOR STUDIO</span></div></div>
  <div class="section-title"><div><span class="eyebrow">ESCOLHA SUA ARENA</span><h2>Qual é o seu cardgame?</h2></div><span>Quatro universos. Seu estilo.</span></div>
  <div class="game-grid">
   <a class="game-card digimon" href="#digimon"><div class="game-art"><img class="game-cover" src="assets/home/digimon.jpg" alt="Digimon Card Game — Timeless Bonds" decoding="async" width="1536" height="1536" /></div><div class="game-copy"><h3>Digimon TCG</h3><p>Cores de deck, energia digital e seu Digimon em destaque.</p><strong>Criar thumbnail <span>↗</span></strong></div></a>
@@ -29,7 +29,7 @@
     <h1 id="editor-title">Editor de capas</h1>
     <p class="sub">Selecione suas cartas, ajuste a composição e dê destaque ao seu próximo duelo.</p>
    </div>
-   <button id="export" type="button">↓ Exportar PNG · 1280 × 720</button>
+   <div class="export-tools"><label class="field"><span>Resolução do PNG</span><select id="export-size"><option value="1280">HD · 1280 × 720</option><option value="1920">Full HD · 1920 × 1080</option><option value="2560">QHD · 2560 × 1440</option></select></label><button id="export" type="button">↓ Exportar PNG</button></div>
   </header>
   <div class="preview" aria-label="Pré-visualização da capa 1280 por 720 pixels">
     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1280 720" width="1280" height="720" id="thumb">
@@ -217,8 +217,9 @@
       </div>
     </section>
   </div>
-  <p class="help"><strong>Como usar:</strong> coloque uma imagem em cada lado, digite os nomes, escolha o preset ou a cor manual de cada jogador, selecione um dos 10 layouts e depois refine tudo do seu jeito. Você pode trocar o texto central, fontes, esconder elementos e exportar em <strong>PNG 1280×720</strong> sem precisar montar a arte no Photoshop.</p>
+  <p class="help"><strong>Como usar:</strong> coloque uma imagem em cada lado, digite os nomes, escolha o preset ou a cor manual de cada jogador, selecione um dos 10 layouts e depois refine tudo do seu jeito. Você pode trocar o texto central, fontes, esconder elementos e exportar em <strong>PNG 720p, 1080p ou 1440p</strong> sem precisar montar a arte no Photoshop.</p>
 </main><footer class="site-footer"><span>ThumbTCG · Por Bakura</span><span>Projeto independente de fãs. Marcas e artes pertencem aos respectivos titulares.</span><a href="mailto:suportebakura@gmail.com">Contato ↗</a></footer>
-<script src="config.js?v=7"></script><script src="images.js?v=3"></script><script src="editor.js?v=3"></script><script src="providers.js?v=3"></script><script src="studio.js?v=3"></script>
+<script src="config.js?v=7"></script><script src="images.js?v=3"></script><script src="editor.js?v=4"></script><script src="providers.js?v=3"></script><script src="studio.js?v=4"></script>
+<script src="interactions.js?v=1"></script>
 </body>
 </html>
