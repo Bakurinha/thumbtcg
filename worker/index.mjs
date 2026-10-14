@@ -24,7 +24,7 @@ export default {async fetch(request,env,ctx){
  const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),15000);
  try{
   const upstream=await fetch(source,{redirect:'error',signal:controller.signal,headers:{Accept:'image/webp,image/png,image/jpeg'}});
-  if(!upstream.ok)return error('Image unavailable',502);
+  if(!upstream.ok)return error(`Image source returned HTTP ${upstream.status}`,502);
   const type=(upstream.headers.get('content-type')||'').split(';')[0];
   if(!/^image\/(png|jpeg|webp)$/i.test(type))return error('Invalid image',502);
   if(Number(upstream.headers.get('content-length'))>MAX)return error('Image too large',413);
@@ -32,5 +32,5 @@ export default {async fetch(request,env,ctx){
   while(true){const {done,value}=await reader.read();if(done)break;size+=value.byteLength;if(size>MAX){await reader.cancel();return error('Image too large',413);}chunks.push(value);}
   const response=new Response(new Blob(chunks,{type}),{headers:{...headers,'Content-Type':type,'Cache-Control':'public, max-age=604800'}});
   ctx.waitUntil(caches.default.put(cacheKey,response.clone()));return response;
- }catch{return error('Image unavailable',502);}finally{clearTimeout(timer);}
+ }catch(e){return error(e?.name==='AbortError'?'Image source timed out':'Image source connection failed',502);}finally{clearTimeout(timer);}
 }};
