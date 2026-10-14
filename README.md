@@ -41,8 +41,9 @@ Os rascunhos em memória duram somente enquanto a página estiver aberta. O arqu
 
 **Serviço de Digimon e One Piece configurado:**
 `https://thumbtcg-images.suportebakura.workers.dev`.
-A URL já está em `config.js`. A validação HTTP deste ambiente recebeu bloqueio
-Cloudflare 403/1010; falta confirmar a importação no navegador do usuário.
+A URL já está em `config.js`. Em 14/10/2026, a validação HTTP confirmou imagens
+Digimon (BT11-017, WebP) e One Piece (OP01-024, JPEG) com resposta 200 e CORS
+para a origem do site. A validação visual da importação no navegador segue pendente.
 O upload manual continua disponível. Para manutenção, veja [worker/README.md](worker/README.md).
 
 As imagens importadas são incorporadas ao projeto para exportação. Uma falha de

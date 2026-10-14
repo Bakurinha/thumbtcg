@@ -1,3 +1,10 @@
+## 0.3.5 — Correção do serviço de imagens
+
+- Usa redirecionamento manual compatível com o Worker, rejeitando respostas de redirecionamento.
+- Mantém a lista de fontes permitidas, limites de tamanho e cache.
+- Publicação automática confirmada após reconexão Git; imagens Digimon e One Piece validadas por HTTP (200 e CORS correto).
+- Testes de regressão para redirecionamentos e falhas de conexão aprovados. Validação visual em navegador pendente.
+
 ## 0.3.4 — Conexão com o serviço de imagens
 
 - Configura o Worker informado pelo usuário para importação Digimon/One Piece.
