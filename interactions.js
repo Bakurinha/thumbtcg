@@ -43,7 +43,7 @@ function validateState(data){
 }
 function setState(data){validateState(data);state=structuredClone(data);for(const id of wrappers.keys())transform(id);refresh();}
 function bounds(id){
- const el=$(id),box=el.getBBox(),matrix=svg.getScreenCTM().inverse().multiply(el.getScreenCTM());
+ const el=$(id),box=window.ThumbFX?.getBounds(id)||el.getBBox(),matrix=svg.getScreenCTM().inverse().multiply(el.getScreenCTM());
  const points=[[box.x,box.y],[box.x+box.width,box.y],[box.x,box.y+box.height],[box.x+box.width,box.y+box.height]].map(([x,y])=>new DOMPoint(x,y).matrixTransform(matrix));
  const xs=points.map(p=>p.x),ys=points.map(p=>p.y);return {x:Math.min(...xs),y:Math.min(...ys),width:Math.max(...xs)-Math.min(...xs),height:Math.max(...ys)-Math.min(...ys)};
 }
@@ -62,7 +62,8 @@ function snapshot(){return studio.snapshot();}
 function equal(a,b){
  if(['left','right'].some(side=>a.art[side].original!==b.art[side].original))return false;
  if(['wallpaper','extra'].some(key=>a.advanced?.[key]!==b.advanced?.[key]))return false;
- const small=data=>({...data,advanced:data.advanced?{...data.advanced,wallpaper:undefined,extra:undefined}:null,art:Object.fromEntries(['left','right'].map(side=>[side,{...data.art[side],original:undefined}]))});
+ if([0,1,2].some(i=>a.fx?.fanImages?.[i]!==b.fx?.fanImages?.[i]))return false;
+ const small=data=>({...data,fx:data.fx?{...data.fx,fanImages:undefined}:null,advanced:data.advanced?{...data.advanced,wallpaper:undefined,extra:undefined}:null,art:Object.fromEntries(['left','right'].map(side=>[side,{...data.art[side],original:undefined}]))});
  return JSON.stringify(small(a))===JSON.stringify(small(b));
 }
 function commit(){
@@ -109,7 +110,7 @@ svg.addEventListener('pointerdown',e=>{
 svg.addEventListener('pointermove',e=>{
  if(!gesture||e.pointerId!==gesture.pointer)return;const g=gesture,p=point(e),v=g.value;
  if(g.resize){const cx=g.bounds.x+g.bounds.width/2,cy=g.bounds.y+g.bounds.height/2,initial=Math.hypot(g.start.x-cx,g.start.y-cy)||1,scale=clamp(v.scale*Math.hypot(p.x-cx,p.y-cy)/initial,.2,4),ratio=scale/v.scale;state[g.id]={x:clamp(cx+(v.x-cx)*ratio,-2560,2560),y:clamp(cy+(v.y-cy)*ratio,-1440,1440),scale};}
- else state[g.id]={...v,x:clamp(v.x+p.x-g.start.x,-2560,2560),y:clamp(v.y+p.y-g.start.y,-1440,1440)};
+ else {const dx=p.x-g.start.x,dy=p.y-g.start.y,snap=window.ThumbFX?.snap(g.bounds,dx,dy)||{dx,dy};state[g.id]={...v,x:clamp(v.x+snap.dx,-2560,2560),y:clamp(v.y+snap.dy,-1440,1440)};}
  transform(g.id);refresh();e.preventDefault();
 });
 for(const event of ['pointerup','pointercancel','lostpointercapture'])svg.addEventListener(event,e=>{
@@ -147,7 +148,7 @@ async function qualityWarnings(width){
  return warnings;
 }
 function scheduleQuality(){clearTimeout(qualityTimer);qualityTimer=setTimeout(async()=>{const version=++qualityVersion;if($('editor').hidden)return;try{const warnings=await qualityWarnings(Number($('export-size').value));if(version===qualityVersion)quality.textContent=warnings.join(' ');}catch{if(version===qualityVersion)quality.textContent='Não foi possível avaliar a nitidez das imagens.';}},300);}
-window.ThumbInteractions={register(id,label){names[id]=label;const el=$(id),group=document.createElementNS(ns,'g');group.dataset.editElement=id;el.before(group);group.append(el);wrappers.set(id,group);$('selected-element').add(new Option(label,id));return group;},select,getState:()=>structuredClone(state),setState,validateState,commit,undo:()=>travel(false),redo:()=>travel(true)};
+window.ThumbInteractions={refresh,resetHistory,register(id,label){names[id]=label;const el=$(id),group=document.createElementNS(ns,'g');group.dataset.editElement=id;el.before(group);group.append(el);wrappers.set(id,group);$('selected-element').add(new Option(label,id));return group;},select,getState:()=>structuredClone(state),setState,validateState,commit,undo:()=>travel(false),redo:()=>travel(true)};
 studio.qualityWarnings=qualityWarnings;
 resetHistory();
 })();

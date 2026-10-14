@@ -46,3 +46,10 @@
 #layer-list{min-height:220px;width:100%;padding:8px}#layer-list option{padding:7px}
 #direct-options{margin-top:15px}.advanced-tools .studio-btn{margin:4px 0}
 @media(max-width:700px){.advanced-grid{grid-template-columns:1fr}.advanced-tools{padding:15px}.background-sliders{grid-template-columns:1fr 1fr}}
+
+/* Geometry/effects workspace: opt-in, accessible tabs, touch-sized controls. */
+.fx-panel{margin:18px 0;padding:20px;border:1px solid #344250;border-radius:16px;background:#111923;color:#e8eef3}
+.fx-title{font-weight:750}.fx-tabs{display:flex;gap:8px;margin:18px 0}.fx-tabs button{flex:1;min-height:48px;padding:12px;border:1px solid #384653;border-radius:10px;background:#17212d;color:#bfcbd7;font:inherit;font-weight:650;cursor:pointer}
+.fx-tabs button[aria-selected=true]{background:#c6f36b;color:#131c11;border-color:#c6f36b}.fx-tabs button:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.fx-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.fx-feature{padding:16px;background:#0d141d;border:1px solid #2a3746;border-radius:12px;min-width:0}.fx-feature-body{margin-top:14px}.fx-panel .field{margin:12px 0}.fx-panel input[type=range]{width:100%;accent-color:#c6f36b;min-height:32px}.fx-panel input[type=color]{width:100%;height:36px}.fx-panel input[type=file]{width:100%;max-width:100%;font-size:12px}.fx-panel output{float:right;color:#c6f36b;font-variant-numeric:tabular-nums}.fx-feature .direct-switch{align-items:center;min-height:32px}.fx-footer{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:18px}.fx-footer span{font-size:12px;color:#b9c9b5}.fx-target{max-width:400px}
+@media(max-width:700px){.fx-panel{padding:15px}.fx-grid{grid-template-columns:1fr}.fx-tabs button{font-size:13px;padding:10px 6px}.fx-feature{padding:13px}}

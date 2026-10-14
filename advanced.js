@@ -35,14 +35,14 @@ function decorationName(node,i){
  if(shape?.tagName==='rect')return shape.getAttribute('fill')==='none'?'Borda da thumbnail':'Base sólida';
  if(shape?.id?.includes('edge-stripe'))return 'Faixa lateral '+(shape.id.startsWith('left')?'esquerda':'direita');return `Decoração ${i+1}`;
 }
-const canonical=[...layers.keys()];
+const canonical=[...layers.keys()],optionalLayers=new Set();
 const ranges={zoom:[1,4,.05,1.5,'Zoom do fundo'],x:[-640,640,5,0,'Posição horizontal'],y:[-360,360,5,0,'Posição vertical'],brightness:[.2,2.5,.05,.8,'Brilho'],gamma:[.3,3,.05,1,'Gamma'],contrast:[.2,2.5,.05,1,'Contraste'],saturation:[0,2.5,.05,1,'Saturação'],blur:[0,30,1,0,'Desfoque'],opacity:[0,1,.05,1,'Opacidade'],shade:[0,.9,.05,.25,'Escurecer fundo']};
 const defaults=()=>({source:'none',wallpaper:'',extra:'',effect:'none',order:[...canonical],...Object.fromEntries(Object.entries(ranges).map(([k,v])=>[k,v[3]]))});
 let state=defaults(),sequence=0;
 const panel=document.createElement('section');panel.className='advanced-tools';panel.innerHTML=`<label class="direct-switch"><input type="checkbox" id="advanced-mode" aria-controls="advanced-options"/> Edição avançada</label><p class="drag-hint">Camadas, fundos e efeitos. Marque para abrir as opções.</p><div id="advanced-options" hidden><div class="advanced-grid"><div><h3>Camadas</h3><p class="drag-hint">O primeiro item fica na frente. Selecione uma camada e altere sua ordem.</p><label class="field"><span>Ordem de sobreposição</span><select id="layer-list" size="8"></select></label><div class="alignment-actions"><button type="button" class="studio-btn" data-layer-move="top">Trazer à frente</button><button type="button" class="studio-btn" data-layer-move="up">Subir uma camada</button><button type="button" class="studio-btn" data-layer-move="down">Descer uma camada</button><button type="button" class="studio-btn" data-layer-move="bottom">Enviar ao fundo</button></div><button type="button" class="studio-btn" id="reset-layers">Restaurar ordem</button><label class="field"><span>Imagem adicional / retrato (PNG transparente recomendado)</span><input type="file" id="extra-upload" accept="image/*"/></label><button type="button" class="studio-btn" id="remove-extra">Remover imagem adicional</button><p class="drag-hint">Posicione e redimensione em “Edição na prévia”. O upload mantém o fundo original da imagem.</p></div><div><h3>Fundo e efeitos</h3><label class="field"><span>Imagem de fundo</span><select id="background-source"><option value="none">Somente tema do cardgame</option><option value="left">Ampliar carta esquerda</option><option value="right">Ampliar carta direita</option><option value="both">Ampliar as duas cartas</option><option value="wallpaper">Papel de parede enviado</option></select></label><label class="field"><span>Enviar papel de parede</span><input type="file" id="wallpaper-upload" accept="image/*"/></label><button type="button" class="studio-btn" id="remove-wallpaper">Remover papel de parede</button><label class="field"><span>Efeito rápido</span><select id="effect-preset"><option value="none">Personalizado / sem brilho externo</option><option value="cinema">Cinema escuro</option><option value="dream">Fundo suave</option><option value="mono">Preto e branco no fundo</option><option value="vivid">Cores intensas</option><option value="neon">Brilho neon nas cartas</option></select></label><div class="background-sliders">${Object.entries(ranges).map(([k,[min,max,step,val,label]])=>`<label class="field"><span>${label} <output id="bg-${k}-value">${val}</output></span><input id="bg-${k}" type="range" min="${min}" max="${max}" step="${step}" value="${val}"/></label>`).join('')}</div><button type="button" class="studio-btn" id="reset-background">Restaurar ajustes do fundo</button><p class="drag-hint">Os ajustes afetam apenas a imagem de fundo. O brilho neon é aplicado às cartas da frente.</p></div></div></div>`;
 document.querySelector('.direct-tools').after(panel);
 $('advanced-mode').onchange=()=>{$('advanced-options').hidden=!$('advanced-mode').checked;};
-function order(){for(const id of state.order)svg.insertBefore(layers.get(id).node,overlay);renderList();}
+function order(){for(const id of state.order)svg.insertBefore(layers.get(id).node,overlay);for(const guide of [...svg.children].filter(el=>el.hasAttribute('data-editor-only')))svg.append(guide);renderList();}
 function renderList(){const selected=$('layer-list').value;$('layer-list').replaceChildren(...[...state.order].reverse().map(id=>new Option(layers.get(id).label,id)));if(state.order.includes(selected))$('layer-list').value=selected;}
 function updateUI(){ $('background-source').value=state.source;$('effect-preset').value=state.effect;for(const k of Object.keys(ranges)){$('bg-'+k).value=state[k];$('bg-'+k+'-value').value=state[k];}}
 function render(){
@@ -71,9 +71,11 @@ function validateState(v){
  if(!['none','left','right','both','wallpaper'].includes(v.source)||!['none','cinema','dream','mono','vivid','neon'].includes(v.effect))throw Error('Efeito inválido.');
  for(const [k,[min,max]]of Object.entries(ranges))if(!Number.isFinite(v[k])||v[k]<min||v[k]>max)throw Error('Ajuste de fundo inválido.');
  for(const k of ['wallpaper','extra'])if(typeof v[k]!=='string'||v[k].length>50*1024*1024||v[k]&&!/^data:image\/png;base64,[A-Za-z0-9+/=]+$/.test(v[k]))throw Error('Imagem avançada inválida.');
- if(!Array.isArray(v.order)||v.order.length!==canonical.length||new Set(v.order).size!==canonical.length||v.order.some(id=>!layers.has(id)))throw Error('Ordem de camadas inválida.');
+ if(!Array.isArray(v.order)||v.order.length>canonical.length||new Set(v.order).size!==v.order.length||v.order.some(id=>!layers.has(id))||canonical.some(id=>!optionalLayers.has(id)&&!v.order.includes(id)))throw Error('Ordem de camadas inválida.');
 }
-function setState(v){validateState(v);state=v?structuredClone(v):defaults();geometry();order();updateUI();render();}
+function setState(v){validateState(v);state=v?structuredClone(v):defaults();
+ for(const id of canonical)if(!state.order.includes(id)){const next=canonical.slice(canonical.indexOf(id)+1).find(key=>state.order.includes(key)),index=next?state.order.indexOf(next):state.order.length;state.order.splice(index,0,id);}
+ geometry();order();updateUI();render();}
 function change(fn){window.ThumbInteractions.commit();fn();render();updateUI();window.ThumbInteractions.commit();}
 for(const k of Object.keys(ranges))$('bg-'+k).addEventListener('input',()=>{state[k]=Number($('bg-'+k).value);render();$('bg-'+k+'-value').value=state[k];});
 $('background-source').onchange=()=>change(()=>{state.source=$('background-source').value;});
@@ -87,6 +89,10 @@ for(const target of ['wallpaper','extra']){
 }
 window.addEventListener('thumb:layout',e=>{geometry();if(e.detail){state.source=state.wallpaper?'wallpaper':e.detail.source;state.shade=.25;}updateUI();render();});
 new MutationObserver(render).observe($('art-left'),{attributes:true,attributeFilter:['href']});new MutationObserver(render).observe($('art-right'),{attributes:true,attributeFilter:['href']});
-window.ThumbAdvanced={getState:()=>structuredClone(state),setState,validateState,reset(){sequence++;setState(null);}};
+window.ThumbAdvanced={registerLayer(id,label,node,before){
+ if(layers.has(id))throw Error('Camada duplicada');node.dataset.layer=id;layers.set(id,{node,label});optionalLayers.add(id);
+ const index=canonical.indexOf(before);canonical.splice(index<0?canonical.length:index,0,id);
+ const current=state.order.indexOf(before);state.order.splice(current<0?state.order.length:current,0,id);order();
+ },getState:()=>structuredClone(state),setState,validateState,reset(){sequence++;setState(null);}};
 setState(null);window.ThumbInteractions.commit();
 })();

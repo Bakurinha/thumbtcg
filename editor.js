@@ -377,6 +377,7 @@ async function exportPNG(){
   const height=width*9/16;
   const warnings=await window.ThumbStudio?.qualityWarnings?.(width)||[];
   status.textContent=`Renderizando a capa em ${width} × ${height}…`; 
+  window.ThumbFX?.flush();
   const copy=svg.cloneNode(true);
   copy.setAttribute('width',width);copy.setAttribute('height',height);
   copy.querySelectorAll('[data-editor-only]').forEach(el=>el.remove());

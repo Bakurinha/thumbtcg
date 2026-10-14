@@ -28,6 +28,17 @@ O fundo pode usar a carta esquerda, a direita, ambas ou um arquivo próprio. Seu
 
 Marque **Editar elementos na prévia** para revelar as ferramentas de posicionamento e tamanho, inclusive da imagem adicional. Para retratos recortados, envie PNG com transparência; o editor não remove o fundo automaticamente. Projetos JSON guardam os dois uploads, as configurações e a ordem das camadas.
 
+## Avançada e Prévia (0.6)
+
+Marque **Avançada e Prévia** para abrir as duas abas. As funções começam desligadas; fechar o painel apenas recolhe os controles, preservando a composição.
+
+- **Enquadramento & Câmera:** escolha a carta esquerda/direita, ajuste rotação Z e inclinação simulada, máscara e divisão diagonal. O leque combina as duas cartas do editor com até três arquivos adicionais; seus controles de abertura, posição, escala e carta focal são independentes dos efeitos das cartas soltas. A lupa usa a imagem original, incluindo o texto da carta. Guias e encaixe ajudam no arraste em “Edição na prévia”.
+- **Efeitos & Shaders:** reflexo, sombra/neon e foil por carta; raios, luzes, linhas de ação, partículas e títulos com volume simulado. O fundo e seu desfoque usam os mesmos valores de “Edição avançada”.
+
+Lupa e leque também podem ser selecionados, arrastados, redimensionados e ordenados nas camadas. Reflexos precisam de espaço abaixo da carta; máscaras do layout e limites do canvas podem recortá-los. Para um personagem saindo da moldura, envie PNG já recortado em **Imagem adicional**, posicione e traga a camada para a frente.
+
+O motor continua em SVG no navegador: inclinação/extrusão são aproximações 2D, sem 3D real, deformação física ou detecção automática de personagens. As partículas e o foil são estáticos, adequados à thumbnail. Os efeitos são incorporados ao PNG; guias e seleção não são exportadas. Nenhum serviço adicional de IA ou renderização é usado.
+
 ## Como usar
 
 Acesse o site (ou sirva a pasta por HTTP para desenvolvimento). Não é necessário instalar dependências para usar o editor.
@@ -103,3 +114,5 @@ Ative **Editar elementos na prévia** para arrastar e usar o ponto no canto. Tam
 Projeto independente de fãs. Marcas, cartas e ilustrações pertencem aos respectivos titulares. Os estilos são interpretações visuais do projeto, não um ranking estatístico de thumbnails mais populares.
 
 Validação do editor avançado: `npm run test:advanced` com servidor HTTP local (mesmas variáveis `BASE_URL` e `CHROMIUM_PATH` do teste de navegador). Verifica 12 novos layouts, opções recolhidas, camadas e histórico, upload/roundtrip, rascunhos por jogo e pixels reais do PNG com filtros.
+
+Teste do módulo visual: `npm run test:effects` com servidor HTTP local e as mesmas variáveis `BASE_URL` e `CHROMIUM_PATH`. Verifica também pixels do reflexo/foil no PNG, guias excluídas, cinco cartas no leque, migração de camadas e estabilidade da atualização por frame.

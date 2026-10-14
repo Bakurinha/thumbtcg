@@ -1,3 +1,15 @@
+## 0.6.0 — Enquadramento e efeitos visuais
+
+- Painel opcional “Avançada e Prévia”, com abas acessíveis “Enquadramento & Câmera” e “Efeitos & Shaders”; atualização agrupada por frame, sem novos serviços externos.
+- Rotação Z e inclinação 2D independentes por carta; máscaras de círculo, lâmina, garras, estilhaços e explosão; divisão diagonal com extremos ajustáveis.
+- Leque de 2 a 5 imagens: cartas do editor e até três uploads, com abertura, espaçamento, elevação focal, posição e escala. O leque é um conjunto independente dos efeitos das cartas soltas.
+- Lupa posicionável sobre a carta original, com zoom e ponto de interesse manuais; guias de terços/centro e encaixe magnético durante o arraste. Guias excluídas da exportação.
+- Reflexo vertical com fade, sombra e neon configuráveis por carta, foil iridescente estático, raios radiais, luz difusa, linhas de ação e até 120 partículas determinísticas.
+- Volume de títulos simulado por extrusão 2D, gradiente metálico/plástico e borda; controle do fundo/desfoque compartilhado com Edição avançada.
+- Novas camadas de luzes, partículas, lupa e leque; migração da ordem de camadas de projetos anteriores; configurações e uploads integrados ao JSON e ao histórico.
+- Não inclui perspectiva 3D real, curvatura física, distorção projetiva ou detecção automática de personagens. Pop-out usa PNG já recortado na camada de imagem adicional.
+- Testado em Chromium desktop e móvel emulado: abas, controles individuais, máscaras, lupa, guias, leque de cinco cartas, salvar/abrir, desfazer e projetos antigos; PNG real com verificação de pixels de reflexo e foil e ausência das guias. Teste em aparelho físico continua pendente.
+
 ## 0.5.0 — Camadas, fundos e composições avançadas
 
 - “Edição avançada” e controles de “Edição na prévia” recolhidos até ativação.

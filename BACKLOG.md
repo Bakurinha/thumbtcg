@@ -2,6 +2,18 @@
 
 TCG-01 e TCG-02 implementados na versão 0.4.0 e validados em Chromium desktop e móvel com toque emulado. A expansão TCG-03 a TCG-05 foi pausada para priorizar o editor avançado solicitado. Sem datas prometidas.
 
+## Prioridade — Enquadramento e efeitos (0.6.0)
+
+| ID | Situação | Entrega compatível com o editor atual |
+| --- | --- | --- |
+| ADV-06 | Implementado | Painel recolhido, duas abas, controles individuais e prévia ao vivo por frame. |
+| ADV-07 | Implementado | Rotação/inclinação 2D, divisão diagonal, cinco máscaras, leque de 2–5 cartas, lupa manual e guias magnéticas. |
+| ADV-08 | Implementado | Reflexo, sombra, neon, foil, raios, luz difusa, linhas de ação, partículas e extrusão de títulos simulada em 2D. |
+| ADV-09 | Implementado | Persistência, histórico, migração de camadas antigas e exportação dos efeitos no PNG; verificações desktop/móvel emulado. |
+| ADV-10 | Manual | Pop-out com PNG transparente previamente recortado, usando a imagem adicional e a ordem das camadas. |
+
+**Fora do escopo atual:** perspectiva/matrizes 3D reais, curvatura física da carta, distorção projetiva e detecção automática do monstro/rosto. Não foram criados controles que prometam essas funções. Foco da lupa e enquadramento são manuais. Considerar outro motor somente em uma etapa futura explicitamente priorizada.
+
 ## Prioridade acima do backlog anterior — Editor avançado (0.5.0)
 
 Implementado e verificado em Chromium desktop e móvel com toque emulado. Conferência em aparelho físico continua pendente.
