@@ -10,7 +10,7 @@ export function allowedImage(value){
 }
 export default {async fetch(request,env,ctx){
  const origin=env.ALLOWED_ORIGIN||'https://bakurinha.github.io';
- const headers={'Access-Control-Allow-Origin':origin,'Access-Control-Allow-Methods':'GET, OPTIONS','Vary':'Origin','X-Content-Type-Options':'nosniff'};
+ const headers={'Access-Control-Allow-Origin':origin,'Access-Control-Allow-Methods':'GET, OPTIONS','X-ThumbTCG-Version':'2026-10-14.1','Vary':'Origin','X-Content-Type-Options':'nosniff'};
  const error=(message,status)=>new Response(message,{status,headers});
  if(request.headers.get('Origin')&&request.headers.get('Origin')!==origin)return error('Origin not allowed',403);
  if(request.method==='OPTIONS')return new Response(null,{status:204,headers});
