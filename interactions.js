@@ -62,8 +62,9 @@ function snapshot(){return studio.snapshot();}
 function equal(a,b){
  if(['left','right'].some(side=>a.art[side].original!==b.art[side].original))return false;
  if(['wallpaper','extra'].some(key=>a.advanced?.[key]!==b.advanced?.[key]))return false;
+ if(a.composition?.image!==b.composition?.image)return false;
  if([0,1,2].some(i=>a.fx?.fanImages?.[i]!==b.fx?.fanImages?.[i]))return false;
- const small=data=>({...data,fx:data.fx?{...data.fx,fanImages:undefined}:null,advanced:data.advanced?{...data.advanced,wallpaper:undefined,extra:undefined}:null,art:Object.fromEntries(['left','right'].map(side=>[side,{...data.art[side],original:undefined}]))});
+ const small=data=>({...data,composition:data.composition?{...data.composition,image:undefined}:null,fx:data.fx?{...data.fx,fanImages:undefined}:null,advanced:data.advanced?{...data.advanced,wallpaper:undefined,extra:undefined}:null,art:Object.fromEntries(['left','right'].map(side=>[side,{...data.art[side],original:undefined}]))});
  return JSON.stringify(small(a))===JSON.stringify(small(b));
 }
 function commit(){

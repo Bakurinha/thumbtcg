@@ -2,6 +2,20 @@
 
 TCG-01 e TCG-02 implementados na versão 0.4.0 e validados em Chromium desktop e móvel com toque emulado. TCG-03 a TCG-05 retomados na versão 0.7.0 após a entrega do editor avançado. Sem datas prometidas.
 
+## Prioridade atual — Composição livre e internacionalização
+
+| ID | Situação | Entrega / critério |
+| --- | --- | --- |
+| EDIT-01 | Implementado em 0.8.0 | Layout base ligado por padrão, opção de desligar e importar composição própria como imagem; JSON para manter elementos editáveis. |
+| EDIT-02 | Implementado em 0.8.0 | Layouts, camadas, efeitos e edição na prévia na mesma área compacta, com painéis recolhíveis. |
+| EDIT-03 | Implementado em 0.8.0 | Seis layouts iniciais para uma carta; ampliar/refinar após as imagens de referência do usuário. |
+| EDIT-04 | Implementado em 0.8.0 | Visibilidade independente das cartas 1 e 2, rotação, espelhamento e remoção; preservar exportação e histórico. |
+| EDIT-05 | Implementado em 0.8.0 | Novos efeitos: retícula de impressão, linhas de tela e vinheta ajustáveis. |
+| EDIT-06 | Implementado em 0.8.0 | Customização geral: combinar posições e estilos de títulos, detalhes, bases e centro de diferentes layouts. |
+| LANG-01 | Planejado | Seletor PT/EN/ES no topo direito, preferência persistida e catálogo de traduções. |
+| LANG-02 | Planejado | Revisão integral de títulos, controles, dicas, acessibilidade, erros, busca e mensagens dinâmicas; não traduzir texto digitado nem nomes oficiais de cartas. Publicar os idiomas somente após a revisão completa. |
+| EDIT-07 | Aguardando referências | Novos modelos singulares baseados nas imagens que o usuário enviará. Não bloqueia os seis modelos iniciais. |
+
 ## Prioridade — Enquadramento e efeitos (0.6.0)
 
 | ID | Situação | Entrega compatível com o editor atual |

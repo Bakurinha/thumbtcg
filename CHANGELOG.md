@@ -1,3 +1,12 @@
+## 0.8.0 — 2026-10-15
+
+- Área de ferramentas compacta com painéis recolhíveis e layouts ao lado das opções avançadas.
+- Seis layouts para uma carta, totalizando 28; visibilidade independente, rotação, espelhamento e remoção de cartas.
+- Importação de layout como camada de imagem, decoração base opcional e mistura de elementos de modelos.
+- Retícula, linhas de tela e vinheta ajustáveis, também no PNG.
+- Persistência, histórico e migração de projetos antigos verificados em Chromium desktop e móvel emulado.
+- Internacionalização completa PT/EN/ES registrada como próxima etapa; ainda não disponível.
+
 ## 0.6.0 — Enquadramento e efeitos visuais
 
 ## 0.7.1 — 2026-10-15

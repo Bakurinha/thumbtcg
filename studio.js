@@ -49,7 +49,7 @@ async function cropImage(source,side){
  const [x,y,w,h]=games[active].crop,canvas=document.createElement('canvas');canvas.width=Math.round(img.naturalWidth*w);canvas.height=Math.round(img.naturalHeight*h);
  canvas.getContext('2d').drawImage(img,img.naturalWidth*x,img.naturalHeight*y,canvas.width,canvas.height,0,0,canvas.width,canvas.height);return canvas.toDataURL('image/png');
 }
-window.ThumbStudio={snapshot,restore,getOriginal:side=>art[side]?.original||'', isBusy:()=>busy>0, async prepareImage(source,side){
+window.ThumbStudio={snapshot,restore,getOriginal:side=>art[side]?.original||'',removeCard(side){defaults(side);engine.clearImage(side);}, isBusy:()=>busy>0, async prepareImage(source,side){
  const game=active;art[side].original=source;art[side].x=0;art[side].y=0;art[side].zoom=1;syncArt(side);const result=await cropImage(source,side);if(active!==game)throw new Error('O cardgame foi alterado. Envie a carta novamente.');return result;
 }};
 window.addEventListener('thumb:image',e=>transform(e.detail.side));
@@ -58,7 +58,7 @@ window.addEventListener('thumb:layout',()=>{
  if(!active)return;value('top-ribbon-input',games[active].ribbon);value('deck-font',games[active].font);value('card-font',games[active].font);for(const side of ['left','right'])transform(side);
 });
 function snapshot(){
- return {format:'thumbtcg',version:2,game:active,fields:Object.fromEntries(baseFields.map(el=>[el.id,el.type==='checkbox'?el.checked:el.value])),art:{left:{...art.left},right:{...art.right}},elements:window.ThumbInteractions?.getState()||{},advanced:window.ThumbAdvanced?.getState()||null,fx:window.ThumbFX?.getState()||null,appearance:window.ThumbThemes?.getState()||null};
+ return {format:'thumbtcg',version:2,game:active,fields:Object.fromEntries(baseFields.map(el=>[el.id,el.type==='checkbox'?el.checked:el.value])),art:{left:{...art.left},right:{...art.right}},elements:window.ThumbInteractions?.getState()||{},advanced:window.ThumbAdvanced?.getState()||null,fx:window.ThumbFX?.getState()||null,appearance:window.ThumbThemes?.getState()||null,composition:window.ThumbComposition?.getState()||null};
 }
 async function restore(data){
  busy++;try{
@@ -75,6 +75,7 @@ async function restore(data){
  window.ThumbAdvanced?.setState(data.advanced);
  window.ThumbFX?.setState(data.fx);
  window.ThumbThemes?.setState(data.appearance);
+ window.ThumbComposition?.setState(data.composition);
  }finally{busy--;}
 }
 async function route(){
@@ -84,7 +85,7 @@ async function route(){
  active=valid;editor.hidden=!active;$('welcome').hidden=!!active;$('change-game').hidden=!active;document.querySelector('.nav-label').hidden=!!active;
  if(!active){document.title='ThumbTCG — seu deck em destaque';document.body.removeAttribute('data-game');document.documentElement.style.setProperty('--accent','#c6f36b');return;}
  const game=games[active];document.body.dataset.game=active;document.title=`${game.name} · ThumbTCG`;$('editor-title').textContent=game.name;themeNote.textContent=game.note;
- document.documentElement.style.setProperty('--accent',game.accent);engine.resetImages();window.ThumbInteractions?.setState({});window.ThumbAdvanced?.reset();window.ThumbFX?.reset();window.ThumbThemes?.reset(active);
+ document.documentElement.style.setProperty('--accent',game.accent);engine.resetImages();window.ThumbInteractions?.setState({});window.ThumbAdvanced?.reset();window.ThumbFX?.reset();window.ThumbThemes?.reset(active);window.ThumbComposition?.reset();
  const mesh=$('mesh');mesh.setAttribute('width','80');mesh.setAttribute('height','80');mesh.innerHTML=patterns[active];
  for(const side of ['left','right']){
   defaults(side);const select=$(`theme-${side}`);select.replaceChildren(...game.colors.map(([key,name])=>new Option(name,key)),new Option('Personalizada','custom'));
@@ -175,9 +176,10 @@ $('open-project').addEventListener('change',async e=>{
   window.ThumbInteractions?.validateState(data.elements||{});
   window.ThumbAdvanced?.validateState(data.advanced);
   window.ThumbFX?.validateState(data.fx);
+  window.ThumbComposition?.validateState(data.composition);
   if(data.appearance)window.ThumbThemes?.validate(data.appearance,data.game);
   if(data.fields['export-size']&&!['1280','1920','2560'].includes(String(data.fields['export-size'])))throw new Error('Resolução inválida.');
-  for(const source of [data.art.left.original,data.art.right.original,data.advanced?.wallpaper,data.advanced?.extra,...(data.fx?.fanImages||[])].filter(Boolean)){const img=new Image();img.src=source;await img.decode();if(img.naturalWidth>4096||img.naturalHeight>4096)throw new Error('Imagem do projeto excede o tamanho permitido.');}
+  for(const source of [data.art.left.original,data.art.right.original,data.advanced?.wallpaper,data.advanced?.extra,data.composition?.image,...(data.fx?.fanImages||[])].filter(Boolean)){const img=new Image();img.src=source;await img.decode();if(img.naturalWidth>4096||img.naturalHeight>4096)throw new Error('Imagem do projeto excede o tamanho permitido.');}
   for(const side of ['left','right'])if(!/^#[0-9a-f]{6}$/i.test(data.fields[`accent-${side}`]))throw new Error('Cor inválida.');
   if(busy)throw new Error('Aguarde a imagem terminar de carregar.');
   if(active)drafts.set(active,snapshot());drafts.set(data.game,data);active=null;history.replaceState(null,'',`#${data.game}`);await route();$('status').textContent='Projeto restaurado. Continue sua edição.';

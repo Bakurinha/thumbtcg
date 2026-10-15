@@ -9,7 +9,7 @@ Editor de thumbnails dedicado a trading card games, mantido por **Bakura**.
 - Boas-vindas com seleção de Digimon TCG, Yu-Gi-Oh!, Magic: The Gathering, One Piece, Pokémon TCG e Disney Lorcana.
 - Rotas compartilháveis: `#digimon`, `#yugioh`, `#magic`, `#onepiece`, `#pokemon` e `#lorcana`.
 - 18 temas (três por jogo), molduras e intensidade ajustável; preservam cartas e posições.
-- 22 layouts, paletas de cada TCG, padrões visuais próprios e cores livres por lado.
+- 28 layouts (seis para uma carta), paletas de cada TCG, padrões visuais próprios e cores livres por lado.
 - Pesquisa nas bases correspondentes ao cardgame escolhido, com resultados e paginação.
 - Upload de imagens em todos os jogos; recorte inicial da ilustração em Yu-Gi-Oh!, Magic e One Piece.
 - Posição horizontal/vertical, zoom e edição direta na prévia, inclusive por toque.
@@ -21,17 +21,29 @@ Editor de thumbnails dedicado a trading card games, mantido por **Bakura**.
 - Interface responsiva: prévia ao lado das ferramentas no desktop e fluxo vertical no celular.
 - Contato e chave PIX com botão de copiar.
 
+## Composição livre (0.8.0)
+
+Em **Ferramentas do editor**, clique em uma opção para abrir seu painel; clique novamente para recolher. Layouts, customização, camadas, efeitos, edição direta, textos e temas ficam juntos. Recolha o grupo inteiro para priorizar a prévia.
+
+- **Layouts → Uma carta / apresentação de deck:** seis modelos centrais, laterais, circular, panorâmico e galeria. A segunda carta começa oculta; pode ser reativada sem perder o arquivo.
+- **Customização geral:** importe PNG/JPG/WebP/AVIF como uma camada, ajuste opacidade/enquadramento e desligue a decoração base. PNG transparente funciona como moldura; uma imagem importada não vira elementos editáveis. Para isso, abra um projeto JSON do ThumbTCG.
+- Combine títulos, detalhes, bases e centro de outros modelos. Retícula, linhas de tela e vinheta têm intensidades independentes.
+- Em cada carta, abra **visibilidade e orientação** para ocultar, girar, espelhar ou remover. A imagem adicional também tem rotação/espelhamento. Remoções podem ser desfeitas.
+- A composição é preservada no JSON, no histórico e no PNG exportado.
+
+**Próxima etapa:** seletor e revisão integral PT/EN/ES. A interface desta entrega continua em português. Modelos adicionais baseados em referências aguardam as imagens do usuário.
+
 ## Temas por cardgame
 
 Em **Temas do cardgame**, escolha um preset e ajuste a intensidade ou a moldura. Os presets atualizam as cores dos dois lados, mantendo textos, imagens, posições e efeitos. **Remover efeitos e moldura** preserva as cores escolhidas. Fundo e moldura aparecem na edição por camadas. Projetos antigos abrem sem tema aplicado.
 
 ## Edição avançada
 
-Marque **Edição avançada** para ordenar camadas, enviar um wallpaper ou uma imagem adicional e controlar o fundo ampliado. A lista mostra primeiro o que está na frente. Os botões movem a camada selecionada; **Restaurar ordem** recupera a composição original.
+Abra **Ferramentas do editor → Camadas e fundo** para ordenar camadas, enviar um wallpaper ou uma imagem adicional e controlar o fundo ampliado. A lista mostra primeiro o que está na frente. Os botões movem a camada selecionada; **Restaurar ordem** recupera a composição original.
 
 O fundo pode usar a carta esquerda, a direita, ambas ou um arquivo próprio. Seus ajustes de gamma, brilho, contraste, saturação, desfoque, zoom e posição são independentes das cartas frontais. Os presets são pontos de partida ajustáveis. Um wallpaper enviado é preservado ao escolher outro layout.
 
-Marque **Editar elementos na prévia** para revelar as ferramentas de posicionamento e tamanho, inclusive da imagem adicional. Para retratos recortados, envie PNG com transparência; o editor não remove o fundo automaticamente. Projetos JSON guardam os dois uploads, as configurações e a ordem das camadas.
+Abra **Ferramentas do editor → Editar elementos** para revelar as ferramentas de posicionamento e tamanho, inclusive da imagem adicional. Para retratos recortados, envie PNG com transparência; o editor não remove o fundo automaticamente. Projetos JSON guardam os dois uploads, as configurações e a ordem das camadas.
 
 ## Avançada e Prévia (0.6)
 

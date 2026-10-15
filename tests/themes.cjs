@@ -4,7 +4,7 @@ for(const mobile of [false,true]){
  const ctx=await browser.newContext({viewport:mobile?{width:390,height:844}:{width:1440,height:1000},isMobile:mobile,hasTouch:mobile,acceptDownloads:true});const page=await ctx.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await page.goto(process.env.BASE_URL||'http://localhost:8776');
  assert.equal(await page.locator('.game-card').count(),6);assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
  for(const game of ['digimon','yugioh','magic','onepiece','pokemon','lorcana']){
-  await page.goto((process.env.BASE_URL||'http://localhost:8776')+'/#'+game);await page.waitForFunction(g=>document.body.dataset.game===g,game);await page.waitForSelector('.theme-preset');
+  await page.goto((process.env.BASE_URL||'http://localhost:8776')+'/#'+game);await page.waitForFunction(g=>document.body.dataset.game===g,game);await page.waitForSelector('.theme-preset',{state:'attached'});if(await page.locator('[data-tool=themes]').getAttribute('aria-expanded')==='false')await page.click('[data-tool=themes]');
   assert.equal(await page.locator('.theme-preset').count(),3);
   await page.evaluate(async()=>{const blob=await (await fetch('assets/home/pokemon.webp')).blob();for(const side of ['left','right'])await ThumbEngine.loadFile(side,new File([blob],'card.webp',{type:'image/webp'}));ThumbInteractions.commit();});
   const before=await page.evaluate(()=>{const s=ThumbFX.getState();s.cards.left.glow=true;ThumbFX.setState(s);const a=ThumbAdvanced.getState();a.brightness=1.4;ThumbAdvanced.setState(a);return ThumbStudio.snapshot();});
