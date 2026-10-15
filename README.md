@@ -31,7 +31,15 @@ Em **Ferramentas do editor**, clique em uma opção para abrir seu painel; cliqu
 - Em cada carta, abra **visibilidade e orientação** para ocultar, girar, espelhar ou remover. A imagem adicional também tem rotação/espelhamento. Remoções podem ser desfeitas.
 - A composição é preservada no JSON, no histórico e no PNG exportado.
 
-**Próxima etapa:** seletor e revisão integral PT/EN/ES. A interface desta entrega continua em português. Modelos adicionais baseados em referências aguardam as imagens do usuário.
+## Idiomas (0.9.0)
+
+O seletor no canto superior direito oferece **Português, English e Español**. A preferência fica salva neste navegador; se o armazenamento estiver bloqueado, a troca funciona durante a sessão. O idioma inicial é português.
+
+Menus, layouts, temas, dicas, atributos de acessibilidade e mensagens de busca, carregamento, erro e exportação estão no catálogo local `locales.js`. A troca não envia textos a serviços de tradução. Nomes de cartas, informações vindas das bases, arquivos e textos digitados no projeto mantêm o conteúdo original; o idioma de uma base (como TCGdex EN/PT) continua sendo uma escolha separada.
+
+O idioma da interface não faz parte do projeto JSON e não altera a arte exportada. Modelos adicionais baseados em referências aguardam as imagens do usuário. Ao final do backlog está a expansão para **10 temas por cardgame** (60 nos seis jogos atuais).
+
+Para novos controles, adicione as mensagens em `locales.js`; parâmetros dinâmicos usam `{0}`, `{1}`, etc. `i18n.js` traduz somente a interface, observa novos textos e protege os valores dos campos, o SVG da arte e os dados das cartas. Execute `npm run test:i18n` com o servidor local e Chromium disponíveis.
 
 ## Temas por cardgame
 

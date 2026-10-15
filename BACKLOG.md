@@ -12,8 +12,8 @@ TCG-01 e TCG-02 implementados na versão 0.4.0 e validados em Chromium desktop e
 | EDIT-04 | Implementado em 0.8.0 | Visibilidade independente das cartas 1 e 2, rotação, espelhamento e remoção; preservar exportação e histórico. |
 | EDIT-05 | Implementado em 0.8.0 | Novos efeitos: retícula de impressão, linhas de tela e vinheta ajustáveis. |
 | EDIT-06 | Implementado em 0.8.0 | Customização geral: combinar posições e estilos de títulos, detalhes, bases e centro de diferentes layouts. |
-| LANG-01 | Planejado | Seletor PT/EN/ES no topo direito, preferência persistida e catálogo de traduções. |
-| LANG-02 | Planejado | Revisão integral de títulos, controles, dicas, acessibilidade, erros, busca e mensagens dinâmicas; não traduzir texto digitado nem nomes oficiais de cartas. Publicar os idiomas somente após a revisão completa. |
+| LANG-01 | Implementado em 0.9.0 | Seletor PT/EN/ES no topo direito, preferência persistida e catálogo de traduções. |
+| LANG-02 | Implementado em 0.9.0 | Revisão integral de títulos, controles, dicas, acessibilidade, erros, busca e mensagens dinâmicas; não traduzir texto digitado nem nomes oficiais de cartas. Catálogo revisado e fluxos validados nos três idiomas em desktop e celular emulado. |
 | EDIT-07 | Aguardando referências | Novos modelos singulares baseados nas imagens que o usuário enviará. Não bloqueia os seis modelos iniciais. |
 
 ## Prioridade — Enquadramento e efeitos (0.6.0)
@@ -76,3 +76,9 @@ Implementado e verificado em Chromium desktop e móvel com toque emulado. Confer
 ## Regra de evolução
 
 Cada entrega deve atualizar o CHANGELOG e preservar a abertura dos projetos salvos. Priorizar uma alteração por vez e verificar o fluxo de selecionar carta, editar, salvar e exportar.
+
+## Final da fila — Expansão de temas por cardgame
+
+| ID | Situação | Entrega / critério |
+| --- | --- | --- |
+| TEMA-10 | Planejado · após os itens anteriores | Completar 10 temas para cada um dos seis cardgames atuais (60 no total; hoje são 3 por jogo, portanto adicionar 7 a cada um). Garantir identidade visual por jogo, compatibilidade com layouts/camadas/exportação e nomes revisados em PT/EN/ES. |

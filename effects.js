@@ -144,7 +144,7 @@ function reset(){uploadSequence=uploadSequence.map(n=>n+1);setState(null);}
 $('fx-reset-card').onclick=()=>{window.ThumbInteractions.commit();state.cards[target]=cardDefault();updateUI();flush();window.ThumbInteractions.commit();};
 $('fx-reset').onclick=()=>{window.ThumbInteractions.commit();reset();window.ThumbInteractions.commit();};
 for(let i=0;i<3;i++){
- $('fx-upload-'+i).onchange=async e=>{const file=e.target.files[0];if(!file)return;const ticket=++uploadSequence[i];window.dispatchEvent(new CustomEvent('thumb:loading',{detail:true}));try{const data=await window.ThumbEngine.normalizeImage(file);if(ticket!==uploadSequence[i])return;state.fanImages[i]=data;updateUI();schedule();}catch(err){$('status').textContent=err.message;}finally{e.target.value='';window.dispatchEvent(new CustomEvent('thumb:loading',{detail:false}));window.ThumbInteractions.commit();}};
+ $('fx-upload-'+i).onchange=async e=>{const file=e.target.files[0];if(!file)return;const ticket=++uploadSequence[i];window.dispatchEvent(new CustomEvent('thumb:loading',{detail:true}));try{const data=await window.ThumbEngine.normalizeImage(file);if(ticket!==uploadSequence[i])return;state.fanImages[i]=data;updateUI();schedule();}catch(err){$('status').textContent=window.ThumbI18n?.errorText(err)||err.message;}finally{e.target.value='';window.dispatchEvent(new CustomEvent('thumb:loading',{detail:false}));window.ThumbInteractions.commit();}};
  panel.querySelector(`[data-remove-fan="${i}"]`).onclick=()=>{window.ThumbInteractions.commit();uploadSequence[i]++;state.fanImages[i]='';updateUI();schedule();window.ThumbInteractions.commit();};
 }
 function snap(box,dx,dy){

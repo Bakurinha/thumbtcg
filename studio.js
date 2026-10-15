@@ -123,7 +123,7 @@ async function search(side){
  try{
   const data=await providers[game].search(query,null,ctrl.signal,searchState[side].providerSource);if(ctrl.signal.aborted||version!==routeVersion)return;
   Object.assign(searchState[side],data);renderBatch(side);
- }catch(e){if(ctrl.signal.aborted||version!==routeVersion)return;$(`search-status-${side}`).textContent=e.name==='AbortError'?'A busca demorou demais. Tente novamente ou envie sua imagem.':`${e.message||'Falha de conexão.'} Use o upload abaixo se necessário.`;}
+ }catch(e){if(ctrl.signal.aborted||version!==routeVersion)return;$(`search-status-${side}`).textContent=e.name==='AbortError'?'A busca demorou demais. Tente novamente ou envie sua imagem.':`${window.ThumbI18n?.errorText(e,'Falha de conexão.')||e.message||'Falha de conexão.'} Use o upload abaixo se necessário.`;}
  finally{if(requests[side]===ctrl)btn.disabled=false;}
 }
 function renderBatch(side){
@@ -183,7 +183,7 @@ $('open-project').addEventListener('change',async e=>{
   for(const side of ['left','right'])if(!/^#[0-9a-f]{6}$/i.test(data.fields[`accent-${side}`]))throw new Error('Cor inválida.');
   if(busy)throw new Error('Aguarde a imagem terminar de carregar.');
   if(active)drafts.set(active,snapshot());drafts.set(data.game,data);active=null;history.replaceState(null,'',`#${data.game}`);await route();$('status').textContent='Projeto restaurado. Continue sua edição.';
- }catch(error){$('status').textContent=error.message||'Não foi possível abrir este projeto.';}finally{e.target.value='';}
+ }catch(error){$('status').textContent=window.ThumbI18n?.errorText(error,'Não foi possível abrir este projeto.')||error.message||'Não foi possível abrir este projeto.';}finally{e.target.value='';}
 });
 $('copy-pix').addEventListener('click',async()=>{try{await navigator.clipboard.writeText('suportebakura@gmail.com');$('pix-status').textContent='Chave PIX copiada.';}catch{$('pix-status').textContent='Copie a chave acima: suportebakura@gmail.com';}});
 window.addEventListener('hashchange',route);route();

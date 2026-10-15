@@ -1,3 +1,11 @@
+## 0.9.0 — 2026-10-15
+
+- Seletor Português / English / Español no canto superior direito, com preferência local persistente e funcionamento quando o armazenamento estiver bloqueado.
+- Catálogo de traduções para home, menus, layouts, temas, acessibilidade e mensagens dinâmicas de busca, erro, importação, histórico e exportação.
+- Textos do usuário, nomes oficiais, dados das cartas e arquivos preservados. Alterar o idioma não muda o projeto nem a arte do PNG.
+- Controles de upload nos painéis avançados com botões traduzidos pelo próprio site.
+- Meta de 10 temas por cardgame adicionada ao final do backlog; os novos temas ainda não foram implementados.
+
 ## 0.8.0 — 2026-10-15
 
 - Área de ferramentas compacta com painéis recolhíveis e layouts ao lado das opções avançadas.

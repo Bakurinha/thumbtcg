@@ -376,7 +376,7 @@ async function loadFile(side,file){
    window.dispatchEvent(new CustomEvent('thumb:image',{detail:{side}}));
    status.textContent='Imagem centralizada. Edite os nomes, escolha as cores, o layout e exporte quando quiser.';
    return true;
- }catch(err){status.textContent='Erro: '+(err.message||String(err));return false;}
+ }catch(err){status.textContent='Erro: '+(window.ThumbI18n?.errorText(err)||err.message||String(err));return false;}
  finally{window.dispatchEvent(new CustomEvent('thumb:loading',{detail:false}));}
 }
 for(const side of ['left','right']){
@@ -424,7 +424,7 @@ async function exportPNG(){
    setTimeout(()=>URL.revokeObjectURL(link),2000);
   }finally{URL.revokeObjectURL(blobUrl);}
   status.textContent=`PNG exportado (${width} × ${height} pixels). ${warnings.join(' ')}`;
- }catch(e){status.textContent='Não foi possível exportar: '+(e.message||String(e));}
+ }catch(e){status.textContent='Não foi possível exportar: '+(window.ThumbI18n?.errorText(e)||e.message||String(e));}
  finally{exportBtn.disabled=false;exportBtn.textContent=old;}
 }
 exportBtn.addEventListener('click',exportPNG);
