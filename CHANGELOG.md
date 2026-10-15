@@ -1,5 +1,11 @@
 ## 0.6.0 — Enquadramento e efeitos visuais
 
+## 0.7.1 — 2026-10-15
+
+- Home: cartas Rocks.D.Xebec, Riverpyre Verge, Elfnote Lucina e Susanoomon substituem as quatro imagens de produtos.
+- Apresentação das seis coleções padronizada, com cartas inteiras e fundo escuro responsivo.
+
+
 ## 0.7.0 — 2026-10-14
 
 - Seis cardgames: Pokémon TCG e Disney Lorcana entram na home com paletas, recortes e fontes próprios.

@@ -58,3 +58,8 @@
 .game-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.pokemon{--game:#ffe274}.lorcana{--game:#c8a6ff}.pokemon .game-art,.lorcana .game-art{background:radial-gradient(ellipse at top,#384b5c,#111b24)}.pokemon .game-cover,.lorcana .game-cover{object-fit:contain;object-position:center 20%;padding:8px}
 .theme-gallery{margin:16px 0;padding:16px;border:1px solid var(--line);border-radius:16px;background:#121a17}.theme-gallery summary{font-weight:700;cursor:pointer}.theme-gallery>p{color:var(--dim);font-size:12px;line-height:1.6}.theme-presets{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.theme-preset{padding:5px;background:#0d1511;border:1px solid #354034;border-radius:9px;color:var(--ink);cursor:pointer;min-width:0}.theme-preset svg{display:block;width:100%;height:auto;border-radius:5px}.theme-preset span{display:block;font-size:11px;margin:8px 2px}.theme-preset[aria-pressed=true]{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}.theme-adjust{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:14px}.theme-adjust .field{flex:1;min-width:170px}.theme-adjust input[type=range]{width:100%}.source-choice{margin:10px 0}.source-choice span{font-size:11px}
 @media(max-width:760px){.game-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.theme-gallery{padding:12px}.theme-adjust{align-items:stretch}.theme-adjust .studio-btn{width:100%}.theme-preset span{font-size:10px}}
+
+/* Consistent full-card presentation across all six home collections. */
+.game-card .game-art{background:radial-gradient(ellipse at top,color-mix(in srgb,var(--game),#26333b 75%),#111b24)}
+.game-card .game-cover{object-fit:contain;object-position:center;padding:8px;box-sizing:border-box}
+@media(max-width:760px){.welcome{overflow-x:clip}}
