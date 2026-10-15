@@ -81,4 +81,4 @@ Cada entrega deve atualizar o CHANGELOG e preservar a abertura dos projetos salv
 
 | ID | Situação | Entrega / critério |
 | --- | --- | --- |
-| TEMA-10 | Planejado · após os itens anteriores | Completar 10 temas para cada um dos seis cardgames atuais (60 no total; hoje são 3 por jogo, portanto adicionar 7 a cada um). Garantir identidade visual por jogo, compatibilidade com layouts/camadas/exportação e nomes revisados em PT/EN/ES. |
+| TEMA-10 | Implementado em 0.10.0 | 10 temas para cada um dos seis cardgames (60 no total; 42 novos). Novos padrões e molduras, galeria compacta, nomes em PT/EN/ES, preservação de projetos anteriores e PNG verificados em desktop e celular emulado. |

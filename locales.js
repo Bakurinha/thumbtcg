@@ -2371,5 +2371,173 @@ window.ThumbLocales = {
   "Link": [
     "Link",
     "Enlace"
+  ],
+  "Trilha de memória": [
+    "Memory track",
+    "Pista de memoria"
+  ],
+  "Armadura cromada": [
+    "Chrome armor",
+    "Armadura cromada"
+  ],
+  "Oceano de dados": [
+    "Data ocean",
+    "Océano de datos"
+  ],
+  "Alerta de vírus": [
+    "Virus alert",
+    "Alerta de virus"
+  ],
+  "Luz sagrada": [
+    "Sacred light",
+    "Luz sagrada"
+  ],
+  "Selva digital": [
+    "Digital jungle",
+    "Selva digital"
+  ],
+  "Terminal retrô": [
+    "Retro terminal",
+    "Terminal retro"
+  ],
+  "Órbita Sincro": [
+    "Synchro orbit",
+    "Órbita de Sincronía"
+  ],
+  "Constelação Xyz": [
+    "Xyz constellation",
+    "Constelación Xyz"
+  ],
+  "Selo ritual": [
+    "Ritual seal",
+    "Sello ritual"
+  ],
+  "Pêndulo dual": [
+    "Dual pendulum",
+    "Péndulo dual"
+  ],
+  "Pergaminho mágico": [
+    "Spell scroll",
+    "Pergamino mágico"
+  ],
+  "Armadilha escarlate": [
+    "Scarlet trap",
+    "Trampa escarlata"
+  ],
+  "Arena de duelo": [
+    "Duel arena",
+    "Arena de duelo"
+  ],
+  "Horizonte das planícies": [
+    "Plains horizon",
+    "Horizonte de las llanuras"
+  ],
+  "Maré das ilhas": [
+    "Island tide",
+    "Marea de las islas"
+  ],
+  "Névoa do pântano": [
+    "Swamp mist",
+    "Niebla del pantano"
+  ],
+  "Cristas da montanha": [
+    "Mountain ridges",
+    "Crestas de montaña"
+  ],
+  "Bosque ancestral": [
+    "Ancient grove",
+    "Arboleda ancestral"
+  ],
+  "Engrenagem arcana": [
+    "Arcane gears",
+    "Engranajes arcanos"
+  ],
+  "Prisma multicolorido": [
+    "Multicolor prism",
+    "Prisma multicolor"
+  ],
+  "Cartaz de recompensa": [
+    "Bounty poster",
+    "Cartel de recompensa"
+  ],
+  "Pulso de Haki": [
+    "Haki pulse",
+    "Pulso de Haki"
+  ],
+  "Ordem naval": [
+    "Naval order",
+    "Orden naval"
+  ],
+  "Alvorada no mar": [
+    "Dawn at sea",
+    "Amanecer en el mar"
+  ],
+  "Tempestade no oceano": [
+    "Ocean storm",
+    "Tormenta oceánica"
+  ],
+  "Mapa da aventura": [
+    "Adventure map",
+    "Mapa de aventura"
+  ],
+  "Página de mangá": [
+    "Manga page",
+    "Página de manga"
+  ],
+  "Ondas de água": [
+    "Water waves",
+    "Olas de agua"
+  ],
+  "Brasa de fogo": [
+    "Fire embers",
+    "Brasas de fuego"
+  ],
+  "Espiral psíquica": [
+    "Psychic spiral",
+    "Espiral psíquica"
+  ],
+  "Placas metálicas": [
+    "Metal plates",
+    "Placas metálicas"
+  ],
+  "Eclipse noturno": [
+    "Night eclipse",
+    "Eclipse nocturno"
+  ],
+  "Escamas de dragão": [
+    "Dragon scales",
+    "Escamas de dragón"
+  ],
+  "Campo de batalha": [
+    "Battle field",
+    "Campo de batalla"
+  ],
+  "Brilho de âmbar": [
+    "Amber glow",
+    "Brillo de ámbar"
+  ],
+  "Cristais de ametista": [
+    "Amethyst crystals",
+    "Cristales de amatista"
+  ],
+  "Jardim de esmeralda": [
+    "Emerald garden",
+    "Jardín de esmeralda"
+  ],
+  "Centelhas de rubi": [
+    "Ruby sparks",
+    "Chispas de rubí"
+  ],
+  "Correntes de safira": [
+    "Sapphire currents",
+    "Corrientes de zafiro"
+  ],
+  "Fortaleza de aço": [
+    "Steel fortress",
+    "Fortaleza de acero"
+  ],
+  "Páginas de história": [
+    "Storybook pages",
+    "Páginas de cuento"
   ]
 };

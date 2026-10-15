@@ -8,7 +8,7 @@ Editor de thumbnails dedicado a trading card games, mantido por **Bakura**.
 
 - Boas-vindas com seleção de Digimon TCG, Yu-Gi-Oh!, Magic: The Gathering, One Piece, Pokémon TCG e Disney Lorcana.
 - Rotas compartilháveis: `#digimon`, `#yugioh`, `#magic`, `#onepiece`, `#pokemon` e `#lorcana`.
-- 18 temas (três por jogo), molduras e intensidade ajustável; preservam cartas e posições.
+- 60 temas (dez por jogo), molduras e intensidade ajustável; preservam cartas e posições.
 - 28 layouts (seis para uma carta), paletas de cada TCG, padrões visuais próprios e cores livres por lado.
 - Pesquisa nas bases correspondentes ao cardgame escolhido, com resultados e paginação.
 - Upload de imagens em todos os jogos; recorte inicial da ilustração em Yu-Gi-Oh!, Magic e One Piece.
@@ -37,11 +37,14 @@ O seletor no canto superior direito oferece **Português, English e Español**. 
 
 Menus, layouts, temas, dicas, atributos de acessibilidade e mensagens de busca, carregamento, erro e exportação estão no catálogo local `locales.js`. A troca não envia textos a serviços de tradução. Nomes de cartas, informações vindas das bases, arquivos e textos digitados no projeto mantêm o conteúdo original; o idioma de uma base (como TCGdex EN/PT) continua sendo uma escolha separada.
 
-O idioma da interface não faz parte do projeto JSON e não altera a arte exportada. Modelos adicionais baseados em referências aguardam as imagens do usuário. Ao final do backlog está a expansão para **10 temas por cardgame** (60 nos seis jogos atuais).
+O idioma da interface não faz parte do projeto JSON e não altera a arte exportada. Modelos adicionais baseados em referências aguardam as imagens do usuário. A expansão para **10 temas por cardgame** foi concluída na versão 0.10.0 (60 nos seis jogos atuais).
 
 Para novos controles, adicione as mensagens em `locales.js`; parâmetros dinâmicos usam `{0}`, `{1}`, etc. `i18n.js` traduz somente a interface, observa novos textos e protege os valores dos campos, o SVG da arte e os dados das cartas. Execute `npm run test:i18n` com o servidor local e Chromium disponíveis.
 
 ## Temas por cardgame
+
+São **10 temas em cada um dos seis jogos**. Os 42 novos temas incluem trilhas de memória e armadura em Digimon; Sincro, Xyz e selos em Yu-Gi-Oh!; paisagens de mana em Magic; cartazes, mapas e navegação em One Piece; energias e tipos em Pokémon; tintas e páginas de história em Lorcana. As miniaturas apresentam os padrões e molduras de cada modelo. A galeria tem rolagem interna para manter os controles próximos, inclusive no celular.
+
 
 Em **Temas do cardgame**, escolha um preset e ajuste a intensidade ou a moldura. Os presets atualizam as cores dos dois lados, mantendo textos, imagens, posições e efeitos. **Remover efeitos e moldura** preserva as cores escolhidas. Fundo e moldura aparecem na edição por camadas. Projetos antigos abrem sem tema aplicado.
 

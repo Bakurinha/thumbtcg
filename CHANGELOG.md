@@ -1,3 +1,11 @@
+## 0.10.0 — 2026-10-15
+
+- 42 novos temas: dez por cardgame, totalizando 60 nos seis jogos.
+- Padrões vetoriais de memória, placas, ondas, órbitas, selos, mapas, páginas, energias e tintas; cinco novas variações de moldura.
+- Miniaturas com o padrão e a moldura do modelo, galeria com rolagem interna e duas colunas no celular.
+- Nomes novos em português, inglês e espanhol. IDs antigos preservados para reabrir projetos salvos.
+- Os 60 temas exportados em PNG no Chromium desktop; seleção, histórico, idiomas, migração e ausência de rolagem horizontal também verificados em celular emulado.
+
 ## 0.9.0 — 2026-10-15
 
 - Seletor Português / English / Español no canto superior direito, com preferência local persistente e funcionamento quando o armazenamento estiver bloqueado.
