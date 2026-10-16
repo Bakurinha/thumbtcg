@@ -1,0 +1,73 @@
+name: ThumbTCG validation
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Node tests and Chromium desktop/mobile
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install project dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Install Chromium browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Check JavaScript syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+          while IFS= read -r -d '' file; do
+            node --check "$file"
+          done < <(find . -type f \( -name '*.js' -o -name '*.cjs' -o -name '*.mjs' \) -not -path './node_modules/*' -print0)
+
+      - name: Unit and regression tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm test
+          npm run test:advanced
+          npm run test:effects
+          npm run test:themes
+          npm run test:composition
+          npm run test:i18n
+          npm run test:scenes
+
+      - name: Run browser tests (desktop and touch emulator)
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/thumbtcg-server.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in {1..20}; do
+            if curl -fsS http://127.0.0.1:8765/ > /dev/null; then break; fi
+            sleep 1
+          done
+          BASE_URL=http://127.0.0.1:8765 npm run test:browser
+
+      - name: Upload test screenshots if produced
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: thumbtcg-validation-screenshots
+          path: |
+            /tmp/thumbtcg-desktop.png
+            /tmp/thumbtcg-mobile.png
+          if-no-files-found: ignore
