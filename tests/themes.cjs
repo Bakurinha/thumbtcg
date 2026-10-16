@@ -5,15 +5,15 @@ for(const mobile of [false,true]){
  assert.equal(await page.locator('.game-card').count(),6);assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
  for(const game of ['digimon','yugioh','magic','onepiece','pokemon','lorcana']){
   await page.goto((process.env.BASE_URL||'http://localhost:8776')+'/#'+game);await page.waitForFunction(g=>document.body.dataset.game===g,game);await page.waitForSelector('.theme-preset',{state:'attached'});if(await page.locator('[data-tool=themes]').getAttribute('aria-expanded')==='false')await page.click('[data-tool=themes]');
-  assert.equal(await page.locator('.theme-preset').count(),10);
+  const count=game==='digimon'?18:10;assert.equal(await page.locator('.theme-preset').count(),count);
   await page.evaluate(async()=>{const blob=await (await fetch('assets/home/pokemon.webp')).blob();for(const side of ['left','right'])await ThumbEngine.loadFile(side,new File([blob],'card.webp',{type:'image/webp'}));ThumbInteractions.commit();});
   const before=await page.evaluate(()=>{const s=ThumbFX.getState();s.cards.left.glow=true;ThumbFX.setState(s);const a=ThumbAdvanced.getState();a.brightness=1.4;ThumbAdvanced.setState(a);return ThumbStudio.snapshot();});
-  for(let i=0;i<10;i++){await page.locator('.theme-preset').nth(i).click();assert.equal(await page.evaluate(()=>document.getElementById('theme-background').children.length>0),true);
+  for(let i=0;i<count;i++){await page.locator('.theme-preset').nth(i).click();assert.equal(await page.evaluate(()=>document.getElementById('theme-background').children.length>0),true);
    if(!mobile){const e=page.waitForEvent('download');await page.click('#export');const bytes=await fs.readFile(await(await e).path());assert.equal(bytes.readUInt32BE(16),1280);assert.ok(bytes.length>15000);}
   }
   const names=await page.locator('.theme-preset span').allTextContents();
-  assert.equal(new Set(await page.locator('.theme-preset').evaluateAll(els=>els.map(e=>e.dataset.theme))).size,10);
-  for(const lang of ['en','es','pt-BR']){await page.selectOption('#site-language',lang);for(let n=0;n<10;n++)assert.equal(await page.locator('.theme-preset span').nth(n).textContent(),await page.evaluate(([name,l])=>ThumbI18n.t(name,l),[names[n],lang]));}
+  assert.equal(new Set(await page.locator('.theme-preset').evaluateAll(els=>els.map(e=>e.dataset.theme))).size,count);
+  for(const lang of ['en','es','pt-BR']){await page.selectOption('#site-language',lang);for(let n=0;n<count;n++)assert.equal(await page.locator('.theme-preset span').nth(n).textContent(),await page.evaluate(([name,l])=>ThumbI18n.t(name,l),[names[n],lang]));}
   // All older theme IDs remain restorable with their saved settings.
   for(let n=0;n<3;n++){const id=await page.locator('.theme-preset').nth(n).getAttribute('data-theme');await page.evaluate(id=>ThumbThemes.setState({id,intensity:37,frame:false}),id);assert.deepEqual(await page.evaluate(()=>ThumbThemes.getState()),{id,intensity:37,frame:false});}
   await page.locator('.theme-preset').last().click();

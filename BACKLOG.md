@@ -82,3 +82,10 @@ Cada entrega deve atualizar o CHANGELOG e preservar a abertura dos projetos salv
 | ID | Situação | Entrega / critério |
 | --- | --- | --- |
 | TEMA-10 | Implementado em 0.10.0 | 10 temas para cada um dos seis cardgames (60 no total; 42 novos). Novos padrões e molduras, galeria compacta, nomes em PT/EN/ES, preservação de projetos anteriores e PNG verificados em desktop e celular emulado. |
+
+### Modelo de referência — versão 0.11.0
+
+- [x] Lua vermelha, exclusivo de Digimon: castelo e lua vermelha, duas cartas editáveis inclinadas, neon vermelho/roxo, prévia e exportação PNG.
+- [ ] Receber referências adicionais para modelos singulares (EDIT-07).
+
+- [x] Oito novos temas de Digimon com as imagens enviadas, miniaturas, intensidade, moldura opcional e nomes em PT/EN/ES (18 temas de Digimon, 68 no total).

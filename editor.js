@@ -107,6 +107,11 @@ singles.forEach(([name,note,art,title,kind],i)=>{
  c.vs.label='';c.showPlate=false;c.topRibbon=false;c.nameplates=false;c.extra={kind,source:'left'};
  layoutPresets['layout'+(23+i)]=c;
 });
+const moon=structuredClone(layoutPresets.layout9);
+Object.assign(moon,{name:'Lua vermelha',note:'Digimon · castelo, duas cartas inclinadas e neon',game:'digimon',showDeckNames:false,showPlate:false,topRibbon:false,nameplates:false,artL:{x:135,y:65,w:420,h:590},artR:{x:725,y:65,w:420,h:590},extra:{kind:'bloodMoon',source:'none'}});
+for(const key of ['deckL','deckR','digiL','digiR','detailL','detailR'])moon[key].display=false;
+moon.vs.label='';layoutPresets.layout29=moon;
+const isLayoutAvailable=id=>!!layoutPresets[id]&&(!layoutPresets[id].game||layoutPresets[id].game===document.body.dataset.game);
 const layoutOrder=Object.keys(layoutPresets);
 const currentLayout={value:'layout1'};
 function fontCss(key){return (FONTS[key]||FONTS.impact).css;}
@@ -243,6 +248,8 @@ function buildLayoutUI(){
   });
 }
 function buildThumbSvg(cfg){
+ if(cfg.extra?.kind==='bloodMoon')return `<svg viewBox="0 0 160 90"><image href="assets/layouts/digimon-red-moon.webp" width="160" height="90" preserveAspectRatio="xMidYMid slice"/><rect x="17" y="9" width="52" height="72" rx="3" fill="#181523" stroke="#ff4545" stroke-width="2" transform="rotate(-7 43 45)"/><rect x="91" y="9" width="52" height="72" rx="3" fill="#20152d" stroke="#ce75ff" stroke-width="2" transform="rotate(7 117 45)"/></svg>`;
+
  if(cfg.extra){const circle=['circles','circleRight','circleLeft','creator','soloCircle'].includes(cfg.extra.kind);const art=(r,color)=>circle?`<ellipse cx="${(r.x+r.w/2)/8}" cy="${(r.y+r.h/2)/8}" rx="${r.w/16}" ry="${r.h/16}" fill="${color}" stroke="#e5f9bb"/>`:`<rect x="${r.x/8}" y="${r.y/8}" width="${r.w/8}" height="${r.h/8}" rx="2" fill="${color}"/>`;return `<svg viewBox="0 0 160 90"><rect width="160" height="90" fill="#182b34"/>${art(cfg.artL,'#49785a')}${cfg.solo?'':art(cfg.artR,'#487b94')}<text x="${cfg.deckL.x/8}" y="${cfg.deckL.y/8}" text-anchor="${cfg.deckL.anchor}" fill="white" font-size="7">DECK 01</text><text opacity="${cfg.solo?0:1}" x="${cfg.deckR.x/8}" y="${cfg.deckR.y/8}" text-anchor="${cfg.deckR.anchor}" fill="white" font-size="7">DECK 02</text><text x="80" y="48" text-anchor="middle" fill="#fff" font-size="12">${cfg.vs.label}</text></svg>`;}
 
   const cx=cfg.vs.x/1280*160, cy=cfg.vs.y/720*90;
@@ -294,6 +301,7 @@ function applyCustomControls(){
   window.dispatchEvent(new Event('thumb:controls'));
 }
 function applyLayout(name, announce=false){
+  if(!isLayoutAvailable(name))name="layout1";
   const cfg=layoutPresets[name]||layoutPresets.layout1;
   currentLayout.value=name;
   layoutSelect.value=name;
@@ -313,7 +321,7 @@ function applyLayout(name, announce=false){
   toggleEls.ribbon.checked=cfg.topRibbon!==false;
   toggleEls.ribbonText.checked=cfg.topRibbon!==false;
   toggleEls.nameplates.checked=cfg.nameplates!==false;
-  toggleEls.deckNames.checked=true;
+  toggleEls.deckNames.checked=cfg.showDeckNames!==false;
   toggleEls.leftArt.checked=true;toggleEls.rightArt.checked=!cfg.solo;
   toggleEls.cardNames.checked=(cfg.digiL.display!==false || cfg.digiR.display!==false);
   toggleEls.cardDetails.checked=(cfg.detailL.display!==false || cfg.detailR.display!==false);
@@ -397,6 +405,8 @@ async function exportPNG(){
   const height=width*9/16;
   const warnings=await window.ThumbStudio?.qualityWarnings?.(width)||[];
   status.textContent=`Renderizando a capa em ${width} × ${height}…`; 
+  await window.ThumbScenes?.ready();
+  await window.ThumbThemes?.ready();
   window.ThumbComposition?.flush();window.ThumbFX?.flush();
   const copy=svg.cloneNode(true);
   copy.setAttribute('width',width);copy.setAttribute('height',height);
@@ -443,7 +453,7 @@ window.ThumbEngine={resetFragmentGeometry(){
  for(const id of ['vs-plate','vs-plate-ring']){document.getElementById(id).setAttribute('cx',640);document.getElementById(id).setAttribute('cy',334);document.getElementById(id).style.display=toggleEls.vsPlate.checked?'':'none';}
  document.getElementById('left-nameplate').setAttribute('d','M0 589H550L520 712H0Z');document.getElementById('right-nameplate').setAttribute('d','M737 589H1280V712H766Z');for(const side of ['left','right'])document.getElementById(side+'-nameplate').style.display=toggleEls.nameplates.checked?'':'none';
  applyFontCustomization();textUpdaters.forEach(fn=>fn());
- },layouts:()=>Object.entries(layoutPresets).map(([id,c])=>({id,name:c.name,solo:!!c.solo})),isSolo:()=>!!layoutPresets[currentLayout.value]?.solo,
+ },isLayoutAvailable,layouts:()=>Object.entries(layoutPresets).map(([id,c])=>({id,name:c.name,solo:!!c.solo})),isSolo:()=>!!layoutPresets[currentLayout.value]?.solo,
  applyFragment(part,key){const c=layoutPresets[key];if(!c)return;
  const textParts={titleLeft:['text-left-deck','deckL'],titleRight:['text-right-deck','deckR'],detailLeft:['text-left-detail','detailL'],detailRight:['text-right-detail','detailR']};
  if(textParts[part]){const [id,k]=textParts[part];setTextEl(id,{...c[k],display:true});}

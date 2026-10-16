@@ -8,8 +8,8 @@ Editor de thumbnails dedicado a trading card games, mantido por **Bakura**.
 
 - Boas-vindas com seleção de Digimon TCG, Yu-Gi-Oh!, Magic: The Gathering, One Piece, Pokémon TCG e Disney Lorcana.
 - Rotas compartilháveis: `#digimon`, `#yugioh`, `#magic`, `#onepiece`, `#pokemon` e `#lorcana`.
-- 60 temas (dez por jogo), molduras e intensidade ajustável; preservam cartas e posições.
-- 28 layouts (seis para uma carta), paletas de cada TCG, padrões visuais próprios e cores livres por lado.
+- 68 temas (18 em Digimon e dez em cada um dos outros jogos), molduras e intensidade ajustável; preservam cartas e posições.
+- 28 layouts gerais (seis para uma carta) e o modelo Lua vermelha exclusivo de Digimon, paletas de cada TCG, padrões visuais próprios e cores livres por lado.
 - Pesquisa nas bases correspondentes ao cardgame escolhido, com resultados e paginação.
 - Upload de imagens em todos os jogos; recorte inicial da ilustração em Yu-Gi-Oh!, Magic e One Piece.
 - Posição horizontal/vertical, zoom e edição direta na prévia, inclusive por toque.
@@ -37,13 +37,13 @@ O seletor no canto superior direito oferece **Português, English e Español**. 
 
 Menus, layouts, temas, dicas, atributos de acessibilidade e mensagens de busca, carregamento, erro e exportação estão no catálogo local `locales.js`. A troca não envia textos a serviços de tradução. Nomes de cartas, informações vindas das bases, arquivos e textos digitados no projeto mantêm o conteúdo original; o idioma de uma base (como TCGdex EN/PT) continua sendo uma escolha separada.
 
-O idioma da interface não faz parte do projeto JSON e não altera a arte exportada. Modelos adicionais baseados em referências aguardam as imagens do usuário. A expansão para **10 temas por cardgame** foi concluída na versão 0.10.0 (60 nos seis jogos atuais).
+O idioma da interface não faz parte do projeto JSON e não altera a arte exportada. A versão 0.11.0 inclui o primeiro modelo de referência: Lua vermelha, exclusivo de Digimon, com cenário incorporado ao PNG, duas cartas editáveis, inclinação e neon vermelho/roxo. O cenário é um recurso incluído no aplicativo; o JSON guarda a escolha do modelo e as personalizações. A expansão para **10 temas por cardgame** foi concluída na versão 0.10.0 (60 nos seis jogos atuais).
 
 Para novos controles, adicione as mensagens em `locales.js`; parâmetros dinâmicos usam `{0}`, `{1}`, etc. `i18n.js` traduz somente a interface, observa novos textos e protege os valores dos campos, o SVG da arte e os dados das cartas. Execute `npm run test:i18n` com o servidor local e Chromium disponíveis.
 
 ## Temas por cardgame
 
-São **10 temas em cada um dos seis jogos**. Os 42 novos temas incluem trilhas de memória e armadura em Digimon; Sincro, Xyz e selos em Yu-Gi-Oh!; paisagens de mana em Magic; cartazes, mapas e navegação em One Piece; energias e tipos em Pokémon; tintas e páginas de história em Lorcana. As miniaturas apresentam os padrões e molduras de cada modelo. A galeria tem rolagem interna para manter os controles próximos, inclusive no celular.
+São **18 temas em Digimon e 10 em cada um dos outros cinco jogos**. Os 42 novos temas incluem trilhas de memória e armadura em Digimon; Sincro, Xyz e selos em Yu-Gi-Oh!; paisagens de mana em Magic; cartazes, mapas e navegação em One Piece; energias e tipos em Pokémon; tintas e páginas de história em Lorcana. As miniaturas apresentam os padrões e molduras de cada modelo. A galeria tem rolagem interna para manter os controles próximos, inclusive no celular.
 
 
 Em **Temas do cardgame**, escolha um preset e ajuste a intensidade ou a moldura. Os presets atualizam as cores dos dois lados, mantendo textos, imagens, posições e efeitos. **Remover efeitos e moldura** preserva as cores escolhidas. Fundo e moldura aparecem na edição por camadas. Projetos antigos abrem sem tema aplicado.
@@ -149,3 +149,5 @@ Projeto independente de fãs. Marcas, cartas e ilustrações pertencem aos respe
 Validação do editor avançado: `npm run test:advanced` com servidor HTTP local (mesmas variáveis `BASE_URL` e `CHROMIUM_PATH` do teste de navegador). Verifica 12 novos layouts, opções recolhidas, camadas e histórico, upload/roundtrip, rascunhos por jogo e pixels reais do PNG com filtros.
 
 Teste do módulo visual: `npm run test:effects` com servidor HTTP local e as mesmas variáveis `BASE_URL` e `CHROMIUM_PATH`. Verifica também pixels do reflexo/foil no PNG, guias excluídas, cinco cartas no leque, migração de camadas e estabilidade da atualização por frame.
+
+Oito cenários enviados pelo usuário foram adicionados aos temas de Digimon: Catedral sombria, Forja industrial, Vila da floresta, Portal dourado, Arena neon, Fogo e gelo, Trono ancestral e Reino submarino. Digimon agora tem 18 temas; os demais jogos mantêm 10 cada (68 no total). Os fundos carregam sob demanda e são incorporados na exportação PNG.

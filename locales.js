@@ -1,5 +1,18 @@
 /* Reviewed UI catalog. Keys are the original Portuguese messages; values: English, Spanish. */
 window.ThumbLocales = {
+"Catedral sombria":["Dark cathedral", "Catedral oscura"],
+"Forja industrial":["Industrial forge", "Forja industrial"],
+"Vila da floresta":["Forest village", "Aldea del bosque"],
+"Portal dourado":["Golden portal", "Portal dorado"],
+"Arena neon":["Neon arena", "Arena neón"],
+"Fogo e gelo":["Fire and ice", "Fuego y hielo"],
+"Trono ancestral":["Ancestral throne", "Trono ancestral"],
+"Reino submarino":["Underwater kingdom", "Reino submarino"],
+"Não foi possível carregar o tema. Selecione-o novamente para tentar outra vez.":["Could not load the theme. Select it again to retry.", "No se pudo cargar el tema. Selecciónalo de nuevo para reintentar."],
+  "Lua vermelha": ["Blood moon", "Luna roja"],
+  "Digimon · castelo, duas cartas inclinadas e neon": ["Digimon · castle, two tilted cards and neon", "Digimon · castillo, dos cartas inclinadas y neón"],
+  "Cenário: lua vermelha": ["Scene: blood moon", "Escenario: luna roja"],
+  "Não foi possível carregar o cenário. Selecione o layout novamente para tentar outra vez.": ["Could not load the scene. Select the layout again to retry.", "No se pudo cargar el escenario. Selecciona el diseño de nuevo para reintentar."],
   "ThumbTCG — seu deck em destaque": [
     "ThumbTCG — put your deck in the spotlight",
     "ThumbTCG — destaca tu mazo"
@@ -1504,9 +1517,9 @@ window.ThumbLocales = {
     "How to use:",
     "Cómo usar:"
   ],
-  "coloque uma imagem em cada lado, digite os nomes, escolha o preset ou a cor manual de cada jogador, selecione um dos 28 layouts e depois refine tudo do seu jeito. Você pode trocar o texto central, fontes, esconder elementos e exportar em": [
-    "add an image to each side, enter the names, choose each player's preset or custom color, select one of 28 layouts and fine-tune it. Change the center text and fonts, hide elements and export in",
-    "añade una imagen a cada lado, escribe los nombres, elige un color predefinido o personalizado para cada jugador, selecciona uno de los 28 diseños y ajústalo a tu gusto. Cambia el texto central y las fuentes, oculta elementos y exporta en"
+  "coloque uma imagem em cada lado, digite os nomes, escolha o preset ou a cor manual de cada jogador, selecione um dos 28+ layouts e depois refine tudo do seu jeito. Você pode trocar o texto central, fontes, esconder elementos e exportar em": [
+    "add an image to each side, enter the names, choose each player's preset or custom color, select one of 28+ layouts and fine-tune it. Change the center text and fonts, hide elements and export in",
+    "añade una imagen a cada lado, escribe los nombres, elige un color predefinido o personalizado para cada jugador, selecciona uno de los 28+ diseños y ajústalo a tu gusto. Cambia el texto central y las fuentes, oculta elementos y exporta en"
   ],
   "PNG 720p, 1080p ou 1440p": [
     "720p, 1080p or 1440p PNG",

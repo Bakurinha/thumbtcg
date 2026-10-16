@@ -17,12 +17,27 @@ catalog.magic.push(["plains", "Horizonte das planícies", "#f2e3b4", "#d0ba83", 
 catalog.onepiece.push(["wanted", "Cartaz de recompensa", "#e6ca98", "#c39177", "script", "page"],["haki", "Pulso de Haki", "#dc777b", "#bf9de4", "shock", "segmented"],["navy", "Ordem naval", "#b7d9ec", "#ded1ab", "anchor", "etched"],["sun", "Alvorada no mar", "#efc77c", "#ed9d86", "horizon", "wave"],["storm", "Tempestade no oceano", "#8eb5d7", "#c9c4e9", "storm", "wave"],["map", "Mapa da aventura", "#dab98e", "#85bcb1", "map", "page"],["manga", "Página de mangá", "#dbdfe4", "#eea68c", "panels", "etched"]);
 catalog.pokemon.push(["water", "Ondas de água", "#7fc8f2", "#9fe2e3", "bubbles", "wave"],["fire", "Brasa de fogo", "#f4a174", "#f6d98a", "embers", "segmented"],["psychic", "Espiral psíquica", "#d3a0ed", "#b8b5f3", "orbit", "star"],["metal", "Placas metálicas", "#b7c8d2", "#d4c0a1", "plates", "etched"],["darkness", "Eclipse noturno", "#a4a1cf", "#7ebabb", "eclipse", "double"],["dragon", "Escamas de dragão", "#d6bc7a", "#91bcb4", "scales", "ornament"],["arena", "Campo de batalha", "#9ed6ad", "#e5c777", "arena", "segmented"]);
 catalog.lorcana.push(["amber", "Brilho de âmbar", "#edcb82", "#e5b594", "halo", "ornament"],["amethyst", "Cristais de ametista", "#c49be9", "#a6bde8", "prism", "star"],["emerald", "Jardim de esmeralda", "#8ccda5", "#c7da9e", "vines", "ornament"],["ruby", "Centelhas de rubi", "#e58f9a", "#e5be85", "shock", "etched"],["sapphire-ink", "Correntes de safira", "#8abde8", "#9dd6de", "datawaves", "wave"],["steel", "Fortaleza de aço", "#c5cdd8", "#c4ae91", "plates", "etched"],["storybook", "Páginas de história", "#dbc89f", "#c3a6df", "script", "page"]);
+catalog.digimon.push(...[["scene-cathedral", "Catedral sombria", "#a6b5f4", "#d5ddef", "image", "ornament", "assets/themes/digimon/cathedral.webp"], ["scene-forge", "Forja industrial", "#ffac58", "#9bbfd3", "image", "etched", "assets/themes/digimon/forge.webp"], ["scene-village", "Vila da floresta", "#a7d87f", "#ffc47d", "image", "ornament", "assets/themes/digimon/village.webp"], ["scene-golden-portal", "Portal dourado", "#ffe2a0", "#d2b3ff", "image", "ornament", "assets/themes/digimon/golden-portal.webp"], ["scene-neon-arena", "Arena neon", "#54dfff", "#ff70c7", "image", "tech", "assets/themes/digimon/neon-arena.webp"], ["scene-fire-ice", "Fogo e gelo", "#ffa365", "#88dcff", "image", "double", "assets/themes/digimon/fire-ice.webp"], ["scene-throne", "Trono ancestral", "#dfc385", "#92b69a", "image", "ornament", "assets/themes/digimon/throne.webp"], ["scene-undersea", "Reino submarino", "#8be4ff", "#cca2f5", "image", "wave", "assets/themes/digimon/undersea.webp"]]);
 let game=null,state={id:'',intensity:55,frame:true};
 const panel=document.createElement('details');panel.className='theme-gallery';panel.open=true;
 panel.innerHTML='<summary>Temas do cardgame</summary><p>Escolha um fundo e uma paleta. Suas cartas, textos e posições são preservados.</p><div class="theme-presets"></div><div class="theme-adjust"><label class="field"><span>Intensidade dos efeitos <output id="theme-intensity-value">55%</output></span><input id="theme-intensity" type="range" min="0" max="100" value="55"/></label><label class="toggle"><input id="theme-frame" type="checkbox" checked/> Moldura temática</label><button class="studio-btn" id="theme-clear" type="button">Remover efeitos e moldura</button></div>';
 document.querySelector('.theme-description').after(panel);
 const background=document.createElementNS(ns,'g');background.id='theme-background';background.style.pointerEvents='none';window.ThumbAdvanced.registerLayer('theme-background','Fundo temático',background,'fx-scene-atmosphere');
 const frame=document.createElementNS(ns,'g');frame.id='theme-border';frame.style.pointerEvents='none';window.ThumbAdvanced.registerLayer('theme-border','Moldura temática',frame,'extra-image');
+// Raster themes load on demand and are embedded before SVG-to-PNG export.
+const assetCache=new Map(),assetRequests=new Map();
+const assetStyle=document.createElementNS(ns,'style');assetStyle.textContent='.image-theme [data-composition-base="true"]:not(#theme-background):not(#theme-border){display:none!important}';svg.querySelector('defs').append(assetStyle);
+function selectedImage(){return (catalog[game]||[]).find(t=>t[0]===state.id&&t[4]==='image');}
+async function ready(){
+ const theme=selectedImage();if(!theme)return;
+ const url=theme[6];if(assetCache.has(url))return;
+ if(!assetRequests.has(url))assetRequests.set(url,(async()=>{
+  const response=await fetch(url);if(!response.ok)throw Error('asset');
+  const blob=await response.blob(),data=await new Promise((ok,fail)=>{const r=new FileReader();r.onload=()=>ok(r.result);r.onerror=fail;r.readAsDataURL(blob);});
+  const img=new Image();img.src=data;await img.decode();assetCache.set(url,data);
+ })().catch(()=>{throw Error(window.ThumbI18n?.t('Não foi possível carregar o tema. Selecione-o novamente para tentar outra vez.')||'Não foi possível carregar o tema. Selecione-o novamente para tentar outra vez.');}).finally(()=>assetRequests.delete(url)));
+ await assetRequests.get(url);if(selectedImage()?.[6]===url)draw();else return ready();
+}
 function pattern(type,a,b){
  const path=(d,color=a,width=2)=>`<path d="${d}" fill="none" stroke="${color}" stroke-width="${width}"/>`;
 
@@ -85,12 +100,19 @@ function validate(data,g){
  if(!data||typeof data!=='object'||typeof data.id!=='string'||(data.id&&!(catalog[g]||[]).some(t=>t[0]===data.id))||!Number.isFinite(data.intensity)||data.intensity<0||data.intensity>100||typeof data.frame!=='boolean')throw Error('Tema de projeto inválido.');
 }
 function draw(){
- background.replaceChildren();frame.replaceChildren();const theme=(catalog[game]||[]).find(t=>t[0]===state.id);
+ background.replaceChildren();frame.replaceChildren();svg.classList.toggle('image-theme',!!selectedImage());const theme=(catalog[game]||[]).find(t=>t[0]===state.id);
  if(theme){const [,name,a,b,type,border]=theme;
   let defs=$('theme-pattern');if(!defs){defs=document.createElementNS(ns,'pattern');defs.id='theme-pattern';defs.setAttribute('patternUnits','userSpaceOnUse');defs.setAttribute('width','80');defs.setAttribute('height','80');svg.querySelector('defs').append(defs);}defs.innerHTML=pattern(type,a,b);
   background.innerHTML=`<rect width="1280" height="720" fill="url(#theme-pattern)"/>`;
   if(type==='rays')background.innerHTML+=Array.from({length:22},(_,i)=>{const angle=i*Math.PI/11,x=640+Math.cos(angle)*1100,y=360+Math.sin(angle)*900;return `<path d="M640 360L${x} ${y}" stroke="${i%2?a:b}" stroke-width="${i%3?3:12}"/>`;}).join('');
   background.setAttribute('opacity',String(state.intensity/100*.5));
+  if(type==='image'){
+   const data=assetCache.get(theme[6]);
+   background.innerHTML='<rect width="1280" height="720" fill="#10131b"/>';
+   if(data)background.innerHTML+=`<image href="${data}" width="1280" height="720" preserveAspectRatio="xMidYMid slice"/><rect width="1280" height="720" fill="#000" opacity="${(1-state.intensity/100)*.65}"/>`;
+   else ready().catch(e=>{if(selectedImage()?.[6]===theme[6])$('status').textContent=e.message;});
+   background.setAttribute('opacity','1');
+  }
   if(state.frame){
    frame.innerHTML=borderArt(border,a,b);frame.setAttribute('opacity',String(.3+state.intensity/100*.7));
   }
@@ -100,14 +122,15 @@ function draw(){
 }
 function reset(g){game=g;state={id:'',intensity:55,frame:true};const list=panel.querySelector('.theme-presets');list.replaceChildren();
  for(const t of catalog[game]||[]){const button=document.createElement('button');button.type='button';button.className='theme-preset';button.dataset.theme=t[0];button.setAttribute('aria-pressed','false');const patternId='theme-preview-'+game+'-'+t[0];button.innerHTML=`<svg viewBox="0 0 1280 720" aria-hidden="true"><defs><pattern id="${patternId}" width="80" height="80" patternUnits="userSpaceOnUse">${pattern(t[4],t[2],t[3])}</pattern></defs><rect width="1280" height="720" fill="#111b26"/><rect width="1280" height="720" fill="url(#${patternId})" opacity=".5"/><path d="M720 0L560 720" stroke="${t[3]}" stroke-width="5"/><rect x="190" y="145" width="270" height="425" rx="18" fill="${t[2]}" opacity=".7"/><rect x="820" y="145" width="270" height="425" rx="18" fill="${t[3]}" opacity=".7"/>${borderArt(t[5],t[2],t[3])}</svg><span>${t[1]}</span>`;
-  button.addEventListener('click',()=>{window.ThumbInteractions?.commit();state.id=t[0];for(const [i,side] of ['left','right'].entries()){const input=$(`accent-${side}`);input.value=t[i+2];input.dispatchEvent(new Event('input',{bubbles:true}));$(`theme-${side}`).value='custom';}draw();window.dispatchEvent(new Event('thumb:theme'));});list.append(button);
+  if(t[4]==='image')button.innerHTML=`<img src="${t[6].replace('.webp','-preview.webp')}" loading="lazy" decoding="async" alt="" style="width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:8px"/><span>${t[1]}</span>`;
+  button.addEventListener('click' ,()=>{window.ThumbInteractions?.commit();state.id=t[0];for(const [i,side] of ['left','right'].entries()){const input=$(`accent-${side}`);input.value=t[i+2];input.dispatchEvent(new Event('input',{bubbles:true}));$(`theme-${side}`).value='custom';}draw();window.dispatchEvent(new Event('thumb:theme'));});list.append(button);
  }
  draw();
 }
 $('theme-intensity').addEventListener('input',e=>{state.intensity=Number(e.target.value);draw();window.dispatchEvent(new Event('thumb:theme'));});
 $('theme-frame').addEventListener('change',e=>{state.frame=e.target.checked;draw();window.dispatchEvent(new Event('thumb:theme'));});
 $('theme-clear').addEventListener('click',()=>{window.ThumbInteractions?.commit();state.id='';draw();window.dispatchEvent(new Event('thumb:theme'));});
-window.ThumbThemes={reset,validate,getState:()=>({...state}),setState(data){if(!data)data={id:'',intensity:55,frame:true};validate(data,game);state={...data};draw();}};
+window.ThumbThemes={ready,reset,validate,getState:()=>({...state}),setState(data){if(!data)data={id:'',intensity:55,frame:true};validate(data,game);state={...data};draw();}};
 window.addEventListener('thumb:theme',()=>window.ThumbInteractions?.commit());
 reset(document.body.dataset.game||null);
 window.ThumbInteractions?.resetHistory();
