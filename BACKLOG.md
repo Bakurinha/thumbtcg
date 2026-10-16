@@ -5,7 +5,8 @@
 | ID | Situação | Entrega / critério |
 | --- | --- | --- |
 | QUAL-01 | Implementado | Indentação normalizada em módulos JavaScript e CSS; comentários nas responsabilidades dos módulos e pontos críticos. Preservados os identificadores, os contratos do editor e o formato de projeto. |
-| QUAL-02 | Pendente de validação | Executar testes automatizados, conferir exportação PNG e testar visualmente no navegador desktop e celular. |
+| QUAL-02 | **Validado em 2026-10-16** | GitHub Actions: sintaxe, testes unitários/regressão, Chromium desktop/mobile emulado, temas, efeitos, layout, exportação PNG 720p/1080p/1440p, histórico e projetos legados. [Execução aprovada](https://github.com/Bakurinha/thumbtcg/actions/runs/38884858689). |
+| QUAL-03 | Pendente | Validar em dispositivos físicos Android/iOS; emulação no Chromium não substitui esse teste. |
 
 
 TCG-01 e TCG-02 implementados na versão 0.4.0 e validados em Chromium desktop e móvel com toque emulado. TCG-03 a TCG-05 retomados na versão 0.7.0 após a entrega do editor avançado. Sem datas prometidas.

@@ -3,7 +3,7 @@
 - Indentação de módulos JavaScript normalizada e CSS organizado em blocos legíveis, preservando lógica, seletores e declarações.
 - Comentários das responsabilidades de cada módulo e pontos críticos: exportação PNG, camadas, histórico, efeitos, provedores, idiomas e projetos.
 - Arquivos `.editorconfig` e `docs/CODE_STYLE.md` adicionados para manutenção futura.
-- Sem mudanças funcionais intencionais; testes automatizados e verificação visual em navegador continuam pendentes.
+- Sem mudanças funcionais intencionais. **Validação automatizada aprovada em 2026-10-16**: sintaxe JavaScript, testes unitários e de regressão, 68 temas (60 padrões + 8 de imagem), camadas, composição, efeitos, idiomas, projetos legados e PNG 720p/1080p/1440p em Chromium desktop e mobile com toque emulado. [Relatório GitHub Actions](https://github.com/Bakurinha/thumbtcg/actions/runs/38884858689). Teste em dispositivo físico ainda pendente.
 
 ## 0.10.0 — 2026-10-15
 
