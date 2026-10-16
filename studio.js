@@ -62,7 +62,7 @@
     if(!active)return;value('top-ribbon-input',games[active].ribbon);value('deck-font',games[active].font);value('card-font',games[active].font);for(const side of ['left','right'])transform(side);
   });
   function snapshot(){
-    return {format:'thumbtcg',version:2,game:active,fields:Object.fromEntries(baseFields.map(el=>[el.id,el.type==='checkbox'?el.checked:el.value])),art:{left:{...art.left},right:{...art.right}},elements:window.ThumbInteractions?.getState()||{},advanced:window.ThumbAdvanced?.getState()||null,fx:window.ThumbFX?.getState()||null,appearance:window.ThumbThemes?.getState()||null,composition:window.ThumbComposition?.getState()||null};
+    return {format:'thumbtcg',version:2,game:active,fields:Object.fromEntries(baseFields.map(el=>[el.id,el.type==='checkbox'?el.checked:el.value])),art:{left:{...art.left},right:{...art.right}},elements:window.ThumbInteractions?.getState()||{},advanced:window.ThumbAdvanced?.getState()||null,fx:window.ThumbFX?.getState()||null,appearance:window.ThumbThemes?.getState()||null,composition:window.ThumbComposition?.getState()||null,raster:window.ThumbRaster?.getState()||null};
   }
   async function restore(data){
     busy++;try{
@@ -80,6 +80,8 @@
       window.ThumbFX?.setState(data.fx);
       window.ThumbThemes?.setState(data.appearance);
       window.ThumbComposition?.setState(data.composition);
+    window.ThumbRaster?.setState(data.raster);
+    await window.ThumbRaster?.ready();
     }finally{busy--;}
   }
   /** Switch game context without mixing per-game drafts. */
@@ -90,7 +92,7 @@
     active=valid;editor.hidden=!active;$('welcome').hidden=!!active;$('change-game').hidden=!active;document.querySelector('.nav-label').hidden=!!active;
     if(!active){document.title='ThumbTCG — seu deck em destaque';document.body.removeAttribute('data-game');document.documentElement.style.setProperty('--accent','#c6f36b');return;}
     const game=games[active];document.body.dataset.game=active;document.title=`${game.name} · ThumbTCG`;$('editor-title').textContent=game.name;themeNote.textContent=game.note;
-    document.documentElement.style.setProperty('--accent',game.accent);engine.resetImages();window.ThumbInteractions?.setState({});window.ThumbAdvanced?.reset();window.ThumbFX?.reset();window.ThumbThemes?.reset(active);window.ThumbComposition?.reset();
+    document.documentElement.style.setProperty('--accent',game.accent);engine.resetImages();window.ThumbInteractions?.setState({});window.ThumbAdvanced?.reset();window.ThumbFX?.reset();window.ThumbThemes?.reset(active);window.ThumbComposition?.reset();window.ThumbRaster?.reset();
     const mesh=$('mesh');mesh.setAttribute('width','80');mesh.setAttribute('height','80');mesh.innerHTML=patterns[active];
     for(const side of ['left','right']){
       defaults(side);const select=$(`theme-${side}`);select.replaceChildren(...game.colors.map(([key,name])=>new Option(name,key)),new Option('Personalizada','custom'));
@@ -183,6 +185,7 @@
       window.ThumbAdvanced?.validateState(data.advanced);
       window.ThumbFX?.validateState(data.fx);
       window.ThumbComposition?.validateState(data.composition);
+      window.ThumbRaster?.validateState(data.raster);
       if(data.appearance)window.ThumbThemes?.validate(data.appearance,data.game);
       if(data.fields['export-size']&&!['1280','1920','2560'].includes(String(data.fields['export-size'])))throw new Error('Resolução inválida.');
       for(const source of [data.art.left.original,data.art.right.original,data.advanced?.wallpaper,data.advanced?.extra,data.composition?.image,...(data.fx?.fanImages||[])].filter(Boolean)){const img=new Image();img.src=source;await img.decode();if(img.naturalWidth>4096||img.naturalHeight>4096)throw new Error('Imagem do projeto excede o tamanho permitido.');}
@@ -194,3 +197,4 @@
   $('copy-pix').addEventListener('click',async()=>{try{await navigator.clipboard.writeText('suportebakura@gmail.com');$('pix-status').textContent='Chave PIX copiada.';}catch{$('pix-status').textContent='Copie a chave acima: suportebakura@gmail.com';}});
   window.addEventListener('hashchange',route);route();
 })();
+

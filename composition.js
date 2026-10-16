@@ -72,8 +72,10 @@
   const group=document.createElement('label');group.className='field';group.innerHTML='<span>Tipo de layout</span><select id="layout-category"><option value="all">Todos os layouts</option><option value="solo">Uma carta / apresentação de deck</option><option value="duel">Duas cartas / confronto</option></select>';
   document.querySelector('.layout-header').after(group);$('layout-category').onchange=e=>{for(const el of document.querySelectorAll('[data-layout]'))el.hidden=!engine.isLayoutAvailable(el.dataset.layout)||(e.target.value!=='all'&&(e.target.value==='solo')!==layouts.find(c=>c.id===el.dataset.layout)?.solo);};
   window.addEventListener('thumb:controls',()=>{schedule();if($('composition-show-left')){for(const s of ['left','right'])$('composition-show-'+s).checked=$('toggle-'+s+'-art').checked;}});
-  window.addEventListener('thumb:layout',()=>{if(engine.isSolo()){const fx=window.ThumbFX.getState();fx.fan=false;fx.split=false;window.ThumbFX.setState(fx);}schedule();ui();});
+  let previousPresetRotation=false;
+  window.addEventListener('thumb:layout',()=>{const rotation=engine.layoutExtra()?.rotation;if(rotation!==undefined||previousPresetRotation)state.images.left.rotation=rotation||0;previousPresetRotation=rotation!==undefined;if(engine.isSolo()){const fx=window.ThumbFX.getState();fx.fan=false;fx.split=false;window.ThumbFX.setState(fx);}schedule();ui();});
   window.addEventListener('thumb:image',schedule);
   window.ThumbComposition={getState:()=>structuredClone(state),validateState,setState(v){validateState(v);ticket++;state=v?structuredClone(v):defaults();flush();ui();},reset(){ticket++;state=defaults();flush();ui();},flush};
   flush();ui();window.ThumbInteractions.resetHistory();
 })();
+

@@ -35,7 +35,7 @@
     if(preset&&(on||wasMoon)){
       const c=window.ThumbComposition.getState(),fx=window.ThumbFX.getState();
       for(const side of ['left','right']){
-        Object.assign(c.images[side],{rotation:on?(side==='left'?-7:7):0,flipX:false,flipY:false});
+        Object.assign(c.images[side],{rotation:on?(side==='left'?-7:7):(side==='left'?(engine.layoutExtra()?.rotation||0):0),flipX:false,flipY:false});
         if(on)Object.assign(fx.cards[side],{transform:false,mask:'none',reflection:false,glow:true,glowColor:side==='left'?'#ff4545':'#c76cff',glowBlur:10,glowSpread:2,glowOpacity:.9,shadow:true});
         else{fx.cards[side].glow=false;fx.cards[side].shadow=false;}
       }
@@ -50,3 +50,4 @@
   new MutationObserver(()=>sync()).observe(document.body,{attributes:true,attributeFilter:['data-game']});
   window.ThumbScenes={ready};sync();
 })();
+

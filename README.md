@@ -11,7 +11,7 @@ Editor de thumbnails dedicado a trading card games, mantido por **Bakura**.
 - Boas-vindas com seleção de Digimon TCG, Yu-Gi-Oh!, Magic: The Gathering, One Piece, Pokémon TCG e Disney Lorcana.
 - Rotas compartilháveis: `#digimon`, `#yugioh`, `#magic`, `#onepiece`, `#pokemon` e `#lorcana`.
 - 68 temas (18 em Digimon e dez em cada um dos outros jogos), molduras e intensidade ajustável; preservam cartas e posições.
-- 28 layouts gerais (seis para uma carta) e o modelo Lua vermelha exclusivo de Digimon, paletas de cada TCG, padrões visuais próprios e cores livres por lado.
+- 30 layouts gerais (sete para uma carta) e o modelo Lua vermelha exclusivo de Digimon, paletas de cada TCG, padrões visuais próprios e cores livres por lado.
 - Pesquisa nas bases correspondentes ao cardgame escolhido, com resultados e paginação.
 - Upload de imagens em todos os jogos; recorte inicial da ilustração em Yu-Gi-Oh!, Magic e One Piece.
 - Posição horizontal/vertical, zoom e edição direta na prévia, inclusive por toque.
@@ -153,3 +153,10 @@ Validação do editor avançado: `npm run test:advanced` com servidor HTTP local
 Teste do módulo visual: `npm run test:effects` com servidor HTTP local e as mesmas variáveis `BASE_URL` e `CHROMIUM_PATH`. Verifica também pixels do reflexo/foil no PNG, guias excluídas, cinco cartas no leque, migração de camadas e estabilidade da atualização por frame.
 
 Oito cenários enviados pelo usuário foram adicionados aos temas de Digimon: Catedral sombria, Forja industrial, Vila da floresta, Portal dourado, Arena neon, Fogo e gelo, Trono ancestral e Reino submarino. Digimon agora tem 18 temas; os demais jogos mantêm 10 cada (68 no total). Os fundos carregam sob demanda e são incorporados na exportação PNG.
+
+
+## Tratamento artístico — 0.12.0
+
+Abra **Avançada e Prévia → Efeitos & Shaders → Tratamento artístico** para aplicar pixelização, posterização, relevo, sépia ou solarização por carta. Ajuste a mistura e restaure o original quando quiser. Filtros Konva 10.9.0 executam em worker, sem CDN, preservando projetos anteriores. Detalhes e limites: [motores de edição](docs/EDITING_ENGINES.md).
+
+Novos layouts: **Editorial diagonal** (uma carta) e **Vitrine assimétrica** (duas cartas). Agora são 30 layouts gerais e Lua vermelha exclusivo de Digimon, totalizando 31.

@@ -57,6 +57,7 @@ jobs:
           npm run test:composition
           npm run test:i18n
           npm run test:scenes
+          npm run test:raster
           BASE_URL=http://127.0.0.1:8765 npm run test:browser
 
       - name: Upload test screenshots if produced
@@ -68,3 +69,4 @@ jobs:
             /tmp/thumbtcg-desktop.png
             /tmp/thumbtcg-mobile.png
           if-no-files-found: ignore
+

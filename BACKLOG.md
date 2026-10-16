@@ -98,3 +98,12 @@ Cada entrega deve atualizar o CHANGELOG e preservar a abertura dos projetos salv
 - [ ] Receber referências adicionais para modelos singulares (EDIT-07).
 
 - [x] Oito novos temas de Digimon com as imagens enviadas, miniaturas, intensidade, moldura opcional e nomes em PT/EN/ES (18 temas de Digimon, 68 no total).
+
+
+### Motores e lacunas de edição — 0.12.0
+
+- [x] Pesquisar Konva, Fabric.js e PixiJS; registrar decisão e fontes em docs/EDITING_ENGINES.md.
+- [x] Integrar cinco filtros Konva em worker opcional, com originais preservados, configuração por carta, histórico e JSON compatível.
+- [x] Adicionar Editorial diagonal e Vitrine assimétrica com IDs estáveis.
+- [ ] Avaliar efeitos de deslocamento, aberração cromática e glitch com alternativa para aparelhos sem GPU compatível.
+- [ ] Evoluir o modelo para quantidade livre de cartas e perspectiva projetiva exportável.

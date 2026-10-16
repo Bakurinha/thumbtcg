@@ -1,3 +1,11 @@
+## 0.12.0 — 2026-10-16
+
+- Pesquisa de Konva, Fabric.js e PixiJS documentada; integração isolada de Konva 10.9.0 com licença MIT e bundle local.
+- Cinco tratamentos por carta: pixelização, posterização, relevo, sépia e solarização. Processamento em worker, mistura ajustável, original e alpha preservados, espera antes da exportação.
+- Configuração opcional no JSON e no histórico; projetos anteriores abrem sem tratamento. Limite de 2048 pixels no processamento, sem alterar o original.
+- Layouts Editorial diagonal e Vitrine assimétrica, com IDs novos e traduções PT/EN/ES.
+- Testes de efeitos, restauração, arquivos anteriores, histórico, exportação e interface incorporados à validação contínua.
+
 ## 0.11.1 — 2026-10-16 — Indentação e comentários
 
 - Indentação de módulos JavaScript normalizada e CSS organizado em blocos legíveis, preservando lógica, seletores e declarações.
@@ -128,3 +136,4 @@
 - Adicionados projetos JSON e rascunhos separados por jogo durante a sessão.
 - Separados estilos, motor de edição, interface e provedores para facilitar extensões.
 - Documentadas as limitações de imagens remotas e de validação visual.
+

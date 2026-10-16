@@ -116,6 +116,13 @@
   for(const key of ['deckL','deckR','digiL','digiR','detailL','detailR'])moon[key].display=false;
   moon.vs.label='';layoutPresets.layout29=moon;
   const isLayoutAvailable=id=>!!layoutPresets[id]&&(!layoutPresets[id].game||layoutPresets[id].game===document.body.dataset.game);
+  // Stable IDs keep older projects compatible as the layout catalog grows.
+  const editorial=structuredClone(layoutPresets.layout24);
+  Object.assign(editorial,{name:'Editorial diagonal',note:'Uma carta inclinada e espaço para seu título',artL:{x:760,y:80,w:400,h:560},deckL:{x:70,y:270,size:68,anchor:'start',font:'arena'},extra:{kind:'solo',source:'left',rotation:9}});
+  layoutPresets.layout30=editorial;
+  const showcase=structuredClone(layoutPresets.layout29);
+  Object.assign(showcase,{name:'Vitrine assimétrica',note:'Carta principal em destaque e apoio lateral',game:null,artL:{x:130,y:45,w:440,h:620},artR:{x:830,y:160,w:320,h:450},extra:{kind:'wallpaper',source:'none'}});
+  layoutPresets.layout31=showcase;
   const layoutOrder=Object.keys(layoutPresets);
   const currentLayout={value:'layout1'};
   function fontCss(key){return (FONTS[key]||FONTS.impact).css;}
@@ -413,6 +420,7 @@
       status.textContent=`Renderizando a capa em ${width} × ${height}…`; 
       await window.ThumbScenes?.ready();
       await window.ThumbThemes?.ready();
+      await window.ThumbRaster?.ready();
       window.ThumbComposition?.flush();window.ThumbFX?.flush();
       const copy=svg.cloneNode(true);
       copy.setAttribute('width',width);copy.setAttribute('height',height);
@@ -471,3 +479,4 @@
     setImage(side,data){document.getElementById(`art-${side}`).setAttribute('href',data);uploaded[side]=true;document.getElementById(`placeholder-${side}`).style.display='none';applyToggles();}
   };
 })();
+

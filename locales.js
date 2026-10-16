@@ -3,6 +3,27 @@
  * Maintenance: keep imported content and saved projects backward compatible.
  */
 window.ThumbLocales = {
+"Tratamento artístico":["Artistic treatment", "Tratamiento artístico"],
+"Efeitos por carta. A imagem original permanece preservada.":["Per-card effects. Your original image is preserved.", "Efectos por carta. Se conserva la imagen original."],
+"Carta para tratamento":["Card to process", "Carta para tratar"],
+"Estilo artístico":["Artistic style", "Estilo artístico"],
+"Força do tratamento":["Treatment strength", "Intensidad del tratamiento"],
+"Mistura com a imagem original":["Blend with original image", "Mezcla con la imagen original"],
+"Restaurar imagem original":["Restore original image", "Restaurar imagen original"],
+"Sem tratamento":["No treatment", "Sin tratamiento"],
+"Pixelização":["Pixelation", "Pixelación"],
+"Posterização":["Posterization", "Posterización"],
+"Relevo":["Emboss", "Relieve"],
+"Sépia":["Sepia", "Sepia"],
+"Solarização":["Solarization", "Solarización"],
+"Aplicando tratamento…":["Applying treatment…", "Aplicando tratamiento…"],
+"Tratamento aplicado.":["Treatment applied.", "Tratamiento aplicado."],
+"Tratamento artístico inválido.":["Invalid artistic treatment.", "Tratamiento artístico no válido."],
+"Não foi possível aplicar o tratamento. Tente novamente ou restaure a imagem original.":["Could not apply treatment. Retry or restore the original image.", "No se pudo aplicar el tratamiento. Reintenta o restaura la imagen original."],
+"Editorial diagonal":["Diagonal editorial", "Editorial diagonal"],
+"Uma carta inclinada e espaço para seu título":["A tilted card with room for your title", "Una carta inclinada con espacio para el título"],
+"Vitrine assimétrica":["Asymmetric showcase", "Vitrina asimétrica"],
+"Carta principal em destaque e apoio lateral":["A featured main card with a smaller side card", "Una carta principal destacada y otra lateral"],
   "Catedral sombria":["Dark cathedral", "Catedral oscura"],
   "Forja industrial":["Industrial forge", "Forja industrial"],
   "Vila da floresta":["Forest village", "Aldea del bosque"],
@@ -1520,9 +1541,9 @@ window.ThumbLocales = {
   "How to use:",
   "Cómo usar:"
   ],
-  "coloque uma imagem em cada lado, digite os nomes, escolha o preset ou a cor manual de cada jogador, selecione um dos 28+ layouts e depois refine tudo do seu jeito. Você pode trocar o texto central, fontes, esconder elementos e exportar em": [
-  "add an image to each side, enter the names, choose each player's preset or custom color, select one of 28+ layouts and fine-tune it. Change the center text and fonts, hide elements and export in",
-  "añade una imagen a cada lado, escribe los nombres, elige un color predefinido o personalizado para cada jugador, selecciona uno de los 28+ diseños y ajústalo a tu gusto. Cambia el texto central y las fuentes, oculta elementos y exporta en"
+  "coloque uma imagem em cada lado, digite os nomes, escolha o preset ou a cor manual de cada jogador, selecione um dos 30+ layouts e depois refine tudo do seu jeito. Você pode trocar o texto central, fontes, esconder elementos e exportar em": [
+  "add an image to each side, enter the names, choose each player's preset or custom color, select one of 30+ layouts and fine-tune it. Change the center text and fonts, hide elements and export in",
+  "añade una imagen a cada lado, escribe los nombres, elige un color predefinido o personalizado para cada jugador, selecciona uno de los 30+ diseños y ajústalo a tu gusto. Cambia el texto central y las fuentes, oculta elementos y exporta en"
   ],
   "PNG 720p, 1080p ou 1440p": [
   "720p, 1080p or 1440p PNG",
@@ -2557,3 +2578,4 @@ window.ThumbLocales = {
   "Páginas de cuento"
   ]
 };
+
