@@ -1,73 +1,79 @@
-/* Portable custom compositions; no external scripts or SVG files are executed. */
+/**
+ * User compositions and mixed layout elements. Uploaded images are inert data, never executable markup.
+ * Maintenance: preserve project JSON compatibility and the existing rendering contract.
+ */
 (()=>{
-'use strict';
-const $=id=>document.getElementById(id),svg=$('thumb'),engine=window.ThumbEngine,ns=svg.namespaceURI;
-const make=(tag,a={})=>{const n=document.createElementNS(ns,tag);for(const[k,v]of Object.entries(a))n.setAttribute(k,v);return n;};
-const defaults=()=>({base:true,image:'',ownVisible:true,opacity:1,fit:'meet',parts:{},images:{left:{rotation:0,flipX:false,flipY:false},right:{rotation:0,flipX:false,flipY:false},extra:{rotation:0,flipX:false,flipY:false}},halftone:0,scanlines:0,vignette:0});
-let state=defaults(),ticket=0,frame=0;
-const partNames={center:'Centro / moldura central',titleLeft:'Título esquerdo',titleRight:'Título direito',detailLeft:'Detalhe esquerdo',detailRight:'Detalhe direito',baseLeft:'Base esquerda',baseRight:'Base direita'};
-const layouts=engine.layouts(),layoutIds=new Set(layouts.map(c=>c.id));
-const panel=document.createElement('section');panel.className='composition-panel';panel.innerHTML=`<h3>Customização geral</h3><p class="drag-hint">Combine elementos sem trocar suas cartas. Abra apenas o grupo que deseja ajustar.</p>
+  'use strict';
+  const $=id=>document.getElementById(id),svg=$('thumb'),engine=window.ThumbEngine,ns=svg.namespaceURI;
+  const make=(tag,a={})=>{const n=document.createElementNS(ns,tag);for(const[k,v]of Object.entries(a))n.setAttribute(k,v);return n;};
+  const defaults=()=>({base:true,image:'',ownVisible:true,opacity:1,fit:'meet',parts:{},images:{left:{rotation:0,flipX:false,flipY:false},right:{rotation:0,flipX:false,flipY:false},extra:{rotation:0,flipX:false,flipY:false}},halftone:0,scanlines:0,vignette:0});
+  let state=defaults(),ticket=0,frame=0;
+  const partNames={center:'Centro / moldura central',titleLeft:'Título esquerdo',titleRight:'Título direito',detailLeft:'Detalhe esquerdo',detailRight:'Detalhe direito',baseLeft:'Base esquerda',baseRight:'Base direita'};
+  const layouts=engine.layouts(),layoutIds=new Set(layouts.map(c=>c.id));
+  const panel=document.createElement('section');panel.className='composition-panel';panel.innerHTML=`<h3>Customização geral</h3><p class="drag-hint">Combine elementos sem trocar suas cartas. Abra apenas o grupo que deseja ajustar.</p>
 <details open><summary>Seu próprio layout</summary><label class="toggle"><input id="composition-base" type="checkbox" checked/> Mostrar decoração do layout base</label><label class="field"><span>Enviar layout como imagem</span><input id="composition-upload" type="file" accept="image/png,image/jpeg,image/webp,image/avif"/></label><p class="drag-hint">Use PNG transparente para uma moldura. A imagem enviada é uma camada única; para um layout com elementos editáveis, use “Abrir projeto” e um JSON do ThumbTCG. Desligue a decoração base para usar apenas sua composição.</p><label class="toggle"><input id="composition-visible" type="checkbox" checked/> Mostrar meu layout</label><label class="field"><span>Enquadramento da imagem</span><select id="composition-fit"><option value="meet">Imagem inteira</option><option value="slice">Preencher a tela</option><option value="none">Esticar para a tela</option></select></label><label class="field"><span>Opacidade</span><input id="composition-opacity" type="range" min="0" max="1" step=".05" value="1"/></label><button id="composition-remove" class="studio-btn" type="button">Remover meu layout</button><p class="drag-hint">A camada “Meu layout” pode ser movida e redimensionada na prévia, ou reordenada em Camadas e fundo.</p></details>
 <details><summary>Mesclar elementos de modelos</summary><p class="drag-hint">Escolha um modelo de origem para cada elemento. Os textos continuam sendo os seus. “Do layout atual” restaura esse elemento.</p>${Object.entries(partNames).map(([k,n])=>`<label class="field"><span>${n}</span><select id="composition-part-${k}"><option value="">Do layout atual</option>${layouts.map(c=>`<option value="${c.id}">${c.name}</option>`).join('')}</select></label>`).join('')}<button id="composition-reset-parts" type="button" class="studio-btn">Restaurar todos os elementos</button></details>
 <details><summary>Novos efeitos de acabamento</summary>${[['halftone','Retícula de impressão'],['scanlines','Linhas de tela'],['vignette','Vinheta nas bordas']].map(([k,n])=>`<label class="field"><span>${n} <output id="composition-value-${k}">0%</output></span><input id="composition-${k}" type="range" min="0" max="1" step=".05" value="0"/></label>`).join('')}<p class="drag-hint">Efeitos estáticos incluídos no PNG. Zere a intensidade para desativar.</p></details>`;
-document.querySelector('.canvas-column').append(panel);
-// Mark only built-in decoration, keeping cards, text and uploaded backgrounds independent.
-for(const n of [...svg.children])if(n.hasAttribute('data-layer')&&!n.querySelector('image,text')&&!n.matches('image,text')&&!['advanced-background','advanced-shade'].includes(n.dataset.layer)&&!n.dataset.layer.startsWith('fx-'))n.dataset.compositionBase='true';
-const own=make('image',{id:'composition-image',x:0,y:0,width:1280,height:720,preserveAspectRatio:'xMidYMid meet'});svg.append(own);const ownWrap=window.ThumbInteractions.register('composition-image','Meu layout');window.ThumbAdvanced.registerLayer('composition-image','Meu layout',ownWrap,'art-left');
-const finish=make('g',{id:'composition-finish','pointer-events':'none'});window.ThumbAdvanced.registerLayer('composition-finish','Acabamento: retícula / tela / vinheta',finish,'extra-image');
-const defs=svg.querySelector('defs'),dot=make('pattern',{id:'composition-dots',width:10,height:10,patternUnits:'userSpaceOnUse'});dot.append(make('circle',{cx:5,cy:5,r:1.8,fill:'#000'}));defs.append(dot);
-const line=make('pattern',{id:'composition-lines',width:8,height:8,patternUnits:'userSpaceOnUse'});line.append(make('rect',{width:8,height:2,fill:'#000'}));defs.append(line);
-const gradient=make('radialGradient',{id:'composition-vignette-gradient'});gradient.append(make('stop',{offset:'.35','stop-color':'#000','stop-opacity':0}),make('stop',{offset:'1','stop-color':'#000','stop-opacity':1}));defs.append(gradient);
-const styles=make('style');defs.append(styles);
-const transforms={};for(const side of ['left','right','extra']){const image=$(side==='extra'?'extra-image':'art-'+side);const target=side==='extra'?image:image.closest('[data-fx-card]');const wrap=make('g',{'data-composition-transform':side});target.before(wrap);wrap.append(target);transforms[side]={image,wrap};}
-function validateState(v){
- if(v==null)return;if(!v||typeof v!=='object'||typeof v.base!=='boolean'||typeof v.ownVisible!=='boolean'||!['meet','slice','none'].includes(v.fit)||typeof v.image!=='string'||v.image.length>50*1024*1024||v.image&&!/^data:image\/png;base64,[A-Za-z0-9+/=]+$/.test(v.image))throw Error('Composição inválida.');
- for(const k of ['opacity','halftone','scanlines','vignette'])if(!Number.isFinite(v[k])||v[k]<0||v[k]>1)throw Error('Intensidade da composição inválida.');
- if(!v.parts||typeof v.parts!=='object'||Array.isArray(v.parts)||Object.entries(v.parts).some(([k,val])=>!Object.hasOwn(partNames,k)||typeof val!=='string'||val&&!layoutIds.has(val)))throw Error('Elemento de layout inválido.');
- for(const side of ['left','right','extra']){const c=v.images?.[side];if(!c||!Number.isFinite(c.rotation)||c.rotation< -180||c.rotation>180||typeof c.flipX!=='boolean'||typeof c.flipY!=='boolean')throw Error('Transformação inválida.');}
-}
-function render(){
- frame=0;styles.textContent=(!state.base?'[data-composition-base="true"]{display:none!important}':'')+(engine.isSolo()?'#text-right-deck,#text-right-digimon,#text-right-detail{display:none!important}':'');
- if(state.image)own.setAttribute('href',state.image);else own.removeAttribute('href');own.style.display=state.image&&state.ownVisible?'':'none';own.setAttribute('opacity',state.opacity);own.setAttribute('preserveAspectRatio',state.fit==='none'?'none':'xMidYMid '+state.fit);
- engine.resetFragmentGeometry();for(const[k,v]of Object.entries(state.parts))if(v)engine.applyFragment(k,v);
- for(const[side,{image,wrap}]of Object.entries(transforms)){const c=state.images[side],x=Number(image.getAttribute('x'))+Number(image.getAttribute('width'))/2,y=Number(image.getAttribute('y'))+Number(image.getAttribute('height'))/2;wrap.setAttribute('transform',`translate(${x} ${y}) rotate(${c.rotation}) scale(${c.flipX?-1:1} ${c.flipY?-1:1}) translate(${-x} ${-y})`);}
- finish.replaceChildren();for(const[k,id]of [['halftone','dots'],['scanlines','lines'],['vignette','vignette-gradient']])if(state[k])finish.append(make('rect',{width:1280,height:720,fill:`url(#composition-${id})`,opacity:state[k]}));
-}
-function schedule(){if(!frame)frame=requestAnimationFrame(render);}
-function flush(){if(frame)cancelAnimationFrame(frame);render();}
-function ui(){
- $('composition-base').checked=state.base;$('composition-visible').checked=state.ownVisible;$('composition-fit').value=state.fit;$('composition-opacity').value=state.opacity;
- for(const k of Object.keys(partNames))$('composition-part-'+k).value=state.parts[k]||'';
- for(const k of ['halftone','scanlines','vignette']){$('composition-'+k).value=state[k];$('composition-value-'+k).value=Math.round(state[k]*100)+'%';}
- for(const side of ['left','right','extra']){const c=state.images[side];$('composition-rotation-'+side).value=c.rotation;for(const k of ['flipX','flipY'])$('composition-'+k+'-'+side).checked=c[k];if(side!=='extra')$('composition-show-'+side).checked=$('toggle-'+side+'-art').checked;}
-}
-function change(fn){window.ThumbInteractions.commit();fn();flush();ui();window.ThumbInteractions.commit();}
-for(const [id,k,type]of [['base','base','checked'],['visible','ownVisible','checked'],['fit','fit','value'],['opacity','opacity','number']])$('composition-'+id).addEventListener('change',e=>change(()=>{state[k]=type==='number'?Number(e.target.value):e.target[type];}));
-for(const k of Object.keys(partNames))$('composition-part-'+k).onchange=e=>change(()=>{state.parts[k]=e.target.value;});
-$('composition-reset-parts').onclick=()=>change(()=>{state.parts={};engine.applyCustomControls();});
-for(const k of ['halftone','scanlines','vignette'])$('composition-'+k).oninput=e=>{state[k]=Number(e.target.value);$('composition-value-'+k).value=Math.round(state[k]*100)+'%';schedule();};
-$('composition-upload').onchange=async e=>{const f=e.target.files[0];if(!f)return;const id=++ticket;window.dispatchEvent(new CustomEvent('thumb:loading',{detail:true}));try{const src=await engine.normalizeImage(f);if(id!==ticket)return;state.image=src;state.ownVisible=true;flush();ui();$('status').textContent='Seu layout foi adicionado como uma camada. Desative a decoração base se preferir.';}catch(err){$('status').textContent=window.ThumbI18n?.errorText(err)||err.message;}finally{e.target.value='';window.dispatchEvent(new CustomEvent('thumb:loading',{detail:false}));window.ThumbInteractions.commit();}};
-$('composition-remove').onclick=()=>change(()=>{ticket++;state.image='';});
-for(const side of ['left','right','extra']){
- const section=document.createElement('details');section.className='image-transform-tools';section.innerHTML=`<summary>${side==='left'?'Carta 1':side==='right'?'Carta 2':'Imagem adicional'} · visibilidade e orientação</summary>${side==='extra'?'':`<label class="toggle"><input id="composition-show-${side}" type="checkbox" checked/> Mostrar carta ${side==='left'?1:2}</label>`}<label class="field"><span>Rotação (graus)</span><input id="composition-rotation-${side}" type="range" min="-180" max="180" step="1" value="0"/></label><div class="alignment-actions"><button class="studio-btn" type="button" data-orientation="90">Deitar 90°</button><button class="studio-btn" type="button" data-orientation="0">Deixar em pé</button></div><label class="toggle"><input id="composition-flipX-${side}" type="checkbox"/> Espelhar horizontalmente</label><label class="toggle"><input id="composition-flipY-${side}" type="checkbox"/> Virar verticalmente</label>${side==='extra'?'':`<button type="button" class="studio-btn" id="composition-delete-${side}">Retirar carta do projeto</button>`}`;
- if(side==='extra')panel.append(section);else $("drop-"+side).after(section);
- if(side!=='extra'){$('composition-show-'+side).onchange=e=>change(()=>{const el=$('toggle-'+side+'-art');el.checked=e.target.checked;el.dispatchEvent(new Event('change',{bubbles:true}));});$('composition-delete-'+side).onclick=()=>change(()=>{window.ThumbStudio.removeCard(side);$('toggle-'+side+'-art').checked=false;engine.applyCustomControls();});}
- $('composition-rotation-'+side).oninput=e=>{state.images[side].rotation=Number(e.target.value);schedule();};
- for(const key of ['flipX','flipY'])$('composition-'+key+'-'+side).onchange=e=>change(()=>{state.images[side][key]=e.target.checked;});
- section.querySelectorAll('[data-orientation]').forEach(b=>b.onclick=()=>change(()=>{state.images[side].rotation=Number(b.dataset.orientation);}));
-}
-// One compact tool area. Opening a panel does not reset its settings.
-const dock=document.createElement('details');dock.className='tool-dock';dock.open=true;dock.innerHTML='<summary>Ferramentas do editor</summary><div class="tool-dock-buttons" role="group" aria-label="Ferramentas do editor"></div><div class="tool-dock-content"></div>';
-const actions=document.querySelector('.project-actions');actions.after(dock);actions.append(document.querySelector('.history-actions'));
-const oldTabs=document.querySelector('.panel-tabs');oldTabs.hidden=true;
-const sections=[['layouts','Layouts',document.querySelector('.layout-toolbar')],['general','Customização geral',panel],['layers','Camadas e fundo',document.querySelector('.advanced-tools')],['effects','Efeitos e câmera',document.querySelector('.fx-panel')],['move','Editar elementos',document.querySelector('.direct-tools')],['text','Textos',document.querySelector('.custom-toolbar')],['themes','Temas',document.querySelector('.theme-gallery')]];
-let opened='';for(const[id,label,node]of sections){node.id=node.id||'dock-panel-'+id;node.hidden=true;dock.querySelector('.tool-dock-content').append(node);const b=document.createElement('button');b.type='button';b.className='studio-btn';b.dataset.tool=id;b.textContent=label;b.setAttribute('aria-controls',node.id);b.setAttribute('aria-expanded','false');dock.querySelector('.tool-dock-buttons').append(b);b.onclick=()=>{opened=opened===id?'':id;for(const[k,,n]of sections)n.hidden=k!==opened;dock.querySelectorAll('[data-tool]').forEach(btn=>btn.setAttribute('aria-expanded',String(btn.dataset.tool===opened)));for(const [tool,mode]of [['layers','advanced-mode'],['effects','fx-mode'],['move','direct-mode']]){if(tool===opened||tool==='move'){$(mode).checked=tool===opened;$(mode).dispatchEvent(new Event('change',{bubbles:true}));}}if(id==='themes')node.open=true;};}
-const group=document.createElement('label');group.className='field';group.innerHTML='<span>Tipo de layout</span><select id="layout-category"><option value="all">Todos os layouts</option><option value="solo">Uma carta / apresentação de deck</option><option value="duel">Duas cartas / confronto</option></select>';
-document.querySelector('.layout-header').after(group);$('layout-category').onchange=e=>{for(const el of document.querySelectorAll('[data-layout]'))el.hidden=!engine.isLayoutAvailable(el.dataset.layout)||(e.target.value!=='all'&&(e.target.value==='solo')!==layouts.find(c=>c.id===el.dataset.layout)?.solo);};
-window.addEventListener('thumb:controls',()=>{schedule();if($('composition-show-left')){for(const s of ['left','right'])$('composition-show-'+s).checked=$('toggle-'+s+'-art').checked;}});
-window.addEventListener('thumb:layout',()=>{if(engine.isSolo()){const fx=window.ThumbFX.getState();fx.fan=false;fx.split=false;window.ThumbFX.setState(fx);}schedule();ui();});
-window.addEventListener('thumb:image',schedule);
-window.ThumbComposition={getState:()=>structuredClone(state),validateState,setState(v){validateState(v);ticket++;state=v?structuredClone(v):defaults();flush();ui();},reset(){ticket++;state=defaults();flush();ui();},flush};
-flush();ui();window.ThumbInteractions.resetHistory();
+  document.querySelector('.canvas-column').append(panel);
+  // Mark only built-in decoration, keeping cards, text and uploaded backgrounds independent.
+  for(const n of [...svg.children])if(n.hasAttribute('data-layer')&&!n.querySelector('image,text')&&!n.matches('image,text')&&!['advanced-background','advanced-shade'].includes(n.dataset.layer)&&!n.dataset.layer.startsWith('fx-'))n.dataset.compositionBase='true';
+  const own=make('image',{id:'composition-image',x:0,y:0,width:1280,height:720,preserveAspectRatio:'xMidYMid meet'});svg.append(own);const ownWrap=window.ThumbInteractions.register('composition-image','Meu layout');window.ThumbAdvanced.registerLayer('composition-image','Meu layout',ownWrap,'art-left');
+  const finish=make('g',{id:'composition-finish','pointer-events':'none'});window.ThumbAdvanced.registerLayer('composition-finish','Acabamento: retícula / tela / vinheta',finish,'extra-image');
+  const defs=svg.querySelector('defs'),dot=make('pattern',{id:'composition-dots',width:10,height:10,patternUnits:'userSpaceOnUse'});dot.append(make('circle',{cx:5,cy:5,r:1.8,fill:'#000'}));defs.append(dot);
+  const line=make('pattern',{id:'composition-lines',width:8,height:8,patternUnits:'userSpaceOnUse'});line.append(make('rect',{width:8,height:2,fill:'#000'}));defs.append(line);
+  const gradient=make('radialGradient',{id:'composition-vignette-gradient'});gradient.append(make('stop',{offset:'.35','stop-color':'#000','stop-opacity':0}),make('stop',{offset:'1','stop-color':'#000','stop-opacity':1}));defs.append(gradient);
+  const styles=make('style');defs.append(styles);
+  const transforms={};for(const side of ['left','right','extra']){const image=$(side==='extra'?'extra-image':'art-'+side);const target=side==='extra'?image:image.closest('[data-fx-card]');const wrap=make('g',{'data-composition-transform':side});target.before(wrap);wrap.append(target);transforms[side]={image,wrap};}
+  /** Validate user-defined composition state and compatibility defaults. */
+  function validateState(v){
+    if(v==null)return;if(!v||typeof v!=='object'||typeof v.base!=='boolean'||typeof v.ownVisible!=='boolean'||!['meet','slice','none'].includes(v.fit)||typeof v.image!=='string'||v.image.length>50*1024*1024||v.image&&!/^data:image\/png;base64,[A-Za-z0-9+/=]+$/.test(v.image))throw Error('Composição inválida.');
+    for(const k of ['opacity','halftone','scanlines','vignette'])if(!Number.isFinite(v[k])||v[k]<0||v[k]>1)throw Error('Intensidade da composição inválida.');
+    if(!v.parts||typeof v.parts!=='object'||Array.isArray(v.parts)||Object.entries(v.parts).some(([k,val])=>!Object.hasOwn(partNames,k)||typeof val!=='string'||val&&!layoutIds.has(val)))throw Error('Elemento de layout inválido.');
+    for(const side of ['left','right','extra']){const c=v.images?.[side];if(!c||!Number.isFinite(c.rotation)||c.rotation< -180||c.rotation>180||typeof c.flipX!=='boolean'||typeof c.flipY!=='boolean')throw Error('Transformação inválida.');}
+  }
+  /** Apply independent layout elements and finishing effects. */
+  function render(){
+    frame=0;styles.textContent=(!state.base?'[data-composition-base="true"]{display:none!important}':'')+(engine.isSolo()?'#text-right-deck,#text-right-digimon,#text-right-detail{display:none!important}':'');
+    if(state.image)own.setAttribute('href',state.image);else own.removeAttribute('href');own.style.display=state.image&&state.ownVisible?'':'none';own.setAttribute('opacity',state.opacity);own.setAttribute('preserveAspectRatio',state.fit==='none'?'none':'xMidYMid '+state.fit);
+    engine.resetFragmentGeometry();for(const[k,v]of Object.entries(state.parts))if(v)engine.applyFragment(k,v);
+    for(const[side,{image,wrap}]of Object.entries(transforms)){const c=state.images[side],x=Number(image.getAttribute('x'))+Number(image.getAttribute('width'))/2,y=Number(image.getAttribute('y'))+Number(image.getAttribute('height'))/2;wrap.setAttribute('transform',`translate(${x} ${y}) rotate(${c.rotation}) scale(${c.flipX?-1:1} ${c.flipY?-1:1}) translate(${-x} ${-y})`);}
+    finish.replaceChildren();for(const[k,id]of [['halftone','dots'],['scanlines','lines'],['vignette','vignette-gradient']])if(state[k])finish.append(make('rect',{width:1280,height:720,fill:`url(#composition-${id})`,opacity:state[k]}));
+  }
+  function schedule(){if(!frame)frame=requestAnimationFrame(render);}
+  /** Finish a scheduled frame before saving or capturing the SVG. */
+  function flush(){if(frame)cancelAnimationFrame(frame);render();}
+  function ui(){
+    $('composition-base').checked=state.base;$('composition-visible').checked=state.ownVisible;$('composition-fit').value=state.fit;$('composition-opacity').value=state.opacity;
+    for(const k of Object.keys(partNames))$('composition-part-'+k).value=state.parts[k]||'';
+    for(const k of ['halftone','scanlines','vignette']){$('composition-'+k).value=state[k];$('composition-value-'+k).value=Math.round(state[k]*100)+'%';}
+    for(const side of ['left','right','extra']){const c=state.images[side];$('composition-rotation-'+side).value=c.rotation;for(const k of ['flipX','flipY'])$('composition-'+k+'-'+side).checked=c[k];if(side!=='extra')$('composition-show-'+side).checked=$('toggle-'+side+'-art').checked;}
+  }
+  function change(fn){window.ThumbInteractions.commit();fn();flush();ui();window.ThumbInteractions.commit();}
+  for(const [id,k,type]of [['base','base','checked'],['visible','ownVisible','checked'],['fit','fit','value'],['opacity','opacity','number']])$('composition-'+id).addEventListener('change',e=>change(()=>{state[k]=type==='number'?Number(e.target.value):e.target[type];}));
+  for(const k of Object.keys(partNames))$('composition-part-'+k).onchange=e=>change(()=>{state.parts[k]=e.target.value;});
+  $('composition-reset-parts').onclick=()=>change(()=>{state.parts={};engine.applyCustomControls();});
+  for(const k of ['halftone','scanlines','vignette'])$('composition-'+k).oninput=e=>{state[k]=Number(e.target.value);$('composition-value-'+k).value=Math.round(state[k]*100)+'%';schedule();};
+  $('composition-upload').onchange=async e=>{const f=e.target.files[0];if(!f)return;const id=++ticket;window.dispatchEvent(new CustomEvent('thumb:loading',{detail:true}));try{const src=await engine.normalizeImage(f);if(id!==ticket)return;state.image=src;state.ownVisible=true;flush();ui();$('status').textContent='Seu layout foi adicionado como uma camada. Desative a decoração base se preferir.';}catch(err){$('status').textContent=window.ThumbI18n?.errorText(err)||err.message;}finally{e.target.value='';window.dispatchEvent(new CustomEvent('thumb:loading',{detail:false}));window.ThumbInteractions.commit();}};
+  $('composition-remove').onclick=()=>change(()=>{ticket++;state.image='';});
+  for(const side of ['left','right','extra']){
+    const section=document.createElement('details');section.className='image-transform-tools';section.innerHTML=`<summary>${side==='left'?'Carta 1':side==='right'?'Carta 2':'Imagem adicional'} · visibilidade e orientação</summary>${side==='extra'?'':`<label class="toggle"><input id="composition-show-${side}" type="checkbox" checked/> Mostrar carta ${side==='left'?1:2}</label>`}<label class="field"><span>Rotação (graus)</span><input id="composition-rotation-${side}" type="range" min="-180" max="180" step="1" value="0"/></label><div class="alignment-actions"><button class="studio-btn" type="button" data-orientation="90">Deitar 90°</button><button class="studio-btn" type="button" data-orientation="0">Deixar em pé</button></div><label class="toggle"><input id="composition-flipX-${side}" type="checkbox"/> Espelhar horizontalmente</label><label class="toggle"><input id="composition-flipY-${side}" type="checkbox"/> Virar verticalmente</label>${side==='extra'?'':`<button type="button" class="studio-btn" id="composition-delete-${side}">Retirar carta do projeto</button>`}`;
+    if(side==='extra')panel.append(section);else $("drop-"+side).after(section);
+    if(side!=='extra'){$('composition-show-'+side).onchange=e=>change(()=>{const el=$('toggle-'+side+'-art');el.checked=e.target.checked;el.dispatchEvent(new Event('change',{bubbles:true}));});$('composition-delete-'+side).onclick=()=>change(()=>{window.ThumbStudio.removeCard(side);$('toggle-'+side+'-art').checked=false;engine.applyCustomControls();});}
+    $('composition-rotation-'+side).oninput=e=>{state.images[side].rotation=Number(e.target.value);schedule();};
+    for(const key of ['flipX','flipY'])$('composition-'+key+'-'+side).onchange=e=>change(()=>{state.images[side][key]=e.target.checked;});
+    section.querySelectorAll('[data-orientation]').forEach(b=>b.onclick=()=>change(()=>{state.images[side].rotation=Number(b.dataset.orientation);}));
+  }
+  // One compact tool area. Opening a panel does not reset its settings.
+  const dock=document.createElement('details');dock.className='tool-dock';dock.open=true;dock.innerHTML='<summary>Ferramentas do editor</summary><div class="tool-dock-buttons" role="group" aria-label="Ferramentas do editor"></div><div class="tool-dock-content"></div>';
+  const actions=document.querySelector('.project-actions');actions.after(dock);actions.append(document.querySelector('.history-actions'));
+  const oldTabs=document.querySelector('.panel-tabs');oldTabs.hidden=true;
+  const sections=[['layouts','Layouts',document.querySelector('.layout-toolbar')],['general','Customização geral',panel],['layers','Camadas e fundo',document.querySelector('.advanced-tools')],['effects','Efeitos e câmera',document.querySelector('.fx-panel')],['move','Editar elementos',document.querySelector('.direct-tools')],['text','Textos',document.querySelector('.custom-toolbar')],['themes','Temas',document.querySelector('.theme-gallery')]];
+  let opened='';for(const[id,label,node]of sections){node.id=node.id||'dock-panel-'+id;node.hidden=true;dock.querySelector('.tool-dock-content').append(node);const b=document.createElement('button');b.type='button';b.className='studio-btn';b.dataset.tool=id;b.textContent=label;b.setAttribute('aria-controls',node.id);b.setAttribute('aria-expanded','false');dock.querySelector('.tool-dock-buttons').append(b);b.onclick=()=>{opened=opened===id?'':id;for(const[k,,n]of sections)n.hidden=k!==opened;dock.querySelectorAll('[data-tool]').forEach(btn=>btn.setAttribute('aria-expanded',String(btn.dataset.tool===opened)));for(const [tool,mode]of [['layers','advanced-mode'],['effects','fx-mode'],['move','direct-mode']]){if(tool===opened||tool==='move'){$(mode).checked=tool===opened;$(mode).dispatchEvent(new Event('change',{bubbles:true}));}}if(id==='themes')node.open=true;};}
+  const group=document.createElement('label');group.className='field';group.innerHTML='<span>Tipo de layout</span><select id="layout-category"><option value="all">Todos os layouts</option><option value="solo">Uma carta / apresentação de deck</option><option value="duel">Duas cartas / confronto</option></select>';
+  document.querySelector('.layout-header').after(group);$('layout-category').onchange=e=>{for(const el of document.querySelectorAll('[data-layout]'))el.hidden=!engine.isLayoutAvailable(el.dataset.layout)||(e.target.value!=='all'&&(e.target.value==='solo')!==layouts.find(c=>c.id===el.dataset.layout)?.solo);};
+  window.addEventListener('thumb:controls',()=>{schedule();if($('composition-show-left')){for(const s of ['left','right'])$('composition-show-'+s).checked=$('toggle-'+s+'-art').checked;}});
+  window.addEventListener('thumb:layout',()=>{if(engine.isSolo()){const fx=window.ThumbFX.getState();fx.fan=false;fx.split=false;window.ThumbFX.setState(fx);}schedule();ui();});
+  window.addEventListener('thumb:image',schedule);
+  window.ThumbComposition={getState:()=>structuredClone(state),validateState,setState(v){validateState(v);ticket++;state=v?structuredClone(v):defaults();flush();ui();},reset(){ticket++;state=defaults();flush();ui();},flush};
+  flush();ui();window.ThumbInteractions.resetHistory();
 })();

@@ -1,5 +1,13 @@
 # Backlog — Thumb TCG
 
+## Qualidade e documentação do código — 0.11.1
+
+| ID | Situação | Entrega / critério |
+| --- | --- | --- |
+| QUAL-01 | Implementado | Indentação normalizada em módulos JavaScript e CSS; comentários nas responsabilidades dos módulos e pontos críticos. Preservados os identificadores, os contratos do editor e o formato de projeto. |
+| QUAL-02 | Pendente de validação | Executar testes automatizados, conferir exportação PNG e testar visualmente no navegador desktop e celular. |
+
+
 TCG-01 e TCG-02 implementados na versão 0.4.0 e validados em Chromium desktop e móvel com toque emulado. TCG-03 a TCG-05 retomados na versão 0.7.0 após a entrega do editor avançado. Sem datas prometidas.
 
 ## Prioridade atual — Composição livre e internacionalização

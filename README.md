@@ -4,6 +4,8 @@ Editor de thumbnails dedicado a trading card games, mantido por **Bakura**.
 
 **Site:** https://bakurinha.github.io/thumbtcg/
 
+**Desenvolvimento:** [convenções de indentação, documentação técnica e manutenção](docs/CODE_STYLE.md).
+
 ## O que há nesta versão
 
 - Boas-vindas com seleção de Digimon TCG, Yu-Gi-Oh!, Magic: The Gathering, One Piece, Pokémon TCG e Disney Lorcana.

@@ -1,3 +1,10 @@
+## 0.11.1 — 2026-10-16 — Indentação e comentários
+
+- Indentação de módulos JavaScript normalizada e CSS organizado em blocos legíveis, preservando lógica, seletores e declarações.
+- Comentários das responsabilidades de cada módulo e pontos críticos: exportação PNG, camadas, histórico, efeitos, provedores, idiomas e projetos.
+- Arquivos `.editorconfig` e `docs/CODE_STYLE.md` adicionados para manutenção futura.
+- Sem mudanças funcionais intencionais; testes automatizados e verificação visual em navegador continuam pendentes.
+
 ## 0.10.0 — 2026-10-15
 
 - 42 novos temas: dez por cardgame, totalizando 60 nos seis jogos.

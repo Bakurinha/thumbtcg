@@ -1,6 +1,6 @@
 {
   "name": "thumbtcg",
-  "version": "0.11.0",
+  "version": "0.11.1",
   "private": true,
   "description": "Editor de thumbnails para trading card games",
   "scripts": {
