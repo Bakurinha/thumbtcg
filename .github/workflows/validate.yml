@@ -37,19 +37,7 @@ jobs:
             node --check "$file"
           done < <(find . -type f \( -name '*.js' -o -name '*.cjs' -o -name '*.mjs' \) -not -path './node_modules/*' -print0)
 
-      - name: Unit and regression tests
-        shell: bash
-        run: |
-          set -euo pipefail
-          npm test
-          npm run test:advanced
-          npm run test:effects
-          npm run test:themes
-          npm run test:composition
-          npm run test:i18n
-          npm run test:scenes
-
-      - name: Run browser tests (desktop and touch emulator)
+      - name: Unit, regression and browser tests
         shell: bash
         run: |
           set -euo pipefail
@@ -60,6 +48,13 @@ jobs:
             if curl -fsS http://127.0.0.1:8765/ > /dev/null; then break; fi
             sleep 1
           done
+          npm test
+          npm run test:advanced
+          npm run test:effects
+          npm run test:themes
+          npm run test:composition
+          npm run test:i18n
+          npm run test:scenes
           BASE_URL=http://127.0.0.1:8765 npm run test:browser
 
       - name: Upload test screenshots if produced
