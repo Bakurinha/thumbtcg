@@ -37,6 +37,11 @@ const { chromium } = require("playwright"),
       "Emboss",
       "Sepia",
       "Solarize",
+      "Chromatic",
+      "Glitch",
+      "Duotone",
+      "Grain",
+      "Edge",
     ]) {
       await p.evaluate(async (effect) => {
         const s = ThumbRaster.getState();
@@ -63,7 +68,7 @@ const { chromium } = require("playwright"),
     }, saved);
     assert.equal(
       await p.evaluate(() => ThumbRaster.getState().left.effect),
-      "Solarize",
+      "Edge",
     );
     await p.evaluate(async (s) => {
       delete s.raster;
@@ -73,7 +78,16 @@ const { chromium } = require("playwright"),
     assert.equal(await p.locator("#art-left").getAttribute("href"), original);
     // Latest slider values win even while previous worker jobs are still running.
     await p.evaluate(async () => {
-      for (const effect of ["Emboss", "Solarize", "Pixelate"]) {
+      for (const effect of [
+        "Emboss",
+        "Solarize",
+        "Chromatic",
+        "Glitch",
+        "Duotone",
+        "Grain",
+        "Edge",
+        "Pixelate",
+      ]) {
         const s = ThumbRaster.getState();
         s.left.effect = effect;
         ThumbRaster.setState(s);
@@ -168,7 +182,7 @@ const { chromium } = require("playwright"),
     await unavailable.close();
     assert.deepEqual(errors, []);
     console.log(
-      "PASS 5 Konva filters, original preservation, project migration, undo, races, 3 export sizes, layouts, translations, mobile.",
+      "PASS 10 filters (5 Konva + 5 custom), original preservation, project migration, undo, races, 3 export sizes, layouts, translations, mobile.",
     );
   } finally {
     await b.close();

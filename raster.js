@@ -9,6 +9,11 @@
     Emboss: "Relevo",
     Sepia: "Sépia",
     Solarize: "Solarização",
+    Chromatic: "Separação RGB",
+    Glitch: "Glitch digital",
+    Duotone: "Duotone ciano e magenta",
+    Grain: "Granulação de filme",
+    Edge: "Contornos neon",
   };
   const defaults = () => ({
     left: { effect: "none", amount: 50, mix: 100 },
@@ -69,11 +74,16 @@
       "Pixelate",
       "Posterize",
       "Emboss",
+      "Chromatic",
+      "Glitch",
+      "Duotone",
+      "Grain",
+      "Edge",
     ].includes(c.effect);
   }
   function process(image, config) {
     if (!worker) {
-      worker = new Worker("raster-worker.js?v=1");
+      worker = new Worker("raster-worker.js?v=2");
       worker.onmessage = ({ data }) => {
         const job = jobs.get(data.id);
         if (!job) return;

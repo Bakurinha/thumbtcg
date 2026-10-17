@@ -426,7 +426,7 @@
       copy.setAttribute('width',width);copy.setAttribute('height',height);
       copy.querySelectorAll('[data-editor-only]').forEach(el=>el.remove());
       copy.removeAttribute('id');
-      for(const side of ['left','right']) if(toggleEls[side==='left'?'leftArt':'rightArt'].checked && !uploaded[side]) throw new Error(`Selecione a carta da ${side==='left'?'esquerda':'direita'} antes de exportar.`);
+      for(const side of ['left','right']) if(!window.ThumbEndscreen?.getState().enabled && toggleEls[side==='left'?'leftArt':'rightArt'].checked && !uploaded[side]) throw new Error(`Selecione a carta da ${side==='left'?'esquerda':'direita'} antes de exportar.`);
       for(const side of ['left','right']){
         const ph=copy.querySelector(`#placeholder-${side}`); if(ph) ph.remove();
         const art=copy.querySelector(`#art-${side}`); if(art && ((side==='left' && toggleEls.leftArt.checked) || (side==='right' && toggleEls.rightArt.checked))) art.removeAttribute('style');

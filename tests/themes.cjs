@@ -6,7 +6,7 @@ const {chromium}=require('playwright'),assert=require('node:assert/strict'),fs=r
       assert.equal(await page.locator('.game-card').count(),6);assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
       for(const game of ['digimon','yugioh','magic','onepiece','pokemon','lorcana']){
         await page.goto((process.env.BASE_URL||'http://localhost:8776')+'/#'+game);await page.waitForFunction(g=>document.body.dataset.game===g,game);await page.waitForSelector('.theme-preset',{state:'attached'});if(await page.locator('[data-tool=themes]').getAttribute('aria-expanded')==='false')await page.click('[data-tool=themes]');
-        const count=game==='digimon'?18:10;assert.equal(await page.locator('.theme-preset').count(),count);
+        const count=game==='digimon'?21:10;assert.equal(await page.locator('.theme-preset').count(),count);
         await page.evaluate(async()=>{const blob=await (await fetch('assets/home/pokemon.webp')).blob();for(const side of ['left','right'])await ThumbEngine.loadFile(side,new File([blob],'card.webp',{type:'image/webp'}));ThumbInteractions.commit();});
         const before=await page.evaluate(()=>{const s=ThumbFX.getState();s.cards.left.glow=true;ThumbFX.setState(s);const a=ThumbAdvanced.getState();a.brightness=1.4;ThumbAdvanced.setState(a);return ThumbStudio.snapshot();});
         for(let i=0;i<count;i++){await page.locator('.theme-preset').nth(i).click();assert.equal(await page.evaluate(()=>document.getElementById('theme-background').children.length>0),true);
@@ -31,3 +31,4 @@ const {chromium}=require('playwright'),assert=require('node:assert/strict'),fs=r
       await page.screenshot({path:`/tmp/tcg-themes-${mobile?'mobile':'desktop'}.png`,fullPage:true});assert.deepEqual(errors,[]);await ctx.close();console.log('PASS themes '+(mobile?'mobile':'desktop')+': six games, 60 themes, state preservation, undo, JSON, PNG, legacy migration, no overflow');
     }
   }finally{await browser.close();}})().catch(e=>{console.error(e);process.exitCode=1;});
+

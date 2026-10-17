@@ -21,6 +21,11 @@
   catalog.pokemon.push(["water", "Ondas de água", "#7fc8f2", "#9fe2e3", "bubbles", "wave"],["fire", "Brasa de fogo", "#f4a174", "#f6d98a", "embers", "segmented"],["psychic", "Espiral psíquica", "#d3a0ed", "#b8b5f3", "orbit", "star"],["metal", "Placas metálicas", "#b7c8d2", "#d4c0a1", "plates", "etched"],["darkness", "Eclipse noturno", "#a4a1cf", "#7ebabb", "eclipse", "double"],["dragon", "Escamas de dragão", "#d6bc7a", "#91bcb4", "scales", "ornament"],["arena", "Campo de batalha", "#9ed6ad", "#e5c777", "arena", "segmented"]);
   catalog.lorcana.push(["amber", "Brilho de âmbar", "#edcb82", "#e5b594", "halo", "ornament"],["amethyst", "Cristais de ametista", "#c49be9", "#a6bde8", "prism", "star"],["emerald", "Jardim de esmeralda", "#8ccda5", "#c7da9e", "vines", "ornament"],["ruby", "Centelhas de rubi", "#e58f9a", "#e5be85", "shock", "etched"],["sapphire-ink", "Correntes de safira", "#8abde8", "#9dd6de", "datawaves", "wave"],["steel", "Fortaleza de aço", "#c5cdd8", "#c4ae91", "plates", "etched"],["storybook", "Páginas de história", "#dbc89f", "#c3a6df", "script", "page"]);
   catalog.digimon.push(...[["scene-cathedral", "Catedral sombria", "#a6b5f4", "#d5ddef", "image", "ornament", "assets/themes/digimon/cathedral.webp"], ["scene-forge", "Forja industrial", "#ffac58", "#9bbfd3", "image", "etched", "assets/themes/digimon/forge.webp"], ["scene-village", "Vila da floresta", "#a7d87f", "#ffc47d", "image", "ornament", "assets/themes/digimon/village.webp"], ["scene-golden-portal", "Portal dourado", "#ffe2a0", "#d2b3ff", "image", "ornament", "assets/themes/digimon/golden-portal.webp"], ["scene-neon-arena", "Arena neon", "#54dfff", "#ff70c7", "image", "tech", "assets/themes/digimon/neon-arena.webp"], ["scene-fire-ice", "Fogo e gelo", "#ffa365", "#88dcff", "image", "double", "assets/themes/digimon/fire-ice.webp"], ["scene-throne", "Trono ancestral", "#dfc385", "#92b69a", "image", "ornament", "assets/themes/digimon/throne.webp"], ["scene-undersea", "Reino submarino", "#8be4ff", "#cca2f5", "image", "wave", "assets/themes/digimon/undersea.webp"]]);
+  catalog.digimon.push(
+    ['cs-eden','CS · Ciberespaço EDEN','#62dfff','#c9eaff','image','tech','assets/themes/digimon/cs-eden.webp'],
+    ['cs-kuremi','CS · Agência Kuremi','#ffc078','#a8a0ff','image','etched','assets/themes/digimon/cs-kuremi.webp'],
+    ['cs-hudie','CS · Café Hudie','#75dfff','#d99bff','image','tech','assets/themes/digimon/cs-hudie.webp']
+  );
   let game=null,state={id:'',intensity:55,frame:true};
   const panel=document.createElement('details');panel.className='theme-gallery';panel.open=true;
   panel.innerHTML='<summary>Temas do cardgame</summary><p>Escolha um fundo e uma paleta. Suas cartas, textos e posições são preservados.</p><div class="theme-presets"></div><div class="theme-adjust"><label class="field"><span>Intensidade dos efeitos <output id="theme-intensity-value">55%</output></span><input id="theme-intensity" type="range" min="0" max="100" value="55"/></label><label class="toggle"><input id="theme-frame" type="checkbox" checked/> Moldura temática</label><button class="studio-btn" id="theme-clear" type="button">Remover efeitos e moldura</button></div>';
@@ -140,3 +145,4 @@
   reset(document.body.dataset.game||null);
   window.ThumbInteractions?.resetHistory();
 })();
+

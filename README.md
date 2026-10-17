@@ -10,7 +10,7 @@ Editor de thumbnails dedicado a trading card games, mantido por **Bakura**.
 
 - Boas-vindas com seleção de Digimon TCG, Yu-Gi-Oh!, Magic: The Gathering, One Piece, Pokémon TCG e Disney Lorcana.
 - Rotas compartilháveis: `#digimon`, `#yugioh`, `#magic`, `#onepiece`, `#pokemon` e `#lorcana`.
-- 68 temas (18 em Digimon e dez em cada um dos outros jogos), molduras e intensidade ajustável; preservam cartas e posições.
+- 71 temas (21 em Digimon e dez em cada um dos outros jogos), molduras e intensidade ajustável; preservam cartas e posições.
 - 30 layouts gerais (sete para uma carta) e o modelo Lua vermelha exclusivo de Digimon, paletas de cada TCG, padrões visuais próprios e cores livres por lado.
 - Pesquisa nas bases correspondentes ao cardgame escolhido, com resultados e paginação.
 - Upload de imagens em todos os jogos; recorte inicial da ilustração em Yu-Gi-Oh!, Magic e One Piece.
@@ -45,7 +45,7 @@ Para novos controles, adicione as mensagens em `locales.js`; parâmetros dinâmi
 
 ## Temas por cardgame
 
-São **18 temas em Digimon e 10 em cada um dos outros cinco jogos**. Os 42 novos temas incluem trilhas de memória e armadura em Digimon; Sincro, Xyz e selos em Yu-Gi-Oh!; paisagens de mana em Magic; cartazes, mapas e navegação em One Piece; energias e tipos em Pokémon; tintas e páginas de história em Lorcana. As miniaturas apresentam os padrões e molduras de cada modelo. A galeria tem rolagem interna para manter os controles próximos, inclusive no celular.
+São **21 temas em Digimon e 10 em cada um dos outros cinco jogos**. Os 42 novos temas incluem trilhas de memória e armadura em Digimon; Sincro, Xyz e selos em Yu-Gi-Oh!; paisagens de mana em Magic; cartazes, mapas e navegação em One Piece; energias e tipos em Pokémon; tintas e páginas de história em Lorcana. As miniaturas apresentam os padrões e molduras de cada modelo. A galeria tem rolagem interna para manter os controles próximos, inclusive no celular.
 
 
 Em **Temas do cardgame**, escolha um preset e ajuste a intensidade ou a moldura. Os presets atualizam as cores dos dois lados, mantendo textos, imagens, posições e efeitos. **Remover efeitos e moldura** preserva as cores escolhidas. Fundo e moldura aparecem na edição por camadas. Projetos antigos abrem sem tema aplicado.
@@ -160,3 +160,11 @@ Oito cenários enviados pelo usuário foram adicionados aos temas de Digimon: Ca
 Abra **Avançada e Prévia → Efeitos & Shaders → Tratamento artístico** para aplicar pixelização, posterização, relevo, sépia ou solarização por carta. Ajuste a mistura e restaure o original quando quiser. Filtros Konva 10.9.0 executam em worker, sem CDN, preservando projetos anteriores. Detalhes e limites: [motores de edição](docs/EDITING_ENGINES.md).
 
 Novos layouts: **Editorial diagonal** (uma carta) e **Vitrine assimétrica** (duas cartas). Agora são 30 layouts gerais e Lua vermelha exclusivo de Digimon, totalizando 31.
+
+## Tela final, novos efeitos e coleção CS — 0.13.0
+
+Em **Layouts → Tela final do YouTube**, ative dois espaços 16:9 com tamanho, espaçamento, altura, cor, borda, título e mensagem. As guias são exclusivas da prévia. Configure os vídeos clicáveis no YouTube Studio após inserir a arte no vídeo.
+
+Em **Efeitos e câmera → Efeitos & Shaders → Tratamento artístico**, há agora dez tratamentos por carta, incluindo separação RGB, glitch, duotone, granulação e contornos neon.
+
+Digimon recebe três cenários CS: EDEN, Agência Kuremi e Café Hudie. São 21 temas para Digimon e 71 no total. Especificações e referências em [docs/CS_AND_ENDSCREEN.md](docs/CS_AND_ENDSCREEN.md).

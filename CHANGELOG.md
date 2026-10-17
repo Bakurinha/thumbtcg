@@ -1,3 +1,10 @@
+## 0.13.0 — Tela final, tratamentos e CS
+
+- Cinco filtros CPU adicionais no Worker, sem substituir o motor SVG ou alterar originais.
+- Painel recolhível em Layouts para dois espaços de vídeo 16:9; exportação da arte sem guias e edição de título, mensagem, bordas, tamanho e alinhamento. Os elementos clicáveis são configurados no YouTube Studio.
+- Três cenários ilustrados originais inspirados em localizações CS (não reproduções oficiais).
+- Estado opcional retrocompatível, histórico e traduções PT/EN/ES.
+
 ## 0.12.0 — 2026-10-16
 
 - Pesquisa de Konva, Fabric.js e PixiJS documentada; integração isolada de Konva 10.9.0 com licença MIT e bundle local.

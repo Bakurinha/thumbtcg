@@ -107,3 +107,19 @@ Cada entrega deve atualizar o CHANGELOG e preservar a abertura dos projetos salv
 - [x] Adicionar Editorial diagonal e Vitrine assimétrica com IDs estáveis.
 - [ ] Avaliar efeitos de deslocamento, aberração cromática e glitch com alternativa para aparelhos sem GPU compatível.
 - [ ] Evoluir o modelo para quantidade livre de cartas e perspectiva projetiva exportável.
+
+## Entrega 0.13 — efeitos, tela final e CS
+
+- [x] Cinco tratamentos extras: separação RGB, glitch, duotone, granulação e contornos neon.
+- [x] Tela final YouTube: dois espaços 16:9, tamanho/posição/espaçamento, cor, borda, título, mensagem e guias apenas na prévia.
+- [x] Fundos ilustrados CS: EDEN, Agência Kuremi e Café Hudie; carregamento sob demanda.
+- [x] Persistência, idiomas PT/EN/ES e exportação PNG.
+
+## Próximas coleções Digimon (ordem solicitada)
+
+- [ ] SW — pesquisar cartas de referência e criar fundos específicos.
+- [ ] ME — pesquisar cartas de referência e criar fundos específicos.
+- [ ] TB — pesquisar cartas de referência e criar fundos específicos.
+- [ ] DM — pesquisar cartas de referência e criar fundos específicos.
+- [ ] NSO — pesquisar cartas de referência e criar fundos específicos.
+- [ ] NSP — pesquisar cartas de referência e criar fundos específicos.
