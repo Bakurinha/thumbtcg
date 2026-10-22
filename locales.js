@@ -2604,3 +2604,186 @@ window.ThumbLocales = {
   ]
 };
 
+
+Object.assign(window.ThumbLocales, {
+  "Recorte e qualidade": [
+    "Cutout and quality",
+    "Recorte y calidad"
+  ],
+  "Cancelar": [
+    "Cancel",
+    "Cancelar"
+  ],
+  "Área de edição da imagem": [
+    "Image editing area",
+    "Área de edición de imagen"
+  ],
+  "Comparar original": [
+    "Compare original",
+    "Comparar original"
+  ],
+  "Zoom da área de edição": [
+    "Editing area zoom",
+    "Zoom del área de edición"
+  ],
+  "Transparência e seleção": [
+    "Transparency and selection",
+    "Transparencia y selección"
+  ],
+  "Clique e arraste para pintar. A seleção retangular limita as alterações. O recorte automático remove cores ligadas às bordas; não reconhece personagens.": [
+    "Click and drag to paint. Rectangle selection limits changes. Auto cutout removes colors connected to edges; it does not recognize characters.",
+    "Haz clic y arrastra para pintar. La selección rectangular limita los cambios. El recorte automático elimina colores conectados a los bordes; no reconoce personajes."
+  ],
+  "Ferramenta": [
+    "Tool",
+    "Herramienta"
+  ],
+  "Pincel: apagar": [
+    "Brush: erase",
+    "Pincel: borrar"
+  ],
+  "Pincel: restaurar": [
+    "Brush: restore",
+    "Pincel: restaurar"
+  ],
+  "Seleção retangular": [
+    "Rectangle selection",
+    "Selección rectangular"
+  ],
+  "Varinha: área por cor": [
+    "Wand: connected color area",
+    "Varita: área por color"
+  ],
+  "Conta-gotas": [
+    "Eyedropper",
+    "Cuentagotas"
+  ],
+  "Pincel: substituir cor": [
+    "Brush: replace color",
+    "Pincel: sustituir color"
+  ],
+  "Tamanho do pincel": [
+    "Brush size",
+    "Tamaño del pincel"
+  ],
+  "Suavidade da borda": [
+    "Edge softness",
+    "Suavidad del borde"
+  ],
+  "Opacidade do pincel": [
+    "Brush opacity",
+    "Opacidad del pincel"
+  ],
+  "Tolerância de cor": [
+    "Color tolerance",
+    "Tolerancia de color"
+  ],
+  "Cor de origem": [
+    "Source color",
+    "Color de origen"
+  ],
+  "Nova cor": [
+    "New color",
+    "Nuevo color"
+  ],
+  "Transparência automática": [
+    "Automatic transparency",
+    "Transparencia automática"
+  ],
+  "Substituir cor na seleção": [
+    "Replace color in selection",
+    "Sustituir color en selección"
+  ],
+  "Limpar seleção": [
+    "Clear selection",
+    "Borrar selección"
+  ],
+  "Desfazer recorte": [
+    "Undo cutout",
+    "Deshacer recorte"
+  ],
+  "Restaurar recorte": [
+    "Reset cutout",
+    "Restaurar recorte"
+  ],
+  "Cor e definição": [
+    "Color and definition",
+    "Color y definición"
+  ],
+  "Ajustes locais, sem IA. Nitidez não recupera detalhes que não existem na imagem.": [
+    "Local adjustments, without AI. Sharpening cannot recover details absent from the image.",
+    "Ajustes locales, sin IA. La nitidez no recupera detalles ausentes en la imagen."
+  ],
+  "Exposição": [
+    "Exposure",
+    "Exposición"
+  ],
+  "Contraste": [
+    "Contrast",
+    "Contraste"
+  ],
+  "Saturação": [
+    "Saturation",
+    "Saturación"
+  ],
+  "Vivacidade": [
+    "Vibrance",
+    "Intensidad de color"
+  ],
+  "Nitidez": [
+    "Sharpness",
+    "Nitidez"
+  ],
+  "Preset: arte vibrante": [
+    "Preset: vibrant artwork",
+    "Preset: arte vibrante"
+  ],
+  "Zerar ajustes": [
+    "Reset adjustments",
+    "Restablecer ajustes"
+  ],
+  "Aplicar salva a edição na carta. Use Desfazer no editor para voltar.": [
+    "Apply saves changes to the card. Use Undo in the editor to go back.",
+    "Aplicar guarda los cambios en la carta. Usa Deshacer en el editor para volver."
+  ],
+  "Aplicar à carta": [
+    "Apply to card",
+    "Aplicar a la carta"
+  ],
+  "Falha no tratamento. Tente novamente.": [
+    "Processing failed. Please retry.",
+    "Error al procesar. Inténtalo de nuevo."
+  ],
+  "Envie uma carta antes de abrir o recorte.": [
+    "Upload a card before opening the cutout editor.",
+    "Sube una carta antes de abrir el editor de recorte."
+  ],
+  "Esta edição será limitada a 2048 px no maior lado. Cancelar preserva a resolução original.": [
+    "This edit is limited to 2048 px on the longest side. Cancel preserves the original resolution.",
+    "Esta edición se limita a 2048 px en el lado más largo. Cancelar conserva la resolución original."
+  ],
+  "Clique e arraste na imagem para editar.": [
+    "Click and drag on the image to edit.",
+    "Haz clic y arrastra sobre la imagen para editar."
+  ],
+  "Esticar texto · horizontal": [
+    "Stretch text · horizontal",
+    "Estirar texto · horizontal"
+  ],
+  "Esticar texto · vertical": [
+    "Stretch text · vertical",
+    "Estirar texto · vertical"
+  ],
+  "Sombra do título": [
+    "Title shadow",
+    "Sombra del título"
+  ],
+  "Espessura do sublinhado": [
+    "Underline thickness",
+    "Grosor del subrayado"
+  ],
+  "Preset: título dourado": [
+    "Preset: golden title",
+    "Preset: título dorado"
+  ]
+});

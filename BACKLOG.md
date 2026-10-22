@@ -1,5 +1,15 @@
 # Backlog — Thumb TCG
 
+## Recorte e acabamento — 0.14.0
+
+- [x] Pincel de transparência/restauração, seleção, varinha e substituição de cor.
+- [x] Ajustes locais de cor e definição em Worker, comparação e histórico.
+- [x] Título dourado, escala X/Y, sombra e sublinhado.
+- [ ] Recorte semântico e super-resolução com IA local: avaliar licença do modelo, peso do download, memória e desempenho Android/iOS antes da integração.
+- [ ] Preservar resolução acima de 2048 px no retoque por processamento em blocos.
+- [ ] Seleção por laço e refinamento de cabelo/contorno com máscara persistente.
+
+
 ## Qualidade e documentação do código — 0.11.1
 
 | ID | Situação | Entrega / critério |

@@ -1557,3 +1557,21 @@ button:disabled {
     line-height:1.4
   }
 }
+
+/* Retouch workspace stays out of the main editor until explicitly opened. */
+#retouch-dialog { width: min(1200px, 96vw); max-height: 94dvh; padding: 0; color: #e9eef5; background: #111923; border: 1px solid #405061; border-radius: 16px; }
+#retouch-dialog::backdrop { background: #02060bd9; }
+.retouch-header,.retouch-footer { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 22px; }
+.retouch-header h2 { margin: 0; font-size: 22px; }
+.retouch-body { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 22px; padding: 0 22px; }
+.retouch-stage { min-width: 0; }
+.retouch-scroll { max-height: 64dvh; overflow: auto; background: repeating-conic-gradient(#29313d 0% 25%, #414b58 0% 50%) 0 / 20px 20px; }
+#retouch-canvas { display: block; width: 100%; touch-action: none; cursor: crosshair; }
+.retouch-controls { max-height: 70dvh; overflow: auto; }
+.retouch-controls details { padding: 12px; border: 1px solid #344255; border-radius: 10px; margin-bottom: 12px; }
+.retouch-controls summary { cursor: pointer; font-weight: 700; margin-bottom: 12px; }
+.retouch-controls .field { margin-bottom: 12px; }
+.retouch-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.retouch-open { margin: 10px 0; }
+.retouch-footer { font-size: 12px; border-top: 1px solid #344255; }
+@media(max-width: 700px) { .retouch-body { grid-template-columns: 1fr; padding: 0 12px; } .retouch-scroll { max-height: 45dvh; } .retouch-controls { max-height: none; } .retouch-header,.retouch-footer { padding: 12px; } .retouch-footer { flex-wrap: wrap; } }

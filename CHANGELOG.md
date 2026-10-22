@@ -1,3 +1,11 @@
+## 0.14.0 — 2026-10-22
+
+- Editor modal de recorte por carta: pincel de apagar/restaurar com tamanho, suavidade e opacidade, seleção retangular, varinha de área conectada, conta-gotas e substituição de cor global/local.
+- Transparência automática por cores conectadas às bordas, sem detecção semântica ou IA. Histórico local de seis recortes e comparação original; aplicar participa do histórico do projeto.
+- Tratamento local em Worker: exposição, contraste, saturação, vivacidade, gamma e nitidez com preset vibrante. Limite de edição de 2048 px informado antes de aplicar; cancelamento preserva o original.
+- Títulos com escala horizontal/vertical, sombra, sublinhado e preset dourado em Efeitos & Shaders → Títulos com volume simulado. Estado antigo recebe valores neutros.
+- Interface PT/EN/ES, toque e mouse; testes de pixels, histórico, legado, responsividade e PNG nas três resoluções.
+
 ## 0.13.0 — Tela final, tratamentos e CS
 
 - Cinco filtros CPU adicionais no Worker, sem substituir o motor SVG ou alterar originais.
