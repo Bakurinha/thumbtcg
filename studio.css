@@ -1575,3 +1575,18 @@ button:disabled {
 .retouch-open { margin: 10px 0; }
 .retouch-footer { font-size: 12px; border-top: 1px solid #344255; }
 @media(max-width: 700px) { .retouch-body { grid-template-columns: 1fr; padding: 0 12px; } .retouch-scroll { max-height: 45dvh; } .retouch-controls { max-height: none; } .retouch-header,.retouch-footer { padding: 12px; } .retouch-footer { flex-wrap: wrap; } }
+
+#ai-dialog { width: min(1000px, 96vw); max-height: 94dvh; padding: 0; color: #e9eef5; background: #111923; border: 1px solid #405061; border-radius: 16px; }
+#ai-dialog::backdrop { background: #02060bd9; }
+.ai-content { padding: 0 22px 16px; }
+.ai-content > p { line-height: 1.5; }
+.ai-beta { display: inline-block; padding: 3px 7px; border-radius: 6px; background: #7154a3; color: #fff; font: 700 11px/1.2 sans-serif; vertical-align: middle; }
+.ai-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.ai-open { margin: 10px; }
+#ai-progress { width: 100%; margin-top: 15px; accent-color: #b5ed7a; }
+.ai-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.ai-compare figure { margin: 0; min-width: 0; padding: 10px; border: 1px solid #344255; border-radius: 10px; }
+.ai-compare figcaption { font-weight: 700; margin-bottom: 10px; }
+.ai-compare img { display: block; width: 100%; max-height: 55dvh; object-fit: contain; background: repeating-conic-gradient(#29313d 0% 25%, #414b58 0% 50%) 0 / 20px 20px; }
+.ai-compare img[hidden] { display: none; }
+@media(max-width: 700px) { .ai-compare { gap: 8px; } .ai-content { padding: 0 12px 12px; } #ai-title { font-size: 18px; } }

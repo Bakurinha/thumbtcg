@@ -60,6 +60,7 @@ jobs:
           npm run test:raster
           npm run test:endscreen
           npm run test:retouch
+          npm run test:ai
           BASE_URL=http://127.0.0.1:8765 npm run test:browser
 
       - name: Upload test screenshots if produced

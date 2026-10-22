@@ -2787,3 +2787,149 @@ Object.assign(window.ThumbLocales, {
     "Preset: título dorado"
   ]
 });
+
+Object.assign(window.ThumbLocales, {
+  "Assistente de imagem": [
+    "Image assistant",
+    "Asistente de imagen"
+  ],
+  "Fechar": [
+    "Close",
+    "Cerrar"
+  ],
+  "IA gratuita no aparelho. As imagens não são enviadas a servidores. Os motores e modelos são baixados apenas ao iniciar, de jsDelivr e Hugging Face.": [
+    "Free AI on your device. Images are not uploaded. Engines and models download only when you start, from jsDelivr and Hugging Face.",
+    "IA gratuita en tu dispositivo. Las imágenes no se suben a servidores. Los motores y modelos se descargan solo al iniciar, de jsDelivr y Hugging Face."
+  ],
+  "Beta: pode demorar, falhar ou recortar partes da arte. Confira o resultado antes de aplicar; fogo, brilho e textos podem mudar.": [
+    "Beta: it may be slow, fail or cut out parts of the artwork. Review before applying; fire, glow and text may change.",
+    "Beta: puede tardar, fallar o recortar partes del arte. Revisa antes de aplicar; el fuego, el brillo y el texto pueden cambiar."
+  ],
+  "Operação de IA": [
+    "AI operation",
+    "Operación de IA"
+  ],
+  "Remover fundo com IA": [
+    "Remove background with AI",
+    "Eliminar fondo con IA"
+  ],
+  "Ampliar com IA · até 2×": [
+    "Upscale with AI · up to 2×",
+    "Ampliar con IA · hasta 2×"
+  ],
+  "Baixar modelo e processar": [
+    "Download model and process",
+    "Descargar modelo y procesar"
+  ],
+  "Cancelar processamento": [
+    "Cancel processing",
+    "Cancelar procesamiento"
+  ],
+  "Progresso da IA": [
+    "AI progress",
+    "Progreso de IA"
+  ],
+  "Original": [
+    "Original",
+    "Original"
+  ],
+  "Resultado Beta": [
+    "Beta result",
+    "Resultado Beta"
+  ],
+  "Imagem antes da IA": [
+    "Image before AI",
+    "Imagen antes de IA"
+  ],
+  "Imagem após a IA": [
+    "Image after AI",
+    "Imagen después de IA"
+  ],
+  "O resultado aparece aqui.": [
+    "The result appears here.",
+    "El resultado aparece aquí."
+  ],
+  "Para refinar o recorte depois de aplicar, use Recorte e qualidade. Você pode desfazer a aplicação no editor.": [
+    "To refine the cutout after applying, use Cutout and quality. You can undo the application in the editor.",
+    "Para refinar el recorte tras aplicar, usa Recorte y calidad. Puedes deshacer la aplicación en el editor."
+  ],
+  "Modelos, requisitos e licenças": [
+    "Models, requirements and licenses",
+    "Modelos, requisitos y licencias"
+  ],
+  "Aplicar resultado à carta": [
+    "Apply result to card",
+    "Aplicar resultado a la carta"
+  ],
+  "Original: {0} · Entrada da IA: {1} · Saída: {2}": [
+    "Original: {0} · AI input: {1} · Output: {2}",
+    "Original: {0} · Entrada de IA: {1} · Salida: {2}"
+  ],
+  "U²-Net portátil: modelo de 4,6 MB e motor de aproximadamente 15 MB. Usa CPU; não exige placa de vídeo. Entrada limitada a 2048 px.": [
+    "Portable U²-Net: 4.6 MB model and approximately 15 MB engine. Uses CPU; no graphics card required. Input limited to 2048 px.",
+    "U²-Net portátil: modelo de 4,6 MB y motor de aproximadamente 15 MB. Usa CPU; no requiere tarjeta gráfica. Entrada limitada a 2048 px."
+  ],
+  "UpscalerJS: modelo de 0,9 MB e motor de aproximadamente 1,5 MB. Usa GPU quando disponível ou CPU. Entrada limitada a 1024 px; saída até 2048 px. Imagens maiores são reduzidas antes da IA.": [
+    "UpscalerJS: 0.9 MB model and approximately 1.5 MB engine. Uses GPU when available or CPU. Input limited to 1024 px; output up to 2048 px. Larger images are resized before AI.",
+    "UpscalerJS: modelo de 0,9 MB y motor de aproximadamente 1,5 MB. Usa GPU si está disponible o CPU. Entrada limitada a 1024 px; salida hasta 2048 px. Las imágenes mayores se reducen antes de la IA."
+  ],
+  "Não foi possível abrir esta imagem.": [
+    "Could not open this image.",
+    "No se pudo abrir esta imagen."
+  ],
+  "Recursos básicos disponíveis. A execução real depende da memória e do navegador.": [
+    "Basic features available. Actual execution depends on memory and browser.",
+    "Recursos básicos disponibles. La ejecución depende de la memoria y del navegador."
+  ],
+  "Este navegador não oferece todos os recursos necessários. Tente uma versão atual do Chrome, Edge ou Safari; o editor manual continua disponível.": [
+    "This browser lacks required features. Try a current Chrome, Edge or Safari version; the manual editor remains available.",
+    "Este navegador no ofrece todos los recursos necesarios. Prueba una versión actual de Chrome, Edge o Safari; el editor manual sigue disponible."
+  ],
+  "IA de imagem": [
+    "Image AI",
+    "IA de imagen"
+  ],
+  "Processamento cancelado. A carta permanece intacta.": [
+    "Processing cancelled. The card is unchanged.",
+    "Procesamiento cancelado. La carta permanece intacta."
+  ],
+  "Baixando motor e modelo…": [
+    "Downloading engine and model…",
+    "Descargando motor y modelo…"
+  ],
+  "A IA não conseguiu concluir. Pode ser falta de memória, bloqueio do download ou incompatibilidade. Tente novamente ou use o editor manual.": [
+    "AI could not finish. Memory, download blocking or compatibility may be the cause. Retry or use the manual editor.",
+    "La IA no pudo terminar. Puede deberse a memoria, descarga bloqueada o incompatibilidad. Reintenta o usa el editor manual."
+  ],
+  "Preparando IA no aparelho…": [
+    "Preparing AI on your device…",
+    "Preparando IA en tu dispositivo…"
+  ],
+  "Processando no aparelho…": [
+    "Processing on your device…",
+    "Procesando en tu dispositivo…"
+  ],
+  "Resultado pronto ({0}). Compare antes de aplicar.": [
+    "Result ready ({0}). Compare before applying.",
+    "Resultado listo ({0}). Compara antes de aplicar."
+  ],
+  "A IA excedeu 3 minutos e foi interrompida. Tente uma imagem menor ou outro aparelho.": [
+    "AI exceeded 3 minutes and was stopped. Try a smaller image or another device.",
+    "La IA superó 3 minutos y se detuvo. Prueba una imagen menor u otro dispositivo."
+  ],
+  "Não foi possível iniciar a IA neste navegador. O editor manual continua disponível.": [
+    "Could not start AI in this browser. The manual editor remains available.",
+    "No se pudo iniciar la IA en este navegador. El editor manual sigue disponible."
+  ],
+  "Não foi possível aplicar o resultado. Tente novamente.": [
+    "Could not apply the result. Please retry.",
+    "No se pudo aplicar el resultado. Inténtalo de nuevo."
+  ]
+});
+
+Object.assign(window.ThumbLocales, {
+  "Tamanho de processamento": ["Processing size", "Tamaño de procesamiento"],
+  "256 px · teste rápido": ["256 px · quick test", "256 px · prueba rápida"],
+  "512 px · equilibrado": ["512 px · balanced", "512 px · equilibrado"],
+  "1024 px · mais pesado": ["1024 px · more demanding", "1024 px · más exigente"]
+});

@@ -13,3 +13,7 @@ Em **Efeitos & Shaders → Títulos com volume simulado**, o preset dourado comb
 - Transformers.js executa modelos ONNX no navegador (WASM/WebGPU): https://huggingface.co/docs/transformers.js/index e https://huggingface.co/docs/transformers.js/guides/webgpu.
 - IMG.LY oferece remoção de fundo no navegador, com condições AGPL: https://github.com/imgly/background-removal-js.
 - Uma biblioteca gratuita não garante licença adequada de todo modelo, execução rápida em celular ou API hospedada sem limites. Por isso esta entrega não adiciona dependências/modelos de IA, não promete recuperar detalhes e não envia cartas a terceiros. A integração semântica/super-resolução fica registrada no backlog para avaliação específica de modelo/licença, tamanho e compatibilidade.
+
+## Atualização 0.15.0
+
+O assistente **IA de imagem · Beta** agora oferece remoção de fundo e ampliação opcionais. Consulte [modelos, requisitos e limites](AI_BETA.md). O tratamento de Recorte e qualidade permanece independente da IA.

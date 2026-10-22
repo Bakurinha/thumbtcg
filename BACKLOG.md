@@ -5,7 +5,8 @@
 - [x] Pincel de transparência/restauração, seleção, varinha e substituição de cor.
 - [x] Ajustes locais de cor e definição em Worker, comparação e histórico.
 - [x] Título dourado, escala X/Y, sombra e sublinhado.
-- [ ] Recorte semântico e super-resolução com IA local: avaliar licença do modelo, peso do download, memória e desempenho Android/iOS antes da integração.
+- [x] IA local Beta: U²-Net portátil para fundo e UpscalerJS para ampliação, opcionais, com cancelamento e comparação.
+- [ ] Validar qualidade da IA por cardgame e em Android/iOS físicos; melhorar recortes de fogo/brilho e ampliar limites de resolução.
 - [ ] Preservar resolução acima de 2048 px no retoque por processamento em blocos.
 - [ ] Seleção por laço e refinamento de cabelo/contorno com máscara persistente.
 

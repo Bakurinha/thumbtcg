@@ -1,3 +1,10 @@
+## 0.15.0 — 2026-10-22 — IA Beta
+
+- Assistente opcional por carta com remoção de fundo U²-Net e ampliação até 2× via UpscalerJS, executados localmente em Worker.
+- Modelos baixados apenas ao iniciar; versões fixas, hash do U²-Net verificado, sem chave de API e sem envio da imagem.
+- Comparação antes/depois, confirmação de aplicação, cancelamento real por encerramento do Worker e timeout de três minutos.
+- Limites de dimensão, download, compatibilidade e imperfeições visíveis antes de iniciar. Traduções PT/EN/ES e documentação de modelos/licenças.
+
 ## 0.14.0 — 2026-10-22
 
 - Editor modal de recorte por carta: pincel de apagar/restaurar com tamanho, suavidade e opacidade, seleção retangular, varinha de área conectada, conta-gotas e substituição de cor global/local.
