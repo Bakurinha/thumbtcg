@@ -1,5 +1,11 @@
 # Backlog — Thumb TCG
 
+## Assistente de imagem — 0.16.0
+
+- [x] Desfoque de fundo, fundo de cor sólida e destaque do personagem usando seleção por IA.
+- [x] Limiar e suavidade da seleção, intensidade dos efeitos, prévia e download PNG independente.
+- [ ] Avaliar modelos MAXIM para ruído/desfoque/baixa luz, com benchmarks de memória, tempo e artefatos por cardgame antes de integrar.
+
 ## Recorte e acabamento — 0.14.0
 
 - [x] Pincel de transparência/restauração, seleção, varinha e substituição de cor.

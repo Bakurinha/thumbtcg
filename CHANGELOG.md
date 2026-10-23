@@ -1,3 +1,10 @@
+## 0.16.0 — 2026-10-23 — Mais opções no Beta de IA
+
+- Três tratamentos novos com seleção U²-Net: fundo desfocado, fundo de cor sólida e iluminação/vivacidade do personagem com escurecimento do fundo.
+- Limiar e suavidade da máscara, intensidade de efeito e download PNG sem modificar o projeto.
+- Controles invalidam resultados antigos; aplicação, cancelamento e histórico continuam transacionais. PT/EN/ES.
+- Sem novos modelos ou serviços pagos: IA produz a seleção; composição e tratamento são operações locais determinísticas.
+
 ## 0.15.0 — 2026-10-22 — IA Beta
 
 - Assistente opcional por carta com remoção de fundo U²-Net e ampliação até 2× via UpscalerJS, executados localmente em Worker.

@@ -2933,3 +2933,50 @@ Object.assign(window.ThumbLocales, {
   "512 px · equilibrado": ["512 px · balanced", "512 px · equilibrado"],
   "1024 px · mais pesado": ["1024 px · more demanding", "1024 px · más exigente"]
 });
+
+Object.assign(window.ThumbLocales, {
+  "Desfocar fundo com seleção IA": [
+    "Blur background with AI selection",
+    "Desenfocar fondo con selección IA"
+  ],
+  "Trocar fundo com seleção IA": [
+    "Replace background with AI selection",
+    "Cambiar fondo con selección IA"
+  ],
+  "Destacar personagem com seleção IA": [
+    "Highlight subject with AI selection",
+    "Destacar personaje con selección IA"
+  ],
+  "Seleção e acabamento": [
+    "Selection and finishing",
+    "Selección y acabado"
+  ],
+  "A IA seleciona o personagem; desfoque, cor e iluminação são efeitos locais. Ajuste os controles e processe para atualizar a prévia.": [
+    "AI selects the subject; blur, color and lighting are local effects. Adjust controls and process to update the preview.",
+    "La IA selecciona el personaje; desenfoque, color e iluminación son efectos locales. Ajusta los controles y procesa para actualizar la vista previa."
+  ],
+  "Precisão do recorte": [
+    "Cutout threshold",
+    "Umbral del recorte"
+  ],
+  "Suavidade das bordas": [
+    "Edge softness",
+    "Suavidad de los bordes"
+  ],
+  "Intensidade do efeito": [
+    "Effect strength",
+    "Intensidad del efecto"
+  ],
+  "Nova cor de fundo": [
+    "New background color",
+    "Nuevo color de fondo"
+  ],
+  "Baixar resultado PNG": [
+    "Download result PNG",
+    "Descargar resultado PNG"
+  ],
+  "Configuração alterada. Processe novamente para atualizar a prévia.": [
+    "Settings changed. Process again to update the preview.",
+    "Configuración modificada. Procesa de nuevo para actualizar la vista previa."
+  ]
+});

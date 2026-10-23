@@ -1590,3 +1590,8 @@ button:disabled {
 .ai-compare img { display: block; width: 100%; max-height: 55dvh; object-fit: contain; background: repeating-conic-gradient(#29313d 0% 25%, #414b58 0% 50%) 0 / 20px 20px; }
 .ai-compare img[hidden] { display: none; }
 @media(max-width: 700px) { .ai-compare { gap: 8px; } .ai-content { padding: 0 12px 12px; } #ai-title { font-size: 18px; } }
+
+#ai-mask-controls { min-width: 0; margin: 14px 0; padding: 14px; border: 1px solid #344255; border-radius: 10px; }
+#ai-mask-controls .field { margin: 10px 0; }
+#ai-mask-controls input[type="range"] { width: 100%; accent-color: #b5ed7a; }
+#ai-mask-controls output { font-variant-numeric: tabular-nums; }

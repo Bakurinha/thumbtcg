@@ -34,3 +34,18 @@ Os URLs de dependências têm versões fixas. O modelo U²-Net é fixado em comm
 - [TensorFlow.js](https://github.com/tensorflow/tfjs): Apache-2.0.
 
 Os motores/modelos permanecem nos provedores públicos; esta integração não redistribui seus binários no repositório. O estado Beta indica validação limitada de qualidade e dispositivos, não serviço pago nem remoção de limites.
+
+## Novas opções — 0.16.0
+
+Em **IA de imagem · Beta**, selecione a operação e ajuste antes de processar:
+
+- **Desfocar fundo com seleção IA:** mantém a área selecionada em foco e desfoca o restante; intensidade controla o raio (até 2,5% do maior lado).
+- **Trocar fundo com seleção IA:** compõe o personagem sobre uma cor escolhida. O resultado é opaco por definição.
+- **Destacar personagem com seleção IA:** aumenta luz e vivacidade da área selecionada e escurece o fundo; preserva a transparência original.
+- **Precisão do recorte:** limiar maior restringe a seleção; limiar menor inclui mais áreas.
+- **Suavidade das bordas:** ajusta a transição da seleção, não recupera detalhes perdidos pelo modelo.
+- **Baixar resultado PNG:** salva a prévia sem aplicar ao projeto.
+
+A IA continua sendo U²-Net para segmentação e UpscalerJS para ampliação. Desfoque, composição de cor e iluminação são pós-processamento convencional guiado pela máscara da IA, não novos modelos generativos. Não há reconstrução de áreas ocultas; o desfoque pode produzir halos próximos ao personagem. Seleções podem incluir molduras/textos ou perder detalhes. Refinamento manual continua em Recorte e qualidade. Mudar parâmetros invalida a prévia; clique para processar novamente. Os limites de 2048 px, memória e três minutos permanecem.
+
+MAXIM (ruído, desfoque e baixa luz) foi pesquisado mas não incluído nesta versão: o autor documenta artefatos em modelos dependentes de contexto global quando processados em blocos. Precisa de validação de qualidade e desempenho em celulares: https://upscalerjs.com/news/maxim-models/ .

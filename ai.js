@@ -5,12 +5,17 @@
   const dialog = document.createElement('dialog'); dialog.id = 'ai-dialog'; dialog.setAttribute('aria-labelledby', 'ai-title');
   dialog.innerHTML = `<header class="retouch-header"><h2 id="ai-title">Assistente de imagem <span class="ai-beta">Beta</span></h2><button type="button" class="studio-btn" id="ai-close">Fechar</button></header>
 <div class="ai-content"><p>IA gratuita no aparelho. As imagens não são enviadas a servidores. Os motores e modelos são baixados apenas ao iniciar, de jsDelivr e Hugging Face.</p><p class="drag-hint">Beta: pode demorar, falhar ou recortar partes da arte. Confira o resultado antes de aplicar; fogo, brilho e textos podem mudar.</p><p id="ai-compat" role="status"></p>
-<label class="field"><span>Operação de IA</span><select id="ai-mode"><option value="remove">Remover fundo com IA</option><option value="upscale">Ampliar com IA · até 2×</option></select></label>
+<label class="field"><span>Operação de IA</span><select id="ai-mode"><option value="remove">Remover fundo com IA</option><option value="blur">Desfocar fundo com seleção IA</option><option value="color">Trocar fundo com seleção IA</option><option value="spotlight">Destacar personagem com seleção IA</option><option value="upscale">Ampliar com IA · até 2×</option></select></label>
+<fieldset id="ai-mask-controls"><legend>Seleção e acabamento</legend><p class="drag-hint">A IA seleciona o personagem; desfoque, cor e iluminação são efeitos locais. Ajuste os controles e processe para atualizar a prévia.</p>
+<label class="field"><span>Precisão do recorte</span><input id="ai-threshold" type="range" min="5" max="95" value="50"/><output id="ai-threshold-value">50%</output></label>
+<label class="field"><span>Suavidade das bordas</span><input id="ai-softness" type="range" min="2" max="100" value="100"/><output id="ai-softness-value">100%</output></label>
+<label class="field" id="ai-strength-field" hidden><span>Intensidade do efeito</span><input id="ai-strength" type="range" min="0" max="100" value="60"/><output id="ai-strength-value">60%</output></label>
+<label class="field" id="ai-color-field" hidden><span>Nova cor de fundo</span><input id="ai-color" type="color" value="#18243b"/></label></fieldset>
 <label class="field" id="ai-size-field" hidden><span>Tamanho de processamento</span><select id="ai-size"><option value="256">256 px · teste rápido</option><option value="512" selected>512 px · equilibrado</option><option value="1024">1024 px · mais pesado</option></select></label><p id="ai-requirements" class="drag-hint"></p><p id="ai-dimensions"></p><div class="ai-actions"><button type="button" class="studio-btn primary" id="ai-run">Baixar modelo e processar</button><button type="button" class="studio-btn" id="ai-stop" hidden>Cancelar processamento</button></div>
 <progress id="ai-progress" max="100" value="0" hidden aria-label="Progresso da IA"></progress><p id="ai-status" role="status" aria-live="polite"></p>
 <div class="ai-compare"><figure><figcaption>Original</figcaption><img id="ai-original" alt="Imagem antes da IA"/></figure><figure><figcaption>Resultado Beta</figcaption><img id="ai-result" alt="Imagem após a IA" hidden/><p id="ai-empty">O resultado aparece aqui.</p></figure></div>
 <p class="drag-hint">Para refinar o recorte depois de aplicar, use Recorte e qualidade. Você pode desfazer a aplicação no editor.</p></div>
-<footer class="retouch-footer"><a href="docs/AI_BETA.md" target="_blank" rel="noopener">Modelos, requisitos e licenças</a><button type="button" class="studio-btn primary" id="ai-apply" disabled>Aplicar resultado à carta</button></footer>`;
+<footer class="retouch-footer"><a href="docs/AI_BETA.md" target="_blank" rel="noopener">Modelos, requisitos e licenças</a><button type="button" class="studio-btn" id="ai-download" disabled>Baixar resultado PNG</button><button type="button" class="studio-btn primary" id="ai-apply" disabled>Aplicar resultado à carta</button></footer>`;
   document.body.append(dialog);
   let worker, timeout, running = false, applying = false, generation = 0, target, snapshot, sourceImage, result = '', inputWidth, inputHeight, resultWidth, resultHeight;
   const supported = () => !!(window.isSecureContext && window.Worker && window.WebAssembly && window.OffscreenCanvas && window.crypto?.subtle);
@@ -18,13 +23,16 @@
   function dimensions() {
     const mode = $('ai-mode').value, limit = mode === 'upscale' ? Number($('ai-size').value) : 2048;
     $('ai-size-field').hidden = mode !== 'upscale';
+    $('ai-mask-controls').hidden = mode === 'upscale';
+    $('ai-strength-field').hidden = !['blur', 'spotlight'].includes(mode);
+    $('ai-color-field').hidden = mode !== 'color';
     const scale = Math.min(1, limit / Math.max(sourceImage.width, sourceImage.height));
     inputWidth = Math.max(1, Math.round(sourceImage.width * scale)); inputHeight = Math.max(1, Math.round(sourceImage.height * scale));
     const factor = mode === 'upscale' ? 2 : 1;
     $('ai-dimensions').textContent = t('Original: {0} · Entrada da IA: {1} · Saída: {2}').replace('{0}', `${sourceImage.width}×${sourceImage.height}`).replace('{1}', `${inputWidth}×${inputHeight}`).replace('{2}', `${inputWidth * factor}×${inputHeight * factor}`);
-    $('ai-requirements').textContent = t(mode === 'remove' ? 'U²-Net portátil: modelo de 4,6 MB e motor de aproximadamente 15 MB. Usa CPU; não exige placa de vídeo. Entrada limitada a 2048 px.' : 'UpscalerJS: modelo de 0,9 MB e motor de aproximadamente 1,5 MB. Usa GPU quando disponível ou CPU. Entrada limitada a 1024 px; saída até 2048 px. Imagens maiores são reduzidas antes da IA.');
+    $('ai-requirements').textContent = t(mode !== 'upscale' ? 'U²-Net portátil: modelo de 4,6 MB e motor de aproximadamente 15 MB. Usa CPU; não exige placa de vídeo. Entrada limitada a 2048 px.' : 'UpscalerJS: modelo de 0,9 MB e motor de aproximadamente 1,5 MB. Usa GPU quando disponível ou CPU. Entrada limitada a 1024 px; saída até 2048 px. Imagens maiores são reduzidas antes da IA.');
   }
-  function buttons() { $('ai-run').disabled = running || applying || !supported(); $('ai-mode').disabled = running || applying; $('ai-size').disabled = running || applying; $('ai-stop').hidden = !running; $('ai-apply').disabled = running || applying || !result; $('ai-close').disabled = applying; }
+  function buttons() { $('ai-run').disabled = running || applying || !supported(); $('ai-mode').disabled = running || applying; $('ai-size').disabled = running || applying; $('ai-stop').hidden = !running; $('ai-apply').disabled = running || applying || !result; $('ai-close').disabled = applying; $('ai-mask-controls').disabled = running || applying; $('ai-download').disabled = running || applying || !result; }
   function stop(message) { generation++; clearTimeout(timeout); worker?.terminate(); worker = null; running = false; $('ai-progress').hidden = true; buttons(); if (message) setStatus(message); }
   function clearResult() { result = ''; $('ai-result').removeAttribute('src'); $('ai-result').hidden = true; $('ai-empty').hidden = false; buttons(); }
   async function open(side) {
@@ -41,6 +49,14 @@
   for (const side of ['left', 'right']) { const button = document.createElement('button'); button.type = 'button'; button.className = 'studio-btn ai-open'; button.id = 'ai-open-' + side; button.innerHTML = 'IA de imagem <span class="ai-beta">Beta</span>'; $('retouch-open-' + side).after(button); button.onclick = () => open(side); }
   $('ai-mode').onchange = () => { clearResult(); dimensions(); setStatus(''); };
   $('ai-size').onchange = () => { clearResult(); dimensions(); setStatus(''); };
+  for (const name of ['threshold', 'softness', 'strength', 'color']) $('ai-' + name).oninput = () => {
+    if (name !== 'color') $('ai-' + name + '-value').textContent = $('ai-' + name).value + '%';
+    clearResult(); setStatus('Configuração alterada. Processe novamente para atualizar a prévia.');
+  };
+  $('ai-download').onclick = () => {
+    if (!result || running || applying) return;
+    const link = document.createElement('a'); link.href = result; link.download = 'thumbtcg-ia-beta.png'; link.click();
+  };
   $('ai-close').onclick = () => { if (!applying) dialog.close(); };
   dialog.oncancel = e => { if (applying) e.preventDefault(); };
   dialog.addEventListener('close', () => { stop(); clearResult(); $('ai-original').removeAttribute('src'); sourceImage = snapshot = null; });
@@ -53,7 +69,7 @@
       const canvas = document.createElement('canvas'); canvas.width = inputWidth; canvas.height = inputHeight;
       const ctx = canvas.getContext('2d'); ctx.drawImage(sourceImage, 0, 0, inputWidth, inputHeight);
       const pixels = ctx.getImageData(0, 0, inputWidth, inputHeight).data;
-      worker = new Worker('ai-worker.js?v=1');
+      worker = new Worker('ai-worker.js?v=2');
       const fail = () => { stop('A IA não conseguiu concluir. Pode ser falta de memória, bloqueio do download ou incompatibilidade. Tente novamente ou use o editor manual.'); };
       worker.onerror = fail;
       worker.onmessage = ({ data }) => {
@@ -70,7 +86,7 @@
       };
       // Bound an unresponsive device; cancellation also works while synchronous inference runs.
       timeout = setTimeout(() => stop('A IA excedeu 3 minutos e foi interrompida. Tente uma imagem menor ou outro aparelho.'), 180000);
-      worker.postMessage({ mode: $('ai-mode').value, pixels: pixels.buffer, width: inputWidth, height: inputHeight }, [pixels.buffer]);
+      worker.postMessage({ options: { threshold: Number($('ai-threshold').value) / 100, softness: Number($('ai-softness').value) / 100, strength: Number($('ai-strength').value) / 100, color: $('ai-color').value }, mode: $('ai-mode').value, pixels: pixels.buffer, width: inputWidth, height: inputHeight }, [pixels.buffer]);
     } catch { stop('Não foi possível iniciar a IA neste navegador. O editor manual continua disponível.'); }
   };
   $('ai-apply').onclick = async () => {

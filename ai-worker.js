@@ -1,6 +1,7 @@
 /* Optional local inference. Only versioned runtime/model downloads leave this worker;
    input pixels are never uploaded. Terminating this worker cancels downloads/inference. */
 'use strict';
+importScripts('ai-composite.js?v=1');
 const ORT = 'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.30.0/dist/';
 const MODEL = 'https://huggingface.co/edgetools/u2netp/resolve/25dee37ab19c5b6ad64ba6578eba63f1ae07720c/u2netp.onnx';
 const MODEL_SHA = '309c8469258dda742793dce0ebea8e6dd393174f89934733ecc8b14c76f4ddd8';
@@ -19,7 +20,7 @@ async function modelBytes() {
   if (!cached) try { await cache?.put(MODEL, new Response(bytes)); } catch { /* Caching is optional. */ }
   return bytes;
 }
-async function removeBackground(pixels, width, height) {
+async function removeBackground(pixels, width, height, mode, options) {
   progress('download', 0);
   importScripts(ORT + 'ort.wasm.min.js');
   ort.env.wasm.numThreads = 1; // Works on GitHub Pages without COOP/COEP headers.
@@ -50,7 +51,17 @@ async function removeBackground(pixels, width, height) {
     ctx.putImageData(new ImageData(maskPixels, 320, 320), 0, 0);
     sourceCtx.clearRect(0, 0, width, height); sourceCtx.drawImage(resized, 0, 0, width, height);
     const mask = sourceCtx.getImageData(0, 0, width, height).data;
-    for (let i = 0; i < pixels.length; i += 4) pixels[i + 3] = pixels[i + 3] * mask[i] / 255;
+    const weights = new Uint8ClampedArray(width * height);
+    for (let p = 0; p < weights.length; p++) weights[p] = mask[p * 4];
+    let background;
+    if (mode === 'blur') {
+      sourceCtx.putImageData(new ImageData(pixels, width, height), 0, 0);
+      const blurred = new OffscreenCanvas(width, height), blurCtx = blurred.getContext('2d');
+      blurCtx.filter = `blur(${options.strength * Math.max(width, height) * .025}px)`;
+      blurCtx.drawImage(source, 0, 0); background = blurCtx.getImageData(0, 0, width, height).data;
+      for (let i = 3; i < pixels.length; i += 4) background[i] = pixels[i];
+    }
+    pixels = aiComposite(pixels, weights, background, mode, options);
     tensor.dispose(); for (const output of Object.values(result)) output.dispose();
     return { pixels, width, height, backend: 'WASM / CPU' };
   } finally { await session.release(); }
@@ -88,10 +99,15 @@ async function upscale(pixels, width, height) {
 self.onmessage = async ({ data }) => {
   try {
     const { mode, width, height } = data;
-    if (!['remove', 'upscale'].includes(mode) || !Number.isInteger(width) || !Number.isInteger(height) || width < 1 || height < 1 || width > 2048 || height > 2048 || mode === 'upscale' && Math.max(width, height) > 1024) throw Error('input');
+    if (!['remove', 'upscale', 'blur', 'color', 'spotlight'].includes(mode) || !Number.isInteger(width) || !Number.isInteger(height) || width < 1 || height < 1 || width > 2048 || height > 2048 || mode === 'upscale' && Math.max(width, height) > 1024) throw Error('input');
     const pixels = new Uint8ClampedArray(data.pixels);
     if (pixels.length !== width * height * 4) throw Error('input');
-    const result = mode === 'remove' ? await removeBackground(pixels, width, height) : await upscale(pixels, width, height);
+    const options = { threshold: .5, softness: 1, strength: .6, color: '#18243b', ...data.options };
+    for (const [key, min, max] of [['threshold', .05, .95], ['softness', .02, 1], ['strength', 0, 1]]) {
+      if (!Number.isFinite(options[key]) || options[key] < min || options[key] > max) throw Error('options');
+    }
+    if (!/^#[0-9a-f]{6}$/i.test(options.color)) throw Error('color');
+    const result = mode === 'upscale' ? await upscale(pixels, width, height) : await removeBackground(pixels, width, height, mode, options);
     postMessage({ type: 'result', ...result, pixels: result.pixels.buffer }, [result.pixels.buffer]);
   } catch (error) { postMessage({ type: 'error', reason: String(error.message || error).slice(0, 400) }); }
 };
