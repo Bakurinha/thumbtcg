@@ -168,3 +168,7 @@ Em **Layouts → Tela final do YouTube**, ative dois espaços 16:9 com tamanho, 
 Em **Efeitos e câmera → Efeitos & Shaders → Tratamento artístico**, há agora dez tratamentos por carta, incluindo separação RGB, glitch, duotone, granulação e contornos neon.
 
 Digimon recebe três cenários CS: EDEN, Agência Kuremi e Café Hudie. São 21 temas para Digimon e 71 no total. Especificações e referências em [docs/CS_AND_ENDSCREEN.md](docs/CS_AND_ENDSCREEN.md).
+
+### Instalação reproduzível e segurança
+
+O lockfile é versionado. Use `npm ci --ignore-scripts` para instalar as versões verificadas. O CI usa a mesma instalação; Dependabot propõe atualizações sem merge automático.

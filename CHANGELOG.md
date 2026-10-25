@@ -1,5 +1,12 @@
 ## 0.16.0 — 2026-10-23 — Mais opções no Beta de IA
 
+## Segurança — 2026-10-25 (configuração)
+
+- Lockfile adicionado; CI usa npm ci com scripts de instalação desativados para reduzir execução de código de dependências.
+- Actions fixadas por SHA verificado; permissões de leitura explícitas e credenciais de checkout removidas dos fluxos sem escrita.
+- Dependabot configurado para propor atualizações de Actions e dos pacotes npm aplicáveis, sem merge automático.
+
+
 - Três tratamentos novos com seleção U²-Net: fundo desfocado, fundo de cor sólida e iluminação/vivacidade do personagem com escurecimento do fundo.
 - Limiar e suavidade da máscara, intensidade de efeito e download PNG sem modificar o projeto.
 - Controles invalidam resultados antigos; aplicação, cancelamento e histórico continuam transacionais. PT/EN/ES.
